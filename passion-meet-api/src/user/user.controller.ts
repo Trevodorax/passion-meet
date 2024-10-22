@@ -8,8 +8,6 @@ export class UserController {
 
   @Post()
   async createUser() {
-    return {
-      success: true
-    }
+    
   }
 }
