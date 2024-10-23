@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">Passion Meet</string>
-    <string name="create_account_button_label">Create account</string>
-    <string name="create_account_email_hint">Email</string>
-    <string name="create_account_username_hint">Username</string>
-    <string name="create_account_password_hint">Password</string>
-    <string name="create_account_login_hint">Login</string>
+    <string name="signup_button_label">Create account</string>
+    <string name="signup_email_hint">Ex: user@example.com</string>
+    <string name="signup_username_hint">Ex: Trevodorax</string>
+    <string name="signup_submit_button_label">Je crée un compte</string>
+    <string name="signup_page_title">Inscription</string>
+    <string name="signup_mandatory_fields_explanation">Les champs marqués d’une astérisque (*) sont obligatoires.</string>
+    <string name="signup_email_label">Email <font color='#FF0000'>*</font></string>
+    <string name="signup_username_label">Username <font color='#FF0000'>*</font></string>
+    <string name="signup_password_label">Password <font color='#FF0000'>*</font></string>
+    <string name="cgu_signup">En cliquant sur “Je crée un compte”, j’accepte les conditions générales d’utilisation de Passion Meeter.</string>
 </resources>
