@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Passion Meet</string>
+    <string name="create_account_button_label">Create account</string>
+    <string name="create_account_email_hint">Email</string>
+    <string name="create_account_username_hint">Username</string>
+    <string name="create_account_password_hint">Password</string>
+    <string name="create_account_login_hint">Login</string>
 </resources>
