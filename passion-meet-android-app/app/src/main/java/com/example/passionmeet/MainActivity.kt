@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         createAccountButton.setOnClickListener {
             // Switch to the LoginActivity
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }
     }
