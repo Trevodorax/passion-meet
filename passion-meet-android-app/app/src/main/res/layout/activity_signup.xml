@@ -118,7 +118,7 @@
         app:cardElevation="0dp">
 
         <Button
-            android:id="@+id/login_button"
+            android:id="@+id/submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/signup_submit_button_label"
