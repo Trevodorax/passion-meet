@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmConfigService } from './config/database.config';
 
 import { UserModule } from './user/user.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UserModule } from './user/user.module';
       imports: [ConfigModule],
       useClass: TypeOrmConfigService,
     }),
+    JwtModule.register({ global: true }),
     UserModule,
   ],
 })

@@ -31,6 +31,68 @@ describe('AppController (e2e)', () => {
     return userData;
   };
 
+  describe('/user/login (POST)', () => {
+    it('should send an error if user logs in with wroongly formatted request', () => {
+      return request(app.getHttpServer())
+        .post('/user/login')
+        .send({
+          bull: 'shit'
+        })
+        .expect(400)
+    })
+
+    it('should send a 404 if the email is not found', () => {
+      return request(app.getHttpServer())
+        .post('/user/login')
+        .send({
+          email: 'notexisting@gmail.com',
+          password: 'verywrong'
+        })
+        .expect(404)
+        .expect((res) => {
+          expect(res.body.message).toBe('USER_WITH_EMAIL_NOT_FOUND')
+        })
+    })
+
+    it('should send a 401 if the password does not match', async () => {
+      await givenUserExists({
+        email: 'email@gmail.com',
+        password: 'password',
+        username: 'user'
+      })
+
+      return request(app.getHttpServer())
+        .post('/user/login')
+        .send({
+          email: 'email@gmail.com',
+          password: 'wrongpassword'
+        })
+        .expect(401)
+        .expect((res) => {
+          expect(res.body.message).toBe('WRONG_PASSWORD')
+        })
+    })
+
+    it('should send a token when everything is fine', async () => {
+      await givenUserExists({
+        email: 'email@gmail.com',
+        password: 'password',
+        username: 'user'
+      })
+
+      return request(app.getHttpServer())
+        .post('/user/login')
+        .send({
+          email: 'email@gmail.com',
+          password: 'password'
+        })
+        .expect(201)
+        .expect((res) => {
+          expect(res.body.token).toBeTruthy()
+        })
+    })
+  })
+
   describe('/user (POST)', () => {
     it('should create a user with valid data', () => {
       return request(app.getHttpServer())
