@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { DataSource } from 'typeorm';
+import { User } from '../src/user/user.entity';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -15,6 +17,19 @@ describe('AppController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe())
     await app.init();
   });
+
+  afterEach(async () => {
+    const dataSource = app.get(DataSource);
+    await dataSource.createQueryBuilder().delete().from(User).execute();
+  });
+
+  const givenUserExists = async (userData: {email: string, password: string, username: string}) => {
+    await request(app.getHttpServer())
+      .post('/user')
+      .send(userData)
+      .expect(201);
+    return userData;
+  };
 
   describe('/user (POST)', () => {
     it('should create a user with valid data', () => {
@@ -70,6 +85,26 @@ describe('AppController (e2e)', () => {
         .expect(400)
         .expect((res) => {
           expect(res.body.message).toContain('username should not be empty');
+        });
+    });
+
+    it('should return 400 if the email is already taken', async () => {
+      await givenUserExists({
+        email: 'test@example.com',
+        password: 'password',
+        username: 'user',
+      });
+  
+      return request(app.getHttpServer())
+        .post('/user')
+        .send({
+          email: 'test@example.com',
+          password: 'password',
+          username: 'user',
+        })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body.message).toBe('EMAIL_TAKEN')
         });
     });
   });
