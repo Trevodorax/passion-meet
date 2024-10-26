@@ -64,6 +64,10 @@ export class UserService {
         }
     }
 
+    async findOneById(id: string): Promise<User | null> {
+        return this.userRepository.findOneBy({id})
+    }
+
     /* === PRIVATE METHODS === */
 
     private async passwordToHash(password: string): Promise<string> {

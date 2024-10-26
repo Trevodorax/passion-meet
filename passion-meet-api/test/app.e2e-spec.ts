@@ -28,8 +28,42 @@ describe('AppController (e2e)', () => {
       .post('/user')
       .send(userData)
       .expect(201);
+
     return userData;
   };
+
+  const givenUserIsLoggedIn = async (userData: {email: string, password: string, username: string}) => {
+    await givenUserExists(userData)
+
+    const response = await request(app.getHttpServer())
+      .post('/user/login')
+      .send({email: userData.email, password: userData.password})
+      .expect(201);
+
+    return {
+      userData,
+      token: response.body.token
+    };
+  };
+
+  describe('/user/me (GET)', () => {
+    it('should send a 401 if the user is not authentified', () => {
+      return request(app.getHttpServer())
+        .get('/user/me')
+        .send()
+        .expect(401)
+    })
+
+    it('should return the authentified user if there is one', async () => {
+      const { token } = await givenUserIsLoggedIn({email: 'email@gmail.com', password: 'password', username: 'user'})
+      
+      return request(app.getHttpServer())
+        .get('/user/me')
+        .set('Authorization', `Bearer ${token}`)
+        .send()
+        .expect(200)
+    })
+  })
 
   describe('/user/login (POST)', () => {
     it('should send an error if user logs in with wroongly formatted request', () => {
