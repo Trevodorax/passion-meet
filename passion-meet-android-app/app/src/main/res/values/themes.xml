@@ -5,5 +5,10 @@
         <item name="editTextStyle">@style/CustomEditTextStyle</item>
     </style>
 
+    <style name="RoundedImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="Theme.PassionMeet" parent="Base.Theme.PassionMeet" />
 </resources>

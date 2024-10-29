@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+<!-- Profile Image with + Icon overlay -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Round profile picture -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/story_header_image"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:src="@drawable/default_avatar_icon_of_social_media_user_vector"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/RoundedImage"
+             />
+
+        <!-- + Icon overlay -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/add_icon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_add"
+            android:background="@drawable/ic_circle"
+            android:padding="2dp"
+            app:shapeAppearanceOverlay="@style/RoundedImage"
+            />
+    </FrameLayout>
+
+
+<!--   name of the user-->
+    <TextView
+        android:id="@+id/story_header_name_tv"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="75dp"
+        android:text="Joe"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"/>
+
+</LinearLayout>
