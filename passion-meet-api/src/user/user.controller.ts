@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/CreateUser.dto';
 import { LoginDto } from './dto/Login.dto';
-import { Public } from './decorators/public.decorator';
+import { Public } from './../decorators/public.decorator';
 
 interface UserResponse {
   id: string;

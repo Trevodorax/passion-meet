@@ -1,22 +1,22 @@
 import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
+import { PassionService } from './passion.service';
+import { PassionController } from './passion.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { Passion } from './passion.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '../auth.guard';
-import { UserController } from './user.controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([Passion]),
   ],
-  controllers: [UserController],
+  controllers: [PassionController],
   providers: [
-    UserService,
+    PassionService,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
   ],
 })
-export class UserModule {}
+export class PassionModule {}
