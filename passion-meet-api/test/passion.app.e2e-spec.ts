@@ -87,7 +87,7 @@ describe('AppController (e2e)', () => {
             })
             .expect(400)
             .expect(({body}) => {
-                expect(body.message).toEqual('type must be a valid enum value')
+                expect(body.message).toEqual(["type must be one of the following values: GAME, MOVIES, FOOD, CARS, ART, TECH, OUTSIDE, PETS, ADULT, MEDIA, OTHER"])
         });
     });
     it('should return a 400 if the name is missing', async () => {
@@ -100,7 +100,7 @@ describe('AppController (e2e)', () => {
             })
             .expect(400)
             .expect(({body}) => {
-                expect(body.message).toEqual('name should not be empty')
+                expect(body.message).toEqual(["name must be a string", "name should not be empty"])
             });
     });
     it('should return a 400 if the description is missing', async () => {
@@ -113,7 +113,7 @@ describe('AppController (e2e)', () => {
             })
             .expect(400)
             .expect(({body}) => {
-                expect(body.message).toEqual('description should not be empty')
+                expect(body.message).toEqual(["description must be a string", "description should not be empty"])
             });
     });
     it('should return a 400 if the picture is missing', async () => {
@@ -126,7 +126,7 @@ describe('AppController (e2e)', () => {
             })
             .expect(400)
             .expect(({body}) => {
-                expect(body.message).toEqual('picture should not be empty')
+                expect(body.message).toEqual(["picture must be a string", "picture should not be empty"])
             });
     });
 });

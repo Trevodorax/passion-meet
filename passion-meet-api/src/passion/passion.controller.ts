@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { PassionService } from './passion.service';
-import { Public } from './../decorators/public.decorator';
+import { Public } from '../user/decorators/public.decorator';
 import { CreatePassionDto } from './dto/createPassion.dto';
 import { PassionType } from './enum/passionType';
 

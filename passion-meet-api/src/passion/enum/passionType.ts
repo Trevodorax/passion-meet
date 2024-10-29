@@ -1,13 +1,13 @@
 export enum PassionType {
-    GAME,
-    MOVIES,
-    FOOD,
-    CARS,
-    ART,
-    TECH,
-    OUTSIDE,
-    PETS,
-    ADULT,
-    MEDIA,
-    OTHER
+    GAME = "GAME",
+    MOVIES = "MOVIES",
+    FOOD = "FOOD",
+    CARS = "CARS",
+    ART = "ART",
+    TECH = "TECH",
+    OUTSIDE = "OUTSIDE",
+    PETS = "PETS",
+    ADULT = "ADULT",
+    MEDIA = "MEDIA",
+    OTHER = "OTHER"
 }
