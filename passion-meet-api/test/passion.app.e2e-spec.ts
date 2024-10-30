@@ -75,7 +75,6 @@ describe('AppController (e2e)', () => {
                 expect(body.message).toEqual('Name for passion is already taken')
             });
         });
-    });
     it('should return a 400 if the type is not in the enum', async () => { 
         return request(app.getHttpServer())
             .post('/passion')
@@ -128,5 +127,6 @@ describe('AppController (e2e)', () => {
             .expect(({body}) => {
                 expect(body.message).toEqual(["picture must be a string", "picture should not be empty"])
             });
+        });
     });
 });

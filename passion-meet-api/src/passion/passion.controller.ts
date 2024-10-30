@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { PassionService } from './passion.service';
 import { Public } from '../user/decorators/public.decorator';
 import { CreatePassionDto } from './dto/createPassion.dto';
@@ -29,5 +29,11 @@ export class PassionController {
       type: passion.type,
       description: passion.description
     }
+  }
+
+  @Public()
+  @Post('/add/user')
+  async addPassionToUser(@Body() body: { userId: string, passionId: string }): Promise<void> {
+    await this.passionService.addPassionToUser(body.userId, body.passionId)
   }
 }
