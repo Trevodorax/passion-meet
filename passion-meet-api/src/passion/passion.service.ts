@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PassionType } from './enum/passionType';
 import { UserService } from '../user/user.service';
-import { User } from 'src/user/user.entity';
 
 interface CreatedPassion {
     id: string;
@@ -65,10 +64,10 @@ export class PassionService {
         return this.passionRepository.save(passion)
     }
 
-        /* === PRIVATE METHODS === */
-    
-        private async isNameAvailable(name: string): Promise<boolean> {
-            const count = await this.passionRepository.count({ where: { name } });
-            return count === 0;
-        }
+    /* === PRIVATE METHODS === */
+
+    private async isNameAvailable(name: string): Promise<boolean> {
+        const count = await this.passionRepository.count({ where: { name } });
+        return count === 0;
+    }
 }
