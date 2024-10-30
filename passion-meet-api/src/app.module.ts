@@ -5,8 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmConfigService } from './config/database.config';
 
 import { UserModule } from './user/user.module';
-import { PassionModule } from './passion/passion.module';
 import { JwtModule } from '@nestjs/jwt';
+import { PassionModule } from './passion/passion.module';
 
 @Module({
   imports: [

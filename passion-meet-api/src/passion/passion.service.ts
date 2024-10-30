@@ -3,10 +3,8 @@ import { CreatePassionDto } from './dto/CreatePassion.dto';
 import { Passion } from './passion.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import { PassionType } from './enum/passionType';
+import { UserService } from '../user/user.service';
 
 interface CreatedPassion {
     id: string;
@@ -21,6 +19,7 @@ export class PassionService {
     constructor(
         @InjectRepository(Passion)
         private passionRepository: Repository<Passion>,
+        private userService: UserService,
     ) {}
 
     async createPassion(dto: CreatePassionDto): Promise<CreatedPassion> {
@@ -47,6 +46,21 @@ export class PassionService {
         }
     }
 
+    async addPassionToUser(userId: string, passionId: string): Promise<void> {
+        const passion = await this.findOneById(passionId)
+        if(!passion) {
+            throw new NotFoundException('Passion not found')
+        }
+
+        const user = await this.userService.findOneById(userId)
+        if(!user) {
+            throw new NotFoundException('User not found')
+        }
+
+        user.passions.push(passion)
+        await this.userService.save(user)
+    }
+
     async findOneById(id: string): Promise<Passion | null> {
         return this.passionRepository.findOneBy({id})
     }
@@ -59,6 +73,10 @@ export class PassionService {
         return this.passionRepository.createQueryBuilder('passion')
         .where('passion.name like :name', {name: `%${name}%`})
         .getMany();
+    }
+
+    async save(passion: Passion): Promise<Passion> {
+        return this.passionRepository.save(passion)
     }
 
         /* === PRIVATE METHODS === */

@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { PassionType } from "./enum/passionType";
+import { User } from "../user/user.entity";
 
 @Entity()
 export class Passion {
@@ -17,4 +18,8 @@ export class Passion {
 
     @Column()
     type: PassionType
+
+    @ManyToMany(() => User, (user) => user.passions)
+    @JoinTable()
+    users: User[];
 }

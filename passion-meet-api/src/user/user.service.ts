@@ -68,6 +68,10 @@ export class UserService {
         return this.userRepository.findOneBy({id})
     }
 
+    async save(user: User): Promise<User> {
+        return this.userRepository.save(user)
+    }
+
     /* === PRIVATE METHODS === */
 
     private async passwordToHash(password: string): Promise<string> {
