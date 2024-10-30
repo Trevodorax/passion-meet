@@ -3,6 +3,8 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/CreateUser.dto';
 import { LoginDto } from './dto/Login.dto';
 import { Public } from './decorators/public.decorator';
+import { User } from './user.entity';
+import { GetUser } from './decorators/get-user.decorator';
 
 interface UserResponse {
   id: string;
@@ -40,7 +42,7 @@ export class UserController {
   }
 
   @Get('me')
-  async getAuthentifiedUser(): Promise<UserResponse> {
-    return
+  async getAuthentifiedUser(@GetUser() user: User): Promise<UserResponse> {
+    return user;
   }
 }
