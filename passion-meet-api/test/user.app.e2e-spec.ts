@@ -62,6 +62,9 @@ describe('AppController (e2e)', () => {
         .set('Authorization', `Bearer ${token}`)
         .send()
         .expect(200)
+        .expect((res) => {
+          expect(res.body.email).toBe('email@gmail.com')
+        })
     })
   })
 
