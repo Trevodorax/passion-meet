@@ -5,6 +5,7 @@ import { LoginDto } from './dto/Login.dto';
 import { Public } from './decorators/public.decorator';
 import { User } from './user.entity';
 import { GetUser } from './decorators/get-user.decorator';
+import { Passion } from 'src/passion/passion.entity';
 
 interface UserResponse {
   id: string;
@@ -16,7 +17,13 @@ interface LoginResponse {
   token: string
 }
 
-@Controller('user')
+interface GetPassionResponse {
+  passions: Passion[]
+}
+
+
+
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {
   }
@@ -44,5 +51,15 @@ export class UserController {
   @Get('me')
   async getAuthentifiedUser(@GetUser() user: User): Promise<UserResponse> {
     return user;
+  }
+
+  @Get('me/passions')
+  async getAllPassionsForAnUser(@GetUser() user: User): Promise<GetPassionResponse> {
+    return await this.userService.getAllPassionsForAnUser(user.id)
+  }
+
+  @Post('me/passions')
+  async addPassionToUser(@GetUser() user: User, @Body() passionId: string): Promise<void> {
+    await this.userService.addPassionToUser(user, passionId)
   }
 }

@@ -12,7 +12,7 @@ interface PassionResponse {
   description: string;
 }
 
-@Controller('passion')
+@Controller('passions')
 export class PassionController {
   constructor(private readonly passionService: PassionService) {
   }
@@ -29,11 +29,5 @@ export class PassionController {
       type: passion.type,
       description: passion.description
     }
-  }
-
-  @Public()
-  @Post('/add/user')
-  async addPassionToUser(@Body() body: { userId: string, passionId: string }): Promise<void> {
-    await this.passionService.addPassionToUser(body.userId, body.passionId)
   }
 }
