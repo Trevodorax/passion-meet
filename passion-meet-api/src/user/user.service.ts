@@ -7,6 +7,8 @@ import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/Login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Passion } from '../passion/passion.entity';
+import { PassionService } from '../passion/passion.service';
 
 interface CreatedUser {
     id: string;
@@ -21,6 +23,7 @@ export class UserService {
         private userRepository: Repository<User>,
         private jwtService: JwtService,
         private configService: ConfigService,
+        private passionService: PassionService,
     ) {}
 
     async createUser(dto: CreateUserDto): Promise<CreatedUser> {
@@ -62,6 +65,20 @@ export class UserService {
         return {
             token: token
         }
+    }
+
+    async getAllPassionsForAnUser(userId: string): Promise<{passions: Passion[]}> {
+        const user = await this.userRepository.findOne({where: {id: userId}, relations: ['passions']}) 
+        return {
+            passions: user.passions
+        }
+    }
+
+    async addPassionToUser(user: User, passionId: string): Promise<void> {
+        const passion = await this.passionService.findOneById(passionId)
+
+        user.passions.push(passion)
+        await this.save(user)
     }
 
     async findOneById(id: string): Promise<User | null> {

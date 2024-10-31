@@ -4,6 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { DataSource } from 'typeorm';
 import { User } from '../src/user/user.entity';
+import { PassionType } from '../src/passion/enum/passionType';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -25,7 +26,7 @@ describe('AppController (e2e)', () => {
 
   const givenUserExists = async (userData: {email: string, password: string, username: string}) => {
     await request(app.getHttpServer())
-      .post('/user')
+      .post('/users')
       .send(userData)
       .expect(201);
 
@@ -36,7 +37,7 @@ describe('AppController (e2e)', () => {
     await givenUserExists(userData)
 
     const response = await request(app.getHttpServer())
-      .post('/user/login')
+      .post('/users/login')
       .send({email: userData.email, password: userData.password})
       .expect(201);
 
@@ -49,7 +50,7 @@ describe('AppController (e2e)', () => {
   describe('/user/me (GET)', () => {
     it('should send a 401 if the user is not authentified', () => {
       return request(app.getHttpServer())
-        .get('/user/me')
+        .get('/users/me')
         .send()
         .expect(401)
     })
@@ -58,7 +59,7 @@ describe('AppController (e2e)', () => {
       const { token } = await givenUserIsLoggedIn({email: 'email@gmail.com', password: 'password', username: 'user'})
       
       return request(app.getHttpServer())
-        .get('/user/me')
+        .get('/users/me')
         .set('Authorization', `Bearer ${token}`)
         .send()
         .expect(200)
@@ -68,10 +69,10 @@ describe('AppController (e2e)', () => {
     })
   })
 
-  describe('/user/login (POST)', () => {
+  describe('/users/login (POST)', () => {
     it('should send an error if user logs in with wroongly formatted request', () => {
       return request(app.getHttpServer())
-        .post('/user/login')
+        .post('/users/login')
         .send({
           bull: 'shit'
         })
@@ -80,7 +81,7 @@ describe('AppController (e2e)', () => {
 
     it('should send a 404 if the email is not found', () => {
       return request(app.getHttpServer())
-        .post('/user/login')
+        .post('/users/login')
         .send({
           email: 'notexisting@gmail.com',
           password: 'verywrong'
@@ -99,7 +100,7 @@ describe('AppController (e2e)', () => {
       })
 
       return request(app.getHttpServer())
-        .post('/user/login')
+        .post('/users/login')
         .send({
           email: 'email@gmail.com',
           password: 'wrongpassword'
@@ -118,7 +119,7 @@ describe('AppController (e2e)', () => {
       })
 
       return request(app.getHttpServer())
-        .post('/user/login')
+        .post('/users/login')
         .send({
           email: 'email@gmail.com',
           password: 'password'
@@ -133,7 +134,7 @@ describe('AppController (e2e)', () => {
   describe('/user (POST)', () => {
     it('should create a user with valid data', () => {
       return request(app.getHttpServer())
-        .post('/user')
+        .post('/users')
         .send({
           email: 'test@example.com',
           password: 'password123',
@@ -149,7 +150,7 @@ describe('AppController (e2e)', () => {
 
     it('should return 400 if email is missing', () => {
       return request(app.getHttpServer())
-        .post('/user')
+        .post('/users')
         .send({
           password: 'password123',
           username: 'testuser',
@@ -162,7 +163,7 @@ describe('AppController (e2e)', () => {
 
     it('should return 400 if password is too short', () => {
       return request(app.getHttpServer())
-        .post('/user')
+        .post('/users')
         .send({
           email: 'test@example.com',
           password: 'short',
@@ -176,7 +177,7 @@ describe('AppController (e2e)', () => {
 
     it('should return 400 if username is missing', () => {
       return request(app.getHttpServer())
-        .post('/user')
+        .post('/users')
         .send({
           email: 'test@example.com',
           password: 'password123',
@@ -195,7 +196,7 @@ describe('AppController (e2e)', () => {
       });
   
       return request(app.getHttpServer())
-        .post('/user')
+        .post('/users')
         .send({
           email: 'test@example.com',
           password: 'password',
@@ -205,6 +206,34 @@ describe('AppController (e2e)', () => {
         .expect((res) => {
           expect(res.body.message).toBe('EMAIL_TAKEN')
         });
+    });
+  });
+  describe('/user/me/passion (GET)', () => {
+    it('should return passion if added to the user', async () => {
+      const { token } = await givenUserIsLoggedIn({email: 'email@gmail.com', password: 'password', username: 'user'})
+
+      await request(app.getHttpServer())
+      .post('/passions')
+      .send({
+          name: 'pokemon',
+          description: 'best passion in the world',
+          type: PassionType.GAME
+      })
+      await request(app.getHttpServer())
+      .post('/users/me/passions')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+          "passionId": "1"
+      })
+      .expect(201)
+      await request(app.getHttpServer())
+      .get('/user/me/passions')
+      .set('Authorization', `Bearer ${token}`)
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.passions[0].name).toBe('pokemon')
+      })
     });
   });
 });

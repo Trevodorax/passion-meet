@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PassionType } from './enum/passionType';
 import { UserService } from '../user/user.service';
+import { User } from 'src/user/user.entity';
 
 interface CreatedPassion {
     id: string;
@@ -44,21 +45,6 @@ export class PassionService {
             type: savedUser.type,
             description: savedUser.description,
         }
-    }
-
-    async addPassionToUser(userId: string, passionId: string): Promise<void> {
-        const passion = await this.findOneById(passionId)
-        if(!passion) {
-            throw new NotFoundException('Passion not found')
-        }
-
-        const user = await this.userService.findOneById(userId)
-        if(!user) {
-            throw new NotFoundException('User not found')
-        }
-
-        user.passions.push(passion)
-        await this.userService.save(user)
     }
 
     async findOneById(id: string): Promise<Passion | null> {

@@ -26,7 +26,7 @@ describe('AppController (e2e)', () => {
 
   const givenPassionExists = async (passionData: {name: string, description: string, picture: string, type: PassionType}) => {
     await request(app.getHttpServer())
-      .post('/passion')
+      .post('/passions')
       .send(passionData)
       .expect(201);
 
@@ -36,7 +36,7 @@ describe('AppController (e2e)', () => {
   describe('/passion (POST)', () => {
     it('should create a new passion if data is valid', () => {
         return request(app.getHttpServer())
-            .post('/passion')
+            .post('/passions')
             .send({
                 name: 'pokemon',
                 description: 'best passion in the world',
@@ -63,7 +63,7 @@ describe('AppController (e2e)', () => {
         });
 
         return request(app.getHttpServer())
-            .post('/passion')
+            .post('/passions')
             .send({
                 name: 'pokemon',
                 description: 'best passion in the world',
@@ -77,7 +77,7 @@ describe('AppController (e2e)', () => {
         });
     it('should return a 400 if the type is not in the enum', async () => { 
         return request(app.getHttpServer())
-            .post('/passion')
+            .post('/passions')
             .send({
                 name: 'pokemon',
                 description: 'best passion in the world',
@@ -91,7 +91,7 @@ describe('AppController (e2e)', () => {
     });
     it('should return a 400 if the name is missing', async () => {
         return request(app.getHttpServer())
-            .post('/passion')
+            .post('/passions')
             .send({
                 description: 'best passion in the world',
                 picture: 'path/to/the/picture',
@@ -104,7 +104,7 @@ describe('AppController (e2e)', () => {
     });
     it('should return a 400 if the description is missing', async () => {
         return request(app.getHttpServer())
-            .post('/passion')
+            .post('/passions')
             .send({
                 name: 'pokemon',
                 picture: 'path/to/the/picture',
@@ -117,7 +117,7 @@ describe('AppController (e2e)', () => {
     });
     it('should return a 400 if the picture is missing', async () => {
         return request(app.getHttpServer())
-            .post('/passion')
+            .post('/passions')
             .send({
                 name: 'pokemon',
                 description: 'best passion in the world',

@@ -5,10 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
+import { PassionModule } from '../passion/passion.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
+    PassionModule,
   ],
   controllers: [UserController],
   providers: [
@@ -18,6 +20,5 @@ import { AuthGuard } from './auth.guard';
       useClass: AuthGuard,
     },
   ],
-  exports: [UserService],
 })
 export class UserModule {}
