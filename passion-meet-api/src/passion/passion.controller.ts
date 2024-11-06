@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { PassionService } from './passion.service';
 import { Public } from '../user/decorators/public.decorator';
 import { CreatePassionDto } from './dto/createPassion.dto';
