@@ -4,7 +4,6 @@ import { Passion } from './passion.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PassionType } from './enum/passionType';
-import { UserService } from '../user/user.service';
 
 interface CreatedPassion {
     id: string;
@@ -19,7 +18,6 @@ export class PassionService {
     constructor(
         @InjectRepository(Passion)
         private passionRepository: Repository<Passion>,
-        private userService: UserService,
     ) {}
 
     async createPassion(dto: CreatePassionDto): Promise<CreatedPassion> {
