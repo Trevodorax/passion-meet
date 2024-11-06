@@ -5,6 +5,7 @@ import { AppModule } from './../src/app.module';
 import { DataSource } from 'typeorm';
 import { User } from '../src/user/user.entity';
 import { PassionType } from '../src/passion/enum/passionType';
+import { Passion } from '../src/passion/passion.entity';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -21,6 +22,7 @@ describe('AppController (e2e)', () => {
 
   afterEach(async () => {
     const dataSource = app.get(DataSource);
+    await dataSource.createQueryBuilder().delete().from(Passion).execute();
     await dataSource.createQueryBuilder().delete().from(User).execute();
   });
 
@@ -47,7 +49,7 @@ describe('AppController (e2e)', () => {
     };
   };
 
-  describe('/user/me (GET)', () => {
+  describe('/users/me (GET)', () => {
     it('should send a 401 if the user is not authentified', () => {
       return request(app.getHttpServer())
         .get('/users/me')
@@ -131,7 +133,7 @@ describe('AppController (e2e)', () => {
     })
   })
 
-  describe('/user (POST)', () => {
+  describe('/users (POST)', () => {
     it('should create a user with valid data', () => {
       return request(app.getHttpServer())
         .post('/users')
@@ -208,26 +210,32 @@ describe('AppController (e2e)', () => {
         });
     });
   });
-  describe('/user/me/passion (GET)', () => {
+  describe('/users/me/passion (GET)', () => {
     it('should return passion if added to the user', async () => {
       const { token } = await givenUserIsLoggedIn({email: 'email@gmail.com', password: 'password', username: 'user'})
+      let passionId: string = "";
 
       await request(app.getHttpServer())
       .post('/passions')
       .send({
           name: 'pokemon',
           description: 'best passion in the world',
-          type: PassionType.GAME
+          type: PassionType.GAME,
+          picture: 'path/to/picture'
       })
+      .expect(201)
+      .expect((res) => {
+        passionId = res.body.id
+      });
       await request(app.getHttpServer())
       .post('/users/me/passions')
       .set('Authorization', `Bearer ${token}`)
       .send({
-          "passionId": "1"
+          "passionId": passionId
       })
       .expect(201)
       await request(app.getHttpServer())
-      .get('/user/me/passions')
+      .get('/users/me/passions')
       .set('Authorization', `Bearer ${token}`)
       .send()
       .expect(200)

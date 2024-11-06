@@ -6,6 +6,7 @@ import { Public } from './decorators/public.decorator';
 import { User } from './user.entity';
 import { GetUser } from './decorators/get-user.decorator';
 import { Passion } from 'src/passion/passion.entity';
+import { AddPassionDto } from './dto/addPassion.dto';
 
 interface UserResponse {
   id: string;
@@ -59,7 +60,7 @@ export class UserController {
   }
 
   @Post('me/passions')
-  async addPassionToUser(@GetUser() user: User, @Body() passionId: string): Promise<void> {
-    await this.userService.addPassionToUser(user, passionId)
+  async addPassionToUser(@GetUser() user: User, @Body() body: AddPassionDto): Promise<void> {
+    await this.userService.addPassionToUser(user, body)
   }
 }

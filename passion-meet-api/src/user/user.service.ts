@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Passion } from '../passion/passion.entity';
 import { PassionService } from '../passion/passion.service';
+import { AddPassionDto } from './dto/addPassion.dto';
 
 interface CreatedUser {
     id: string;
@@ -74,9 +75,16 @@ export class UserService {
         }
     }
 
-    async addPassionToUser(user: User, passionId: string): Promise<void> {
-        const passion = await this.passionService.findOneById(passionId)
+    async addPassionToUser(user: User, dto: AddPassionDto): Promise<void> {
+        const passion = await this.passionService.findOneById(dto.passionId)
+        if (passion === null) {
+            console.log('PASSION_NOT_FOUND')
+            throw new NotFoundException('PASSION_NOT_FOUND')
+        }
 
+        if (user.passions === undefined) {
+            user.passions = []
+        }
         user.passions.push(passion)
         await this.save(user)
     }
