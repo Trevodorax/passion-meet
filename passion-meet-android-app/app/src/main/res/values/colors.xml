@@ -4,4 +4,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="mainAccentuate">#17BEBB</color>
+    <color name="background">#FEF9F9</color>
 </resources>
