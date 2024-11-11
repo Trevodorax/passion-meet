@@ -8,14 +8,27 @@
     android:background="@color/background"
     tools:context=".SelectPassionActivity">
 
+    <!--    View title-->
+    <TextView
+        android:id="@+id/select_passion_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_passion_title"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/category_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@id/selected_passions_container"
+        app:layout_constraintTop_toTopOf="@id/select_passion_title" />
 
     <!-- FlexboxLayout to hold selected passions as chips -->
     <com.google.android.flexbox.FlexboxLayout
@@ -30,6 +43,18 @@
         app:flexWrap="wrap"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/category_recycler_view" />
+        app:layout_constraintBottom_toTopOf="@+id/submit_button" />
+
+
+    <!-- Submit button -->
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/submit_button_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
