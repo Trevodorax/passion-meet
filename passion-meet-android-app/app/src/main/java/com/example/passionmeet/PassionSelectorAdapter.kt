@@ -4,17 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.passionmeet.models.PassionSelectorModel
 import com.example.passionmeet.views.PassionSelectorVH
 
-class PassionSelectorAdapter(val passions: List<PassionSelectorModel>,
-                             private val onSelectionChanged: (selectedItems: List<PassionSelectorModel>) -> Unit
-) :
-    RecyclerView.Adapter<PassionSelectorVH>() {
-
-    private val selectedPositions = mutableSetOf<Int>()
-
+class PassionSelectorAdapter(
+    private val passions: List<PassionSelectorModel>,
+    private val onSelectionChanged: (selectedItems: List<PassionSelectorModel>) -> Unit
+) : RecyclerView.Adapter<PassionSelectorVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PassionSelectorVH {
         val view =
@@ -22,24 +18,15 @@ class PassionSelectorAdapter(val passions: List<PassionSelectorModel>,
         return PassionSelectorVH(view)
     }
 
-    override fun getItemCount(): Int {
-        return this.passions.size
-    }
+    override fun getItemCount(): Int = passions.size
 
     override fun onBindViewHolder(holder: PassionSelectorVH, position: Int) {
         val passion = passions[position]
 
         holder.nameTv.text = passion.name
 
-//        // Load image using Glide
-//        Glide.with(holder.imageTv.context)
-//            .load(passion.image)
-//            .skipMemoryCache(true)
-//            .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.NONE)
-//            .into(holder.imageTv)
-
-        // Set icon based on selection state
-        if (selectedPositions.contains(position)) {
+        // Update the icon based on isSelected property
+        if (passion.isSelected) {
             holder.addIcon.setImageResource(R.drawable.ic_confirm)
             holder.addIcon.setBackgroundColor(
                 ContextCompat.getColor(
@@ -50,28 +37,19 @@ class PassionSelectorAdapter(val passions: List<PassionSelectorModel>,
         } else {
             holder.addIcon.setImageResource(R.drawable.ic_add)
             holder.addIcon.background =
-                ContextCompat.getDrawable(holder.itemView.context, R.drawable.ic_circle);
+                ContextCompat.getDrawable(holder.itemView.context, R.drawable.ic_circle)
         }
 
-        // Handle click event
         holder.itemView.setOnClickListener {
-            if (selectedPositions.contains(position)) {
-                // Deselect if already selected
-                selectedPositions.remove(position)
-            } else {
-                // Select if not already selected
-                selectedPositions.add(position)
-            }
-            // Update the icon for the clicked item only
+            passion.isSelected = !passion.isSelected  // Toggle selection state
             notifyItemChanged(position)
 
-            passion.isSelected = selectedPositions.contains(position)
-
+            // Notify parent of updated selected items
             onSelectionChanged(getSelectedItems())
         }
     }
 
     fun getSelectedItems(): List<PassionSelectorModel> {
-        return selectedPositions.map { passions[it] }
+        return passions.filter { it.isSelected }
     }
 }
