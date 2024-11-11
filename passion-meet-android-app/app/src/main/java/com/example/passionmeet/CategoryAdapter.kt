@@ -8,9 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.passionmeet.models.CategoryModel
+import com.example.passionmeet.models.PassionSelectorModel
 
 class CategoryAdapter(
-    private val categories: List<CategoryModel>
+    private val categories: List<CategoryModel>,
+    private val onPassionsSelected: (selectedPassions: List<PassionSelectorModel>) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -40,7 +42,17 @@ class CategoryAdapter(
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        categoryViewHolder.itemsRecyclerView.adapter = PassionSelectorAdapter(category.items)
+        val adapter = PassionSelectorAdapter(category.items) { selectedItems ->
+            category.items.forEach { item ->
+                if (selectedItems.contains(item)) {
+                    item.isSelected = true
+                } else {
+                    item.isSelected = false
+                }
+            }
+            onPassionsSelected(getAllSelectedPassions())
+        }
+        categoryViewHolder.itemsRecyclerView.adapter = adapter
         categoryViewHolder.itemsRecyclerView.visibility =
             if (category.isExpanded)
                 View.VISIBLE else
@@ -54,4 +66,10 @@ class CategoryAdapter(
     }
 
     override fun getItemCount(): Int = categories.size
+
+    private fun getAllSelectedPassions(): List<PassionSelectorModel> {
+        return categories.flatMap { category ->
+            category.items.filter { it.isSelected }
+        }
+    }
 }

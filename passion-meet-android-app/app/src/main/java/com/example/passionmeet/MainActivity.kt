@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var signInButton: Button
 
+    private lateinit var selectPassionButton: Button
+
     private lateinit var passionSelector: RecyclerView
 
 
@@ -71,6 +73,8 @@ class MainActivity : AppCompatActivity() {
 
         this.signInButton = findViewById(R.id.sign_in_account_button)
 
+        this.selectPassionButton = findViewById(R.id.navigation_select_passion)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -89,16 +93,22 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        selectPassionButton.setOnClickListener {
+            // switch to select passion activity
+            val intent = Intent(this, SelectPassionActivity::class.java)
+            startActivity(intent)
+        }
+
         // Setup passion rv
-        this.passionSelector = findViewById(R.id.passion_selector_rv)
-        this.passionSelector.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        this.passionSelector.adapter = PassionSelectorAdapter(passionList)
+//        this.passionSelector = findViewById(R.id.passion_selector_rv)
+//        this.passionSelector.layoutManager =
+//            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//        this.passionSelector.adapter = PassionSelectorAdapter(passionList)
 
 
-        // Setup categories rv
-        val categoryRecyclerView = findViewById<RecyclerView>(R.id.category_recycler_view)
-        categoryRecyclerView.layoutManager = LinearLayoutManager(this)
-        categoryRecyclerView.adapter = CategoryAdapter(categories)
+//        // Setup categories rv
+//        val categoryRecyclerView = findViewById<RecyclerView>(R.id.category_recycler_view)
+//        categoryRecyclerView.layoutManager = LinearLayoutManager(this)
+//        categoryRecyclerView.adapter = CategoryAdapter(categories)
     }
 }

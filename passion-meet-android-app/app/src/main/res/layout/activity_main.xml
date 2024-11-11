@@ -28,6 +28,15 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/navigation_select_passion"
+        android:text="selectPassions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/passion_selector_rv"

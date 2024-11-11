@@ -8,7 +8,9 @@ import com.bumptech.glide.Glide
 import com.example.passionmeet.models.PassionSelectorModel
 import com.example.passionmeet.views.PassionSelectorVH
 
-class PassionSelectorAdapter(val passions: List<PassionSelectorModel>) :
+class PassionSelectorAdapter(val passions: List<PassionSelectorModel>,
+                             private val onSelectionChanged: (selectedItems: List<PassionSelectorModel>) -> Unit
+) :
     RecyclerView.Adapter<PassionSelectorVH>() {
 
     private val selectedPositions = mutableSetOf<Int>()
@@ -62,6 +64,10 @@ class PassionSelectorAdapter(val passions: List<PassionSelectorModel>) :
             }
             // Update the icon for the clicked item only
             notifyItemChanged(position)
+
+            passion.isSelected = selectedPositions.contains(position)
+
+            onSelectionChanged(getSelectedItems())
         }
     }
 
