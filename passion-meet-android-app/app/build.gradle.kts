@@ -53,7 +53,13 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Glide dependencies
-    implementation("com.github.bumptech.glide:glide:4.13.0")
+    implementation(libs.glide)
 
-    implementation("com.google.android.flexbox:flexbox:3.0.0")
+    implementation(libs.flexbox)
+
+    implementation(libs.play.services.cronet)
+    implementation(libs.gson)
+
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 }
