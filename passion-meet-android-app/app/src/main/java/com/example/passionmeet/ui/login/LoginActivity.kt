@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
         val login = binding.login
         val loading = binding.loading
 
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
+        loginViewModel = ViewModelProvider(this, LoginViewModelFactory(applicationContext))
             .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
@@ -41,8 +41,8 @@ class LoginActivity : AppCompatActivity() {
             // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
 
-            if (loginState.usernameError != null) {
-                username.error = getString(loginState.usernameError)
+            if (loginState.emailError != null) {
+                username.error = getString(loginState.emailError)
             }
             if (loginState.passwordError != null) {
                 password.error = getString(loginState.passwordError)
@@ -54,11 +54,14 @@ class LoginActivity : AppCompatActivity() {
 
             loading.visibility = View.GONE
             if (loginResult.error != null) {
+                System.err.println("Login Failed: ${loginResult.error}")
                 showLoginFailed(loginResult.error)
             }
             if (loginResult.success != null) {
+                System.err.println("LoginActivity: loginResult.success: ${loginResult.success}")
                 updateUiWithUser(loginResult.success)
             }
+            System.err.println("LoginActivity: loginResult: $loginResult")
             setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful

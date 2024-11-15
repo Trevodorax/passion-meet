@@ -6,13 +6,17 @@ import com.example.passionmeet.data.model.LoggedInUser
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
  */
-
 class LoginRepository(val dataSource: LoginDataSource) {
 
-    // in-memory cache of the loggedInUser object
+    /**
+     * A variable that stores the user's login information.
+     */
     var user: LoggedInUser? = null
         private set
 
+    /**
+     * A variable that stores the user's login status.
+     */
     val isLoggedIn: Boolean
         get() = user != null
 
@@ -27,14 +31,17 @@ class LoginRepository(val dataSource: LoginDataSource) {
         dataSource.logout()
     }
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
-        // handle login
+    /**
+     * Logs in the user with the given username and password.
+     * @param username The username of the user.
+     * @param password The password of the user.
+     * @return Result.Success if the login was successful, Result.Error otherwise.
+     */
+    suspend fun login(username: String, password: String): Result<LoggedInUser> {
         val result = dataSource.login(username, password)
-
         if (result is Result.Success) {
             setLoggedInUser(result.data)
         }
-
         return result
     }
 
