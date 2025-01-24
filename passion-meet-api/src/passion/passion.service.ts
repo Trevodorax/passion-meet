@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
-import { CreatePassionDto } from './dto/CreatePassion.dto';
+import { CreatePassionDto } from './dto/createPassion.dto';
 import { Passion } from './passion.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
