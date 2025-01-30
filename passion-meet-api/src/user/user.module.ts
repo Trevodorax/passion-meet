@@ -6,11 +6,13 @@ import { User } from './user.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
 import { PassionModule } from '../passion/passion.module';
+import { ActivityModule } from '../activity/activity.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     PassionModule,
+    ActivityModule,
   ],
   controllers: [UserController],
   providers: [
