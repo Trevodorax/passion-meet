@@ -6,6 +6,7 @@ import { DataSource } from 'typeorm';
 import { User } from '../src/user/user.entity';
 import { PassionType } from '../src/passion/enum/passionType';
 import { Passion } from '../src/passion/passion.entity';
+import { Activity } from '../src/activity/activity.entity';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -23,6 +24,7 @@ describe('AppController (e2e)', () => {
   afterEach(async () => {
     const dataSource = app.get(DataSource);
     await dataSource.createQueryBuilder().delete().from(Passion).execute();
+    await dataSource.createQueryBuilder().delete().from(Activity).execute();
     await dataSource.createQueryBuilder().delete().from(User).execute();
   });
 
@@ -242,6 +244,54 @@ describe('AppController (e2e)', () => {
       .expect((res) => {
         expect(res.body.passions[0].name).toBe('pokemon')
       })
+    });
+  });
+  describe('/activities (POST)', () => {
+    it('should create a new activity if data is valid', async () => {
+      let user: User;
+      await request(app.getHttpServer())
+      .post('/users')
+      .send({
+        email: 'test@example.com',
+        password: 'password123',
+        username: 'testuser',
+      })
+      .expect(201)
+      .expect((res) => {
+        expect(typeof res.body.id).toBe('string')
+        expect(res.body.email).toBe('test@example.com')
+        expect(res.body.username).toBe('testuser')
+        user = res.body
+      });
+      await request(app.getHttpServer())
+      .post('/activities')
+      .send({
+        name: 'activity',
+        description: 'best activity in the world',
+        type: 'GAME',
+        startDate: new Date('2021-01-01'),
+        endDate: new Date('2021-01-02'),
+        location: 'somewhere',
+        maxParticipants: 10,
+        imageUrl: 'path/to/the/picture',
+        createdBy: user
+      })
+      .expect(201)
+      .expect(({body}) => {
+        expect(body).toEqual({
+          id: expect.any(String),
+          name: 'activity',
+          description: 'best activity in the world',
+          type: 'GAME',
+          startDate: expect.any(String),
+          endDate: expect.any(String),
+          location: 'somewhere',
+          maxParticipants: 10,
+          imageUrl: 'path/to/the/picture',
+          createdBy: user,
+          participants: []
+        })
+      });
     });
   });
 });

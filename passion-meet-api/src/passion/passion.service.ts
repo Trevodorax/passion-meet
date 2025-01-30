@@ -33,14 +33,14 @@ export class PassionService {
             description: dto.description,
         })
 
-        const savedUser = await this.passionRepository.save(draftPassion)
+        const savedPassion = await this.passionRepository.save(draftPassion)
 
         return {
-            id: savedUser.id,
-            name: savedUser.name,
-            picture: savedUser.picture,
-            type: savedUser.type,
-            description: savedUser.description,
+            id: savedPassion.id,
+            name: savedPassion.name,
+            picture: savedPassion.picture,
+            type: savedPassion.type,
+            description: savedPassion.description,
         }
     }
 

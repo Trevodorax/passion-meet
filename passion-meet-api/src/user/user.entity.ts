@@ -1,5 +1,6 @@
+import { Activity } from "../activity/activity.entity";
 import { Passion } from "../passion/passion.entity";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -17,4 +18,10 @@ export class User {
 
     @ManyToMany(() => Passion, (passion) => passion.users)
     passions: Passion[];
+
+    @OneToMany(() => Activity, (activity) => activity.createdBy)
+    createdActivities: Activity[];
+
+    @ManyToMany(() => Activity, (activity) => activity.participants)
+    participatedActivities: Activity[];
 }
