@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var passionSelector: RecyclerView
 
+    private lateinit var openGroupList: Button
+
 
     // fixme for test purpose only
     val categories = listOf(
@@ -74,6 +76,8 @@ class MainActivity : AppCompatActivity() {
 
         this.selectPassionButton = findViewById(R.id.navigation_select_passion)
 
+        this.openGroupList = findViewById(R.id.open_groups_list_button)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -83,6 +87,11 @@ class MainActivity : AppCompatActivity() {
         createAccountButton.setOnClickListener {
             // Switch to the SignUpActivity
             val intent = Intent(this, SignupActivity::class.java)
+            startActivity(intent)
+        }
+        openGroupList.setOnClickListener {
+            // Switch to the SignUpActivity
+            val intent = Intent(this, UserHomeActivity::class.java)
             startActivity(intent)
         }
 
