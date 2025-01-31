@@ -47,8 +47,8 @@ export class GroupService {
     }
 
     async findOneById(id: string): Promise<Group | null> {
-        const Group = await this.groupRepository.findOne({where: {id: id}, relations: ['participants']}) 
-        return Group
+        const group = await this.groupRepository.findOne({where: {id: id}, relations: ['participants']}) 
+        return group
     }
 
     async findOneByName(name: string): Promise<Group | null> {
@@ -61,7 +61,7 @@ export class GroupService {
         .getMany();
     }
 
-    async save(Group: Group): Promise<Group> {
-        return this.groupRepository.save(Group)
+    async save(group: Group): Promise<Group> {
+        return this.groupRepository.save(group)
     }
 }

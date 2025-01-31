@@ -8,6 +8,7 @@ import { PassionType } from '../src/passion/enum/passionType';
 import { Passion } from '../src/passion/passion.entity';
 import { Activity } from '../src/activity/activity.entity';
 import { Group } from '../src/group/group.entity';
+import { Message } from '../src/message/message.entity';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -22,6 +23,7 @@ describe('AppController (e2e)', () => {
     await app.init();
 
     const dataSource = app.get(DataSource);
+    await dataSource.createQueryBuilder().delete().from(Message).execute();
     await dataSource.createQueryBuilder().delete().from(Group).execute();
     await dataSource.createQueryBuilder().delete().from(Activity).execute();
     await dataSource.createQueryBuilder().delete().from(User).execute();
@@ -30,6 +32,7 @@ describe('AppController (e2e)', () => {
 
   afterEach(async () => {
     const dataSource = app.get(DataSource);
+    await dataSource.createQueryBuilder().delete().from(Message).execute();
     await dataSource.createQueryBuilder().delete().from(Group).execute();
     await dataSource.createQueryBuilder().delete().from(Activity).execute();
     await dataSource.createQueryBuilder().delete().from(User).execute();
@@ -421,6 +424,89 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect(({body}) => {
         expect(body.participants).toHaveLength(0)
+      });
+    });
+  });
+  describe('groups/:groupId/message', () => {
+    it('user should be able to join a group and send messages', async () => {
+      let user: User;
+      let passion: Passion;
+      let group: Group;
+      const { token } = await givenUserIsLoggedIn({email: 'email@gmail.com', password: 'password', username: 'user'})
+      await request(app.getHttpServer())
+      .get('/users/me')
+      .set('Authorization', `Bearer ${token}`)
+      .send()
+      .expect(200)
+      .expect(({body}) => {
+        user = body
+      });
+      await request(app.getHttpServer())
+      .post('/passions')
+      .send({
+          name: 'pokemon',
+          description: 'best passion in the world',
+          picture: 'path/to/the/picture',
+          type: PassionType.GAME
+      })
+      .expect(201)
+      .expect(({body}) => {
+          expect(body).toEqual({
+              id: expect.any(String),
+              name: 'pokemon',
+              description: 'best passion in the world',
+              picture: 'path/to/the/picture',
+              type: PassionType.GAME
+          })
+          passion = body
+      });
+      await request(app.getHttpServer())
+      .post('/groups')
+      .send({
+        name: 'group',
+        description: 'best group in the world',
+        passion: passion,
+        imageUrl: 'path/to/the/picture',
+        createdBy: user
+      })
+      .expect(201)
+      .expect(({body}) => {
+        expect(body).toEqual({
+          id: expect.any(String),
+          name: 'group',
+          description: 'best group in the world',
+          passion: passion,
+          imageUrl: 'path/to/the/picture',
+          createdBy: user,
+          participants: []
+        })
+        group = body
+      })
+      await request(app.getHttpServer())
+      .post('/users/me/groups')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        groupId: group.id
+      })
+      .expect(201)
+      await request(app.getHttpServer())
+      .post('/groups/' + group.id + '/messages')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        content: 'hello best group in the world',
+        sendedAt: new Date(),
+        createdBy: user,
+        group: group
+      })
+      .expect(201)
+      await request(app.getHttpServer())
+      .get('/groups/' + group.id + '/messages')
+      .set('Authorization', `Bearer ${token}`)
+      .send()
+      .expect(200)
+      .expect(({body}) => {
+        expect(body).toHaveLength(1)
+        expect(body[0].content).toBe('hello best group in the world')
       });
     });
   });

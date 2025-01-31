@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassionModule } from './passion/passion.module';
 import { ActivityModule } from './activity/activity.module';
 import { GroupModule } from './group/group.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { GroupModule } from './group/group.module';
     PassionModule,
     ActivityModule,
     GroupModule,
+    MessageModule,
   ],
 })
 export class AppModule {}
