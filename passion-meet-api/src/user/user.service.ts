@@ -11,6 +11,7 @@ import { Passion } from '../passion/passion.entity';
 import { PassionService } from '../passion/passion.service';
 import { AddPassionDto } from './dto/addPassion.dto';
 import { ActivityService } from '../activity/activity.service';
+import { GroupService } from '../group/group.service';
 
 interface CreatedUser {
     id: string;
@@ -27,6 +28,7 @@ export class UserService {
         private configService: ConfigService,
         private passionService: PassionService,
         private activityService: ActivityService,
+        private groupService: GroupService
     ) {}
 
     async createUser(dto: CreateUserDto): Promise<CreatedUser> {
@@ -133,6 +135,38 @@ export class UserService {
             return
         }
         user.participatedActivities = user.participatedActivities.filter(a => a.id !== activity.id)
+        await this.save(user)
+    }
+
+    async joinGroup(user: User, groupId: string): Promise<void> {
+
+        const group = await this.groupService.findOneById(groupId)
+        if (group === null) {
+            throw new NotFoundException('GROUP_NOT_FOUND')
+        }
+
+        user = await this.userRepository.findOne({where: {id: user.id}, relations: ['participatedGroups']})
+
+        if (user.participatedGroups === undefined) {
+            user.participatedGroups = []
+        }
+
+        user.participatedGroups.push(group)
+        await this.save(user)
+    }
+
+    async leaveGroup(user: User, groupId: string): Promise<void> {
+        const group = await this.groupService.findOneById(groupId)
+        if (group === null) {
+            throw new NotFoundException('GROUP_NOT_FOUND')
+        }
+
+        user = await this.userRepository.findOne({where: {id: user.id}, relations: ['participatedGroups']})
+
+        if (user.participatedGroups === undefined) {
+            return
+        }
+        user.participatedGroups = user.participatedGroups.filter(a => a.id !== group.id)
         await this.save(user)
     }
 

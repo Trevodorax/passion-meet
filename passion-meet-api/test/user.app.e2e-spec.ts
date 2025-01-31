@@ -7,6 +7,7 @@ import { User } from '../src/user/user.entity';
 import { PassionType } from '../src/passion/enum/passionType';
 import { Passion } from '../src/passion/passion.entity';
 import { Activity } from '../src/activity/activity.entity';
+import { Group } from '../src/group/group.entity';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -21,6 +22,7 @@ describe('AppController (e2e)', () => {
     await app.init();
 
     const dataSource = app.get(DataSource);
+    await dataSource.createQueryBuilder().delete().from(Group).execute();
     await dataSource.createQueryBuilder().delete().from(Activity).execute();
     await dataSource.createQueryBuilder().delete().from(User).execute();
     await dataSource.createQueryBuilder().delete().from(Passion).execute();
@@ -28,6 +30,7 @@ describe('AppController (e2e)', () => {
 
   afterEach(async () => {
     const dataSource = app.get(DataSource);
+    await dataSource.createQueryBuilder().delete().from(Group).execute();
     await dataSource.createQueryBuilder().delete().from(Activity).execute();
     await dataSource.createQueryBuilder().delete().from(User).execute();
     await dataSource.createQueryBuilder().delete().from(Passion).execute();
@@ -251,56 +254,8 @@ describe('AppController (e2e)', () => {
       })
     });
   });
-  describe('/activities (POST)', () => {
-    it('should create a new activity if data is valid', async () => {
-      let user: User;
-      await request(app.getHttpServer())
-      .post('/users')
-      .send({
-        email: 'test@example.com',
-        password: 'password123',
-        username: 'testuser',
-      })
-      .expect(201)
-      .expect((res) => {
-        expect(typeof res.body.id).toBe('string')
-        expect(res.body.email).toBe('test@example.com')
-        expect(res.body.username).toBe('testuser')
-        user = res.body
-      });
-      await request(app.getHttpServer())
-      .post('/activities')
-      .send({
-        name: 'activity',
-        description: 'best activity in the world',
-        type: 'GAME',
-        startDate: new Date('2021-01-01'),
-        endDate: new Date('2021-01-02'),
-        location: 'somewhere',
-        maxParticipants: 10,
-        imageUrl: 'path/to/the/picture',
-        createdBy: user
-      })
-      .expect(201)
-      .expect(({body}) => {
-        expect(body).toEqual({
-          id: expect.any(String),
-          name: 'activity',
-          description: 'best activity in the world',
-          type: 'GAME',
-          startDate: expect.any(String),
-          endDate: expect.any(String),
-          location: 'somewhere',
-          maxParticipants: 10,
-          imageUrl: 'path/to/the/picture',
-          createdBy: user,
-          participants: []
-        })
-      });
-    });
-  });
-  describe('users/me/activities (POST)', () => {
-    it('user should join and leave a created activity', async () => {
+  describe('users/me/activities', () => {
+    it('user should be able to create, join and leave an activity', async () => {
       let user: User;
       let activity: Activity;
       const { token } = await givenUserIsLoggedIn({email: 'email@gmail.com', password: 'password', username: 'user'})
@@ -371,6 +326,97 @@ describe('AppController (e2e)', () => {
       .expect(200)
       await request(app.getHttpServer())
       .get('/activities/' + activity.id + '')
+      .send()
+      .expect(200)
+      .expect(({body}) => {
+        expect(body.participants).toHaveLength(0)
+      });
+    });
+  });
+  describe('users/me/groups', () => {
+    it('user should be able to create, join and leave a group', async () => {
+      let user: User;
+      let passion: Passion;
+      let group: Group;
+      const { token } = await givenUserIsLoggedIn({email: 'email@gmail.com', password: 'password', username: 'user'})
+      await request(app.getHttpServer())
+      .post('/users')
+      .send({
+        email: 'test@example.com',
+        password: 'password123',
+        username: 'testuser',
+      })
+      .expect(201)
+      .expect((res) => {
+        expect(typeof res.body.id).toBe('string')
+        expect(res.body.email).toBe('test@example.com')
+        expect(res.body.username).toBe('testuser')
+        user = res.body
+      });
+      await request(app.getHttpServer())
+      .post('/passions')
+      .send({
+          name: 'pokemon',
+          description: 'best passion in the world',
+          picture: 'path/to/the/picture',
+          type: PassionType.GAME
+      })
+      .expect(201)
+      .expect(({body}) => {
+          expect(body).toEqual({
+              id: expect.any(String),
+              name: 'pokemon',
+              description: 'best passion in the world',
+              picture: 'path/to/the/picture',
+              type: PassionType.GAME
+          })
+          passion = body
+      });
+      await request(app.getHttpServer())
+      .post('/groups')
+      .send({
+        name: 'group',
+        description: 'best group in the world',
+        passion: passion,
+        imageUrl: 'path/to/the/picture',
+        createdBy: user
+      })
+      .expect(201)
+      .expect(({body}) => {
+        expect(body).toEqual({
+          id: expect.any(String),
+          name: 'group',
+          description: 'best group in the world',
+          passion: passion,
+          imageUrl: 'path/to/the/picture',
+          createdBy: user,
+          participants: []
+        })
+        group = body
+      })
+      await request(app.getHttpServer())
+      .post('/users/me/groups')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        groupId: group.id
+      })
+      .expect(201)
+      await request(app.getHttpServer())
+      .get('/groups/' + group.id + '')
+      .send()
+      .expect(200)
+      .expect(({body}) => {
+        expect(body.participants).toHaveLength(1)
+      });
+      await request(app.getHttpServer())
+      .delete('/users/me/groups')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        groupId: group.id
+      })
+      .expect(200)
+      await request(app.getHttpServer())
+      .get('/groups/' + group.id + '')
       .send()
       .expect(200)
       .expect(({body}) => {

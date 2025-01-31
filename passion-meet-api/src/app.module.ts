@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassionModule } from './passion/passion.module';
 import { ActivityModule } from './activity/activity.module';
+import { GroupModule } from './group/group.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ActivityModule } from './activity/activity.module';
     UserModule,
     PassionModule,
     ActivityModule,
+    GroupModule,
   ],
 })
 export class AppModule {}

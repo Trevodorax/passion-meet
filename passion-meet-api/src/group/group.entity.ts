@@ -1,0 +1,29 @@
+import { Passion } from "../passion/passion.entity";
+import { User } from "../user/user.entity";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity()
+export class Group {
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
+    @Column()
+    name: string;
+
+    @Column()
+    description: string;
+
+    @Column()
+    imageUrl: string;
+
+    @ManyToOne(() => Passion, (passion) => passion.groups)
+    passion: Passion;
+
+    @ManyToOne(() => User, (user) => user.createdGroups)
+    createdBy: User;
+
+    @ManyToMany(() => User, (user) => user.participatedGroups)
+    @JoinTable()
+    participants: User[];
+
+}
