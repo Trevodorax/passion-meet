@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Get, Param, NotFoundException } from '@nestjs/common';
 import { Public } from '../user/decorators/public.decorator';
 import { User } from '../user/user.entity';
 import { ActivityService } from './activity.service';
@@ -25,21 +25,18 @@ export class ActivityController {
   @Public()
   @Post()
   async createActivity(@Body() body: CreateActivityDto): Promise<ActivityResponse> {
-    console.log('ActivityController.createActivity', body)  
     const activity = await this.activityService.createActivity(body)
 
-    return {  
-      id: activity.id,
-      name: activity.name,
-      description: activity.description,
-      type: activity.type,
-      startDate: activity.startDate,
-      endDate: activity.endDate,
-      location: activity.location,
-      maxParticipants: activity.maxParticipants,
-      imageUrl: activity.imageUrl,
-      createdBy: activity.createdBy,
-      participants: activity.participants
+    return activity
+  }
+
+  @Public()
+  @Get('/:activityId')
+  async getOneActivity(@Param('activityId') activityId: string): Promise<ActivityResponse> {
+    const activity = await this.activityService.findOneById(activityId)
+    if (activity === null) {
+      throw new NotFoundException('ACTIVITY_NOT_FOUND')
     }
+    return activity
   }
 }

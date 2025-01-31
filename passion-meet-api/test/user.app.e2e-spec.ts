@@ -19,6 +19,11 @@ describe('AppController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe())
     await app.init();
+
+    const dataSource = app.get(DataSource);
+    await dataSource.createQueryBuilder().delete().from(Passion).execute();
+    await dataSource.createQueryBuilder().delete().from(Activity).execute();
+    await dataSource.createQueryBuilder().delete().from(User).execute();
   });
 
   afterEach(async () => {
@@ -291,6 +296,86 @@ describe('AppController (e2e)', () => {
           createdBy: user,
           participants: []
         })
+      });
+    });
+  });
+  describe('users/me/activities (POST)', () => {
+    it('user should join and leave a created activity', async () => {
+      let user: User;
+      let activity: Activity;
+      const { token } = await givenUserIsLoggedIn({email: 'email@gmail.com', password: 'password', username: 'user'})
+      await request(app.getHttpServer())
+      .post('/users')
+      .send({
+        email: 'test@example.com',
+        password: 'password123',
+        username: 'testuser',
+      })
+      .expect(201)
+      .expect((res) => {
+        expect(typeof res.body.id).toBe('string')
+        expect(res.body.email).toBe('test@example.com')
+        expect(res.body.username).toBe('testuser')
+        user = res.body
+      });
+      await request(app.getHttpServer())
+      .post('/activities')
+      .send({
+        name: 'activity',
+        description: 'best activity in the world',
+        type: 'GAME',
+        startDate: new Date('2030-01-01'),
+        endDate: new Date('2030-01-02'),
+        location: 'somewhere',
+        maxParticipants: 10,
+        imageUrl: 'path/to/the/picture',
+        createdBy: user
+      })
+      .expect(201)
+      .expect(({body}) => {
+        expect(body).toEqual({
+          id: expect.any(String),
+          name: 'activity',
+          description: 'best activity in the world',
+          type: 'GAME',
+          startDate: expect.any(String),
+          endDate: expect.any(String),
+          location: 'somewhere',
+          maxParticipants: 10,
+          imageUrl: 'path/to/the/picture',
+          createdBy: user,
+          participants: []
+        })
+        activity = body
+      })
+      await request(app.getHttpServer())
+      .post('/users/me/activities')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        activityId: activity.id
+      })
+      .expect(201)
+      await request(app.getHttpServer())
+      .get('/activities/' + activity.id + '')
+      .send()
+      .expect(200)
+      .expect(({body}) => {
+        console.log(body)
+        expect(body.participants).toHaveLength(1)
+      });
+      await request(app.getHttpServer())
+      .delete('/users/me/activities')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        activityId: activity.id
+      })
+      .expect(200)
+      await request(app.getHttpServer())
+      .get('/activities/${activity.id}')
+      .send()
+      .expect(200)
+      .expect(({body}) => {
+        expect(body.participants).toHaveLength(0)
       });
     });
   });

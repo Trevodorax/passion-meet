@@ -20,6 +20,5 @@ export class Passion {
     type: PassionType
 
     @ManyToMany(() => User, (user) => user.passions)
-    @JoinTable()
     users: User[];
 }
