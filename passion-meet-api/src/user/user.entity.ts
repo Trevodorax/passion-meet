@@ -2,6 +2,7 @@ import { on } from "events";
 import { Activity } from "../activity/activity.entity";
 import { Passion } from "../passion/passion.entity";
 import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Group } from "../group/group.entity";
 
 @Entity()
 export class User {
@@ -25,4 +26,10 @@ export class User {
 
     @ManyToMany(() => Activity, (activity) => activity.participants, {onDelete: 'CASCADE'})
     participatedActivities: Activity[];
+
+    @OneToMany(() => Group, (group) => group.createdBy, {onDelete: 'CASCADE'})
+    createdGroups: Group[];
+
+    @ManyToMany(() => Group, (group) => group.participants, {onDelete: 'CASCADE'})
+    participatedGroups: Group[];
 }

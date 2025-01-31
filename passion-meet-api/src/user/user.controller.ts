@@ -5,7 +5,7 @@ import { LoginDto } from './dto/Login.dto';
 import { Public } from './decorators/public.decorator';
 import { User } from './user.entity';
 import { GetUser } from './decorators/get-user.decorator';
-import { Passion } from 'src/passion/passion.entity';
+import { Passion } from '../passion/passion.entity';
 import { AddPassionDto } from './dto/addPassion.dto';
 
 interface UserResponse {
@@ -72,5 +72,15 @@ export class UserController {
   @Delete('me/activities')
   async leaveActivity(@GetUser() user: User, @Body() body: {activityId: string}): Promise<void> {
     await this.userService.leaveActivity(user, body.activityId)
+  }
+
+  @Post('me/groups')
+  async joinGroup(@GetUser() user: User, @Body() body: {groupId: string}): Promise<void> {
+    await this.userService.joinGroup(user, body.groupId)
+  }
+
+  @Delete('me/groups')
+  async leaveGroup(@GetUser() user: User, @Body() body: {groupId: string}): Promise<void> {
+    await this.userService.leaveGroup(user, body.groupId)
   }
 }

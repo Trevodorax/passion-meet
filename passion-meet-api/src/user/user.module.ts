@@ -7,12 +7,14 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
 import { PassionModule } from '../passion/passion.module';
 import { ActivityModule } from '../activity/activity.module';
+import { GroupModule } from '../group/group.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     PassionModule,
     ActivityModule,
+    GroupModule,
   ],
   controllers: [UserController],
   providers: [
