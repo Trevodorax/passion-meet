@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/createUser.dto';
 import { LoginDto } from './dto/Login.dto';
@@ -62,5 +62,15 @@ export class UserController {
   @Post('me/passions')
   async addPassionToUser(@GetUser() user: User, @Body() body: AddPassionDto): Promise<void> {
     await this.userService.addPassionToUser(user, body)
+  }
+
+  @Post('me/activities')
+  async joinActivity(@GetUser() user: User, @Body() body: {activityId: string}): Promise<void> {
+    await this.userService.joinActivity(user, body.activityId)
+  }
+
+  @Delete('me/activities')
+  async leaveActivity(@GetUser() user: User, @Body() body: {activityId: string}): Promise<void> {
+    await this.userService.leaveActivity(user, body.activityId)
   }
 }
