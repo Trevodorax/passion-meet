@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.passionmeet.R
 import com.example.passionmeet.models.GroupModel
 
@@ -17,6 +18,10 @@ class GroupsVH(view: View): RecyclerView.ViewHolder(view) {
         groupNameTv.text = group.name
         groupMembers.text = group.members.toString()
         groupDescription.text = group.description
-        //TODO: bind image with URL
+
+        Glide.with(itemView)
+            .load(group.image)
+            .centerCrop()
+            .into(groupImage)
     }
 }

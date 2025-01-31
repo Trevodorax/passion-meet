@@ -22,9 +22,10 @@ class UserHomeActivity: AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         // Fake data
         groups = listOf(
-            GroupModel("Pikachu lovers", "https://pikachu.fr", 10, "A group for Pikachu lovers"),
-            GroupModel("Salamache lovers", "https://salameche.fr", 7, "A group for Salamche lovers"),
-            GroupModel("Tortipousse lovers", "https://tortipousse.fr", 10, "A group for Tortipousse lovers"),
+            //GroupModel("Pikachu lovers", "https://unsplash.com/fr/photos/cartouche-de-jeu-nintendo-game-boy-pokemon-7P2QXuPmR9I", 90, "A group for Pikachu lovers"),
+            GroupModel("Pikachu lovers", "https://robohash.org/testeuuuh", 90, "A group for Pikachu lovers"),
+            GroupModel("Salamache lovers", "https://robohash.org/estuh2", 7, "A group for Salamche lovers"),
+            GroupModel("Tortipousse lovers", "https://robohash.org/steuuteuhw", 10, "A group for Tortipousse lovers"),
         )
         grouplistAdapter = GroupsListAdapter(this, groups)
         recyclerView.adapter = grouplistAdapter

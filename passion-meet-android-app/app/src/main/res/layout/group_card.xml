@@ -19,29 +19,51 @@
             android:scaleType="centerCrop"
             android:layout_gravity="center"/>
 
-        <TextView
-            android:id="@+id/group_card_memberCount"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:background="@color/black"
-            android:text="5"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:layout_gravity="top|start" />
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/transparentGrey"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
+                <TextView
+                    android:id="@+id/group_card_memberCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="5"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    />
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_person_white"/>
+            </LinearLayout>
 
-        <!-- TODO: ADD ROUND CORNER -->
-        <LinearLayout
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="vertical"
+            android:layout_margin="8dp"
             android:layout_gravity="bottom"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp"
-            android:background="#A0000000">
+            app:cardElevation="0dp"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@color/transparentGrey"
+            >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+          >
 
             <TextView
                 android:id="@+id/group_card_title"
@@ -69,6 +91,7 @@
                  />
 
         </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
     </FrameLayout>
 
