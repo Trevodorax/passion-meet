@@ -30,6 +30,10 @@ export class ActivityService {
 
         await this.checkValidDates(dto.startDate, dto.endDate)
 
+        if (dto.maxParticipants < 1) {
+            throw new UnprocessableEntityException('Max participants must be at least 1')
+        }
+
         const draftActivity = this.activityRepository.create({
             name: dto.name,
             description: dto.description,
