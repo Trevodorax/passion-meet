@@ -27,4 +27,5 @@
     <string name="starting_page_sub_text">Partagez enfin votre passion avec le monde</string>
     <string name="starting_page_app_name">Passion meeter</string>
     <string name="groups">Groupes</string>
+    <string name="notif_encounter_text">a croisé votre chemin !</string>
 </resources>
