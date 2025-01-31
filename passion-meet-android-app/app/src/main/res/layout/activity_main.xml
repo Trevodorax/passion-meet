@@ -24,6 +24,7 @@
         android:id="@+id/open_groups_list_button"
         android:text="User Home"
         app:layout_constraintStart_toEndOf="@+id/sign_in_account_button"
+        app:layout_constraintTop_toBottomOf="@id/create_account_button"
         android:layout_marginTop="35dp"
     />
 
