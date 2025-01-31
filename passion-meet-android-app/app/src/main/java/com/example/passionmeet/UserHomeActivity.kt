@@ -15,7 +15,7 @@ class UserHomeActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_groups_list)
+        setContentView(R.layout.activity_user_home)
 
         //Groups recycler view
         recyclerView = findViewById(R.id.groups_list_recycler_view)

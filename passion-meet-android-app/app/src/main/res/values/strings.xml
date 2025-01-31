@@ -26,4 +26,5 @@
     <string name="select_passion_title">Selectionnez vos passions:</string>
     <string name="groups">Groupes</string>
     <string name="notif_encounter_text">a croisé votre chemin !</string>
+    <string name="last_encounters">Dernières rencontres</string>
 </resources>
