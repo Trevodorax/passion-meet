@@ -2,7 +2,7 @@ package com.example.passionmeet.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.passionmeet.data.model.LoggedInUser
+import com.example.passionmeet.data.model.LoginModel
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonSyntaxException
@@ -34,9 +34,9 @@ class LoginDataSource(private val context: Context) {
      * @throws IOException if there was a network error
      * @throws JsonSyntaxException if there was an error parsing the response
      * @see Result
-     * @see LoggedInUser
+     * @see LoginModel
      */
-    suspend fun login(email: String, password: String): Result<LoggedInUser> {
+    suspend fun login(email: String, password: String): Result<LoginModel> {
         return withContext(Dispatchers.IO) {
             try {
                 val cronetEngine = CronetClient.getEngine(context)
@@ -176,14 +176,14 @@ class LoginDataSource(private val context: Context) {
      * @param response the JSON response from the server
      * @return a Result object containing the token if successful, or an error message if not
      */
-    private fun parseLoginResponse(response: String): Result<LoggedInUser> {
+    private fun parseLoginResponse(response: String): Result<LoginModel> {
         return try {
             val jsonResponse = Gson().fromJson(response, JsonObject::class.java)
 
             // Check if response has a token (success case)
             if (jsonResponse.has("token")) {
                 val token = jsonResponse.get("token").asString
-                Result.Success(LoggedInUser(token))
+                Result.Success(LoginModel(token))
             } else {
                 // Parse error message if token is missing
                 val errorMessages =

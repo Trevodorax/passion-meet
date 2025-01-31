@@ -1,25 +1,36 @@
 package com.example.passionmeet.ui.login
 
 import android.app.Activity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-import com.example.passionmeet.databinding.ActivityLoginBinding
-
+import androidx.activity.viewModels
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.example.passionmeet.R
+import com.example.passionmeet.databinding.ActivityLoginBinding
+import com.example.passionmeet.repositories.LoginRepository
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var loginViewModel: LoginViewModel
+    private val loginViewModel: LoginViewModel by viewModels() {
+        LoginViewModelFactory(LoginRepository(this), this)
+    }
     private lateinit var binding: ActivityLoginBinding
+
+    /**
+     * Shared preferences for storing the auth token
+     */
+    private val sharedPreferences: SharedPreferences by lazy {
+        this.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +43,6 @@ class LoginActivity : AppCompatActivity() {
         val login = binding.login
         val loading = binding.loading
 
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory(applicationContext))
-            .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
@@ -104,10 +113,12 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
+        // get the user's token from the preferences
+        val token = sharedPreferences.getString("auth_token", null)
         // TODO : initiate successful logged in experience
         Toast.makeText(
             applicationContext,
-            "$welcome $displayName",
+            "$welcome $displayName $token",
             Toast.LENGTH_LONG
         ).show()
     }
