@@ -60,7 +60,8 @@ export class ActivityService {
     }
 
     async findOneById(id: string): Promise<Activity | null> {
-        return this.activityRepository.findOneBy({id})
+        const activity = await this.activityRepository.findOne({where: {id: id}, relations: ['participants']}) 
+        return activity
     }
 
     async findOneByName(name: string): Promise<Activity | null> {
