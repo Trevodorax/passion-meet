@@ -22,8 +22,6 @@ interface GetPassionResponse {
   passions: Passion[]
 }
 
-
-
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {
@@ -83,4 +81,10 @@ export class UserController {
   async leaveGroup(@GetUser() user: User, @Body() body: {groupId: string}): Promise<void> {
     await this.userService.leaveGroup(user, body.groupId)
   }
+
+  @Post('me/groups/messages')
+  async sendMessageToGroup(@GetUser() user: User, @Body() body: {groupId: string}): Promise<void> {
+    await this.userService.joinGroup(user, body.groupId)
+  }
+
 }

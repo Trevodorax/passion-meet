@@ -1,6 +1,7 @@
+import { Message } from "../message/message.entity";
 import { Passion } from "../passion/passion.entity";
 import { User } from "../user/user.entity";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Group {
@@ -26,4 +27,6 @@ export class Group {
     @JoinTable()
     participants: User[];
 
+    @OneToMany(() => Message, (message) => message.createdBy, {onDelete: 'CASCADE'})
+    messages: Message[];
 }

@@ -24,5 +24,6 @@ import { GroupModule } from '../group/group.module';
       useClass: AuthGuard,
     },
   ],
+  exports: [UserService],
 })
 export class UserModule {}

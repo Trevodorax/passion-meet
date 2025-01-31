@@ -3,6 +3,7 @@ import { Activity } from "../activity/activity.entity";
 import { Passion } from "../passion/passion.entity";
 import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Group } from "../group/group.entity";
+import { Message } from "../message/message.entity";
 
 @Entity()
 export class User {
@@ -32,4 +33,7 @@ export class User {
 
     @ManyToMany(() => Group, (group) => group.participants, {onDelete: 'CASCADE'})
     participatedGroups: Group[];
+
+    @OneToMany(() => Message, (message) => message.createdBy, {onDelete: 'CASCADE'})
+    messages: Message[];
 }
