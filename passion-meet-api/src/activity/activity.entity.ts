@@ -34,6 +34,7 @@ export class Activity {
     createdBy: User;
 
     @ManyToMany(() => User, (user) => user.participatedActivities)
+    @JoinTable()
     participants: User[];
 
 }

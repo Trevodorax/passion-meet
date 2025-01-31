@@ -21,16 +21,16 @@ describe('AppController (e2e)', () => {
     await app.init();
 
     const dataSource = app.get(DataSource);
-    await dataSource.createQueryBuilder().delete().from(Passion).execute();
     await dataSource.createQueryBuilder().delete().from(Activity).execute();
     await dataSource.createQueryBuilder().delete().from(User).execute();
+    await dataSource.createQueryBuilder().delete().from(Passion).execute();
   });
 
   afterEach(async () => {
     const dataSource = app.get(DataSource);
-    await dataSource.createQueryBuilder().delete().from(Passion).execute();
     await dataSource.createQueryBuilder().delete().from(Activity).execute();
     await dataSource.createQueryBuilder().delete().from(User).execute();
+    await dataSource.createQueryBuilder().delete().from(Passion).execute();
   });
 
   const givenUserExists = async (userData: {email: string, password: string, username: string}) => {
@@ -360,7 +360,6 @@ describe('AppController (e2e)', () => {
       .send()
       .expect(200)
       .expect(({body}) => {
-        console.log(body)
         expect(body.participants).toHaveLength(1)
       });
       await request(app.getHttpServer())
@@ -371,7 +370,7 @@ describe('AppController (e2e)', () => {
       })
       .expect(200)
       await request(app.getHttpServer())
-      .get('/activities/${activity.id}')
+      .get('/activities/' + activity.id + '')
       .send()
       .expect(200)
       .expect(({body}) => {

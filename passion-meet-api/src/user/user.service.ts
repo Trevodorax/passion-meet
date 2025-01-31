@@ -97,6 +97,8 @@ export class UserService {
             throw new NotFoundException('ACTIVITY_NOT_FOUND')
         }
 
+        user = await this.userRepository.findOne({where: {id: user.id}, relations: ['participatedActivities']})
+
         if (activity.participants !== undefined) {
             if (activity.participants.length >= activity.maxParticipants) {
                 throw new UnprocessableEntityException('ACTIVITY_FULL')
@@ -120,6 +122,8 @@ export class UserService {
         if (activity === null) {
             throw new NotFoundException('ACTIVITY_NOT_FOUND')
         }
+
+        user = await this.userRepository.findOne({where: {id: user.id}, relations: ['participatedActivities']})
 
         if (activity.endDate < new Date()) {
             throw new UnprocessableEntityException('ACTIVITY_ENDED')
