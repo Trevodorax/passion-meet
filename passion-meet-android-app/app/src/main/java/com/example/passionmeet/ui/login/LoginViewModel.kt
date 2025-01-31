@@ -1,20 +1,20 @@
 package com.example.passionmeet.ui.login
 
+import android.util.Patterns
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.util.Patterns
-import androidx.lifecycle.viewModelScope
-import com.example.passionmeet.data.LoginRepository
-import com.example.passionmeet.data.Result
-
 import com.example.passionmeet.R
-import kotlinx.coroutines.launch
+import com.example.passionmeet.repositories.LoginRepository
 
 /**
  * ViewModel for the login screen.
  */
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel(
+     val loginRepository: LoginRepository,
+    val context: LifecycleOwner
+) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -27,17 +27,33 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
      * Updates loginResult LiveData based on the Result type
      */
     fun login(username: String, password: String) {
-        viewModelScope.launch {
-            // Call the login function in the repository, which will use Cronet in the data source
-            val result = loginRepository.login(username, password)
+        this.loginRepository.loginResponse.observe(context) { data ->
 
-            // Update loginResult LiveData based on the Result type
-            if (result is Result.Success) {
-                _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.token))
-            } else {
-                _loginResult.value = LoginResult(error = R.string.login_failed)
+            if (data != null) {
+                // Update loginResult LiveData based on the Result type
+                if (data.token != null) {
+                    this@LoginViewModel._loginResult.value =
+                        LoginResult(success = LoggedInUserView(displayName = data.token))
+                } else {
+                    this@LoginViewModel._loginResult.value =
+                        LoginResult(error = R.string.login_failed)
+                }
             }
         }
+
+        this.loginRepository.login(username, password)
+
+//        viewModelScope.launch {
+//            // Call the login function in the repository, which will use Cronet in the data source
+//            val result = loginRepository.login(username, password)
+//
+//            // Update loginResult LiveData based on the Result type
+//            if (result is Result.Success) {
+//                _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.token))
+//            } else {
+//                _loginResult.value = LoginResult(error = R.string.login_failed)
+//            }
+//        }
     }
 
     /**
