@@ -68,4 +68,8 @@ export class PassionService {
         const count = await this.passionRepository.count({ where: { name } });
         return count === 0;
     }
+
+    async getAllPassions(): Promise<Passion[]> {
+        return this.passionRepository.find();
+    }
 }
