@@ -7,6 +7,9 @@ import { TypeOrmConfigService } from './config/database.config';
 import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassionModule } from './passion/passion.module';
+import { ActivityModule } from './activity/activity.module';
+import { GroupModule } from './group/group.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -21,6 +24,9 @@ import { PassionModule } from './passion/passion.module';
     JwtModule.register({ global: true }),
     UserModule,
     PassionModule,
+    ActivityModule,
+    GroupModule,
+    MessageModule,
   ],
 })
 export class AppModule {}
