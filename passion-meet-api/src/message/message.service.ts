@@ -1,10 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { User } from '../user/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateMessageDto } from './dto/createMessage.dto';
-import { Passion } from '../passion/passion.entity';
-import { Message } from './Message.entity';
+import { Message } from './message.entity';
 import { Group } from '../group/group.entity';
 import { UserService } from '../user/user.service';
 import { GroupService } from '../group/group.service';
