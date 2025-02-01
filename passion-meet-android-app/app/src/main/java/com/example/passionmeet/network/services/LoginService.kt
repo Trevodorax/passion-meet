@@ -8,13 +8,12 @@ import retrofit2.http.POST
 
 interface LoginService {
 
-
     // Fonction représentant le contrat d'interface avec l'API
     @FormUrlEncoded
     @POST("users/login") // FONCTION + PATH
     fun login(
         // Paramètres de la fonction
-        @Field("username") username: String,
+        @Field("email") email: String,
         @Field("password") password: String
     ): Call<LoginResponseDTO> // Type de retour de la fonction
 }

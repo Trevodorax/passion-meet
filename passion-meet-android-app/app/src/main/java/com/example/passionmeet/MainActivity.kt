@@ -7,9 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.passionmeet.models.CategoryModel
+import com.example.passionmeet.models.PassionCategoryModel
 import com.example.passionmeet.models.PassionSelectorModel
 import com.example.passionmeet.ui.login.LoginActivity
 
@@ -25,14 +24,14 @@ class MainActivity : AppCompatActivity() {
 
     // fixme for test purpose only
     val categories = listOf(
-        CategoryModel(
+        PassionCategoryModel(
             "Music", listOf(
                 PassionSelectorModel("Rap", "https://picsum.photos/1200"),
                 PassionSelectorModel("Pop", "https://picsum.photos/1200"),
                 PassionSelectorModel("K-POP", "https://picsum.photos/1200")
             )
         ),
-        CategoryModel(
+        PassionCategoryModel(
             "Sports", listOf(
                 PassionSelectorModel("Soccer", "https://picsum.photos/1200"),
                 PassionSelectorModel("Basketball", "https://picsum.photos/1200")
