@@ -2,7 +2,7 @@ package com.example.passionmeet.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.passionmeet.data.model.LoginModel
+import com.example.passionmeet.models.LoginModel
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonSyntaxException

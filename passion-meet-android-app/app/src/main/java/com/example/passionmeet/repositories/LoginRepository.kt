@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.passionmeet.data.model.LoginModel
+import com.example.passionmeet.models.LoginModel
 import com.example.passionmeet.mapper.mapLoginDtoToLoginModel
 import com.example.passionmeet.network.RetrofitClient
 import com.example.passionmeet.network.dto.LoginResponseDTO
