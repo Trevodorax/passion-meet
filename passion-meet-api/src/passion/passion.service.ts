@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
-import { CreatePassionDto } from './dto/CreatePassion.dto';
+import { CreatePassionDto } from './dto/createPassion.dto';
 import { Passion } from './passion.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -33,14 +33,14 @@ export class PassionService {
             description: dto.description,
         })
 
-        const savedUser = await this.passionRepository.save(draftPassion)
+        const savedPassion = await this.passionRepository.save(draftPassion)
 
         return {
-            id: savedUser.id,
-            name: savedUser.name,
-            picture: savedUser.picture,
-            type: savedUser.type,
-            description: savedUser.description,
+            id: savedPassion.id,
+            name: savedPassion.name,
+            picture: savedPassion.picture,
+            type: savedPassion.type,
+            description: savedPassion.description,
         }
     }
 
@@ -60,6 +60,10 @@ export class PassionService {
 
     async save(passion: Passion): Promise<Passion> {
         return this.passionRepository.save(passion)
+    }
+
+    async getAllPassions(): Promise<Passion[]> {
+        return this.passionRepository.find();
     }
 
     /* === PRIVATE METHODS === */

@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
-import { CreateUserDto } from './dto/CreateUser.dto';
+import { CreateUserDto } from './dto/createUser.dto';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,6 +10,10 @@ import { ConfigService } from '@nestjs/config';
 import { Passion } from '../passion/passion.entity';
 import { PassionService } from '../passion/passion.service';
 import { AddPassionDto } from './dto/addPassion.dto';
+import { ActivityService } from '../activity/activity.service';
+import { GroupService } from '../group/group.service';
+import { Relation } from '../relation/relation.entity';
+import { RelationService } from '../relation/relation.service';
 
 interface CreatedUser {
     id: string;
@@ -25,6 +29,9 @@ export class UserService {
         private jwtService: JwtService,
         private configService: ConfigService,
         private passionService: PassionService,
+        private activityService: ActivityService,
+        private groupService: GroupService,
+        private relationService: RelationService
     ) {}
 
     async createUser(dto: CreateUserDto): Promise<CreatedUser> {
@@ -78,7 +85,6 @@ export class UserService {
     async addPassionToUser(user: User, dto: AddPassionDto): Promise<void> {
         const passion = await this.passionService.findOneById(dto.passionId)
         if (passion === null) {
-            console.log('PASSION_NOT_FOUND')
             throw new NotFoundException('PASSION_NOT_FOUND')
         }
 
@@ -87,6 +93,97 @@ export class UserService {
         }
         user.passions.push(passion)
         await this.save(user)
+    }
+    
+    async joinActivity(user: User, activityId: string): Promise<void> {
+
+        const activity = await this.activityService.findOneById(activityId)
+        if (activity === null) {
+            throw new NotFoundException('ACTIVITY_NOT_FOUND')
+        }
+
+        user = await this.userRepository.findOne({where: {id: user.id}, relations: ['participatedActivities']})
+
+        if (activity.participants !== undefined) {
+            if (activity.participants.length >= activity.maxParticipants) {
+                throw new UnprocessableEntityException('ACTIVITY_FULL')
+            }
+        }
+
+        if (activity.endDate < new Date()) {
+            throw new UnprocessableEntityException('ACTIVITY_ENDED')
+        }
+
+        if (user.participatedActivities === undefined) {
+            user.participatedActivities = []
+        }
+
+        user.participatedActivities.push(activity)
+        await this.save(user)
+    }
+
+    async leaveActivity(user: User, activityId: string): Promise<void> {
+        const activity = await this.activityService.findOneById(activityId)
+        if (activity === null) {
+            throw new NotFoundException('ACTIVITY_NOT_FOUND')
+        }
+
+        user = await this.userRepository.findOne({where: {id: user.id}, relations: ['participatedActivities']})
+
+        if (activity.endDate < new Date()) {
+            throw new UnprocessableEntityException('ACTIVITY_ENDED')
+        }
+
+        if (user.participatedActivities === undefined) {
+            return
+        }
+        user.participatedActivities = user.participatedActivities.filter(a => a.id !== activity.id)
+        await this.save(user)
+    }
+
+    async joinGroup(user: User, groupId: string): Promise<void> {
+
+        const group = await this.groupService.findOneById(groupId)
+        if (group === null) {
+            throw new NotFoundException('GROUP_NOT_FOUND')
+        }
+
+        user = await this.userRepository.findOne({where: {id: user.id}, relations: ['participatedGroups']})
+
+        if (user.participatedGroups === undefined) {
+            user.participatedGroups = []
+        }
+
+        user.participatedGroups.push(group)
+        await this.save(user)
+    }
+
+    async leaveGroup(user: User, groupId: string): Promise<void> {
+        const group = await this.groupService.findOneById(groupId)
+        if (group === null) {
+            throw new NotFoundException('GROUP_NOT_FOUND')
+        }
+
+        user = await this.userRepository.findOne({where: {id: user.id}, relations: ['participatedGroups']})
+
+        if (user.participatedGroups === undefined) {
+            return
+        }
+        user.participatedGroups = user.participatedGroups.filter(a => a.id !== group.id)
+        await this.save(user)
+    }
+
+    async getRelations(user: User): Promise<{relations: Relation[]}> {
+        user = await this.userRepository.findOne({where: {id: user.id}, relations: ['baseUserRelations']})
+        let relations = []
+
+        for (let relation of user.baseUserRelations) {
+            relations.push(await this.relationService.findOneByIdWithUserMet(relation.id))
+        }
+
+        return {
+            relations: relations
+        }
     }
 
     async findOneById(id: string): Promise<User | null> {

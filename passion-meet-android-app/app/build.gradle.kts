@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -53,7 +55,20 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Glide dependencies
-    implementation("com.github.bumptech.glide:glide:4.13.0")
+    implementation(libs.glide)
 
-    implementation("com.google.android.flexbox:flexbox:3.0.0")
+    implementation(libs.flexbox)
+
+    implementation(libs.play.services.cronet)
+    implementation(libs.gson)
+
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
+
+    // NETWORK
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+
 }

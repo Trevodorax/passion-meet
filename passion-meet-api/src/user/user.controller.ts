@@ -1,12 +1,13 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/CreateUser.dto';
+import { CreateUserDto } from './dto/createUser.dto';
 import { LoginDto } from './dto/Login.dto';
 import { Public } from './decorators/public.decorator';
 import { User } from './user.entity';
 import { GetUser } from './decorators/get-user.decorator';
-import { Passion } from 'src/passion/passion.entity';
+import { Passion } from '../passion/passion.entity';
 import { AddPassionDto } from './dto/addPassion.dto';
+import { Relation } from '../relation/relation.entity';
 
 interface UserResponse {
   id: string;
@@ -22,7 +23,9 @@ interface GetPassionResponse {
   passions: Passion[]
 }
 
-
+interface GetRelationsResponse {
+  relations: Relation[]
+}
 
 @Controller('users')
 export class UserController {
@@ -63,4 +66,35 @@ export class UserController {
   async addPassionToUser(@GetUser() user: User, @Body() body: AddPassionDto): Promise<void> {
     await this.userService.addPassionToUser(user, body)
   }
+
+  @Post('me/activities')
+  async joinActivity(@GetUser() user: User, @Body() body: {activityId: string}): Promise<void> {
+    await this.userService.joinActivity(user, body.activityId)
+  }
+
+  @Delete('me/activities')
+  async leaveActivity(@GetUser() user: User, @Body() body: {activityId: string}): Promise<void> {
+    await this.userService.leaveActivity(user, body.activityId)
+  }
+
+  @Post('me/groups')
+  async joinGroup(@GetUser() user: User, @Body() body: {groupId: string}): Promise<void> {
+    await this.userService.joinGroup(user, body.groupId)
+  }
+
+  @Delete('me/groups')
+  async leaveGroup(@GetUser() user: User, @Body() body: {groupId: string}): Promise<void> {
+    await this.userService.leaveGroup(user, body.groupId)
+  }
+
+  @Post('me/groups/messages')
+  async sendMessageToGroup(@GetUser() user: User, @Body() body: {groupId: string}): Promise<void> {
+    await this.userService.joinGroup(user, body.groupId)
+  }
+
+  @Get('me/relations')
+  async getRelations(@GetUser() user: User): Promise<GetRelationsResponse> {
+    return await this.userService.getRelations(user)
+  }
+
 }

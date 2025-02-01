@@ -1,23 +1,26 @@
 package com.example.passionmeet.ui.login
 
+import android.content.Context
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.passionmeet.data.LoginDataSource
-import com.example.passionmeet.data.LoginRepository
+import com.example.passionmeet.repositories.LoginRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
  * Required given LoginViewModel has a non-empty constructor
  */
-class LoginViewModelFactory : ViewModelProvider.Factory {
+class LoginViewModelFactory(
+    private val repository: LoginRepository,
+    private val activity: LoginActivity
+) : ViewModelProvider.Factory {
 
-    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(
-                loginRepository = LoginRepository(
-                    dataSource = LoginDataSource()
-                )
+                repository,
+                activity
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

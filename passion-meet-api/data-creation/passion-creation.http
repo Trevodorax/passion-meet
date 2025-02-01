@@ -1,0 +1,200 @@
+### Création de passions
+
+### Passion 1 - Jeux vidéo
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Jeux vidéo",
+  "picture": "url_jeux_video.jpg",
+  "type": "GAME",
+  "description": "Passionné par les jeux vidéo, du rétro au moderne."
+}
+
+### Passion 2 - Films de science-fiction
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Films de science-fiction",
+  "picture": "url_sf.jpg",
+  "type": "MOVIES",
+  "description": "Exploration des mondes futuristes et des technologies avancées à travers le cinéma."
+}
+
+### Passion 3 - Cuisine italienne
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Cuisine italienne",
+  "picture": "url_cuisine_italienne.jpg",
+  "type": "FOOD",
+  "description": "Amateur de pâtes fraîches, de pizza et de tiramisu maison."
+}
+
+### Passion 4 - Voitures de collection
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Voitures de collection",
+  "picture": "url_voitures.jpg",
+  "type": "CARS",
+  "description": "Passionné par les voitures classiques et les modèles rares."
+}
+
+### Passion 5 - Peinture à l'huile
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Peinture à l'huile",
+  "picture": "url_peinture.jpg",
+  "type": "ART",
+  "description": "Exploration des couleurs et des textures à travers la peinture traditionnelle."
+}
+
+### Passion 6 - Nouvelles technologies
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Nouvelles technologies",
+  "picture": "url_tech.jpg",
+  "type": "TECH",
+  "description": "Curieux des innovations, de l'IA aux objets connectés."
+}
+
+### Passion 7 - Randonnée en montagne
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Randonnée en montagne",
+  "picture": "url_randonnee.jpg",
+  "type": "OUTSIDE",
+  "description": "Découverte des paysages à couper le souffle en marchant."
+}
+
+### Passion 8 - Chiens et dressage
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Chiens et dressage",
+  "picture": "url_chiens.jpg",
+  "type": "PETS",
+  "description": "Amour inconditionnel pour les chiens et leur éducation."
+}
+
+### Passion 9 - Photographie urbaine
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Photographie urbaine",
+  "picture": "url_photographie.jpg",
+  "type": "ART",
+  "description": "Capturer l’essence des villes à travers l’objectif."
+}
+
+### Passion 10 - Dégustation de vin
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Dégustation de vin",
+  "picture": "url_vin.jpg",
+  "type": "FOOD",
+  "description": "Exploration des saveurs et des terroirs viticoles."
+}
+
+### Passion 11 - Moto et sensations fortes
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Moto et sensations fortes",
+  "picture": "url_moto.jpg",
+  "type": "CARS",
+  "description": "Vivre la route et l’adrénaline sur deux roues."
+}
+
+### Passion 12 - Modélisme ferroviaire
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Modélisme ferroviaire",
+  "picture": "url_trains.jpg",
+  "type": "TECH",
+  "description": "Reproduction minutieuse de paysages et trains miniatures."
+}
+
+### Passion 13 - Jardinage biologique
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Jardinage biologique",
+  "picture": "url_jardin.jpg",
+  "type": "OUTSIDE",
+  "description": "Cultiver des fruits et légumes sains sans pesticides."
+}
+
+### Passion 14 - Astuces de bricolage
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Astuces de bricolage",
+  "picture": "url_bricolage.jpg",
+  "type": "OTHER",
+  "description": "Réalisation de projets DIY et amélioration de la maison."
+}
+
+### Passion 15 - Dessin numérique
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Dessin numérique",
+  "picture": "url_dessin.jpg",
+  "type": "ART",
+  "description": "Création artistique avec tablette et logiciels spécialisés."
+}
+
+### Passion 16 - Astronomie
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Astronomie",
+  "picture": "url_astronomie.jpg",
+  "type": "TECH",
+  "description": "Observation des étoiles et des phénomènes célestes."
+}
+
+
+### Passion 17 - Musique électronique
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Musique électronique",
+  "picture": "url_musique.jpg",
+  "type": "MEDIA",
+  "description": "Production et écoute de sons électros innovants."
+}
+
+### Passion 18 - Théâtre et comédie
+POST https://passion-meet.onrender.com/passions
+Content-Type: application/json
+
+{
+  "name": "Théâtre et comédie",
+  "picture": "url_theatre.jpg",
+  "type": "ART",
+  "description": "Monter sur scène et vivre des émotions intenses."
+}
