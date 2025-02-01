@@ -9,9 +9,9 @@ import com.example.passionmeet.models.EncounterStatus
 import com.example.passionmeet.models.ShortenedEncounter
 
 class EncounterVH(view: View): RecyclerView.ViewHolder(view) {
-    val encounterNameTV: TextView = view.findViewById(R.id.encouter_card_username);
-    val encounterDatetimeTV: TextView = view.findViewById(R.id.encounter_card_datetime);
-    val encounterStatusIV: ImageView = view.findViewById(R.id.encounter_card_stars);
+    val encounterNameTV: TextView = view.findViewById(R.id.encouter_card_username)
+    val encounterDatetimeTV: TextView = view.findViewById(R.id.encounter_card_datetime)
+    val encounterStatusIV: ImageView = view.findViewById(R.id.encounter_card_stars)
 
 
     fun bind(encounter: ShortenedEncounter) {
