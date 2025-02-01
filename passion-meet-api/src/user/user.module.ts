@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,6 +8,7 @@ import { AuthGuard } from './auth.guard';
 import { PassionModule } from '../passion/passion.module';
 import { ActivityModule } from '../activity/activity.module';
 import { GroupModule } from '../group/group.module';
+import { RelationModule } from '../relation/relation.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { GroupModule } from '../group/group.module';
     PassionModule,
     ActivityModule,
     GroupModule,
+    RelationModule,
   ],
   controllers: [UserController],
   providers: [

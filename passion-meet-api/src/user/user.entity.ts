@@ -4,6 +4,7 @@ import { Passion } from "../passion/passion.entity";
 import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Group } from "../group/group.entity";
 import { Message } from "../message/message.entity";
+import { Relation } from "../relation/relation.entity";
 
 @Entity()
 export class User {
@@ -36,4 +37,10 @@ export class User {
 
     @OneToMany(() => Message, (message) => message.createdBy, {onDelete: 'CASCADE'})
     messages: Message[];
+
+    @OneToMany(() => Relation, (relation) => relation.userMet, {onDelete: 'CASCADE'})
+    userMetRelations: Relation[];
+
+    @OneToMany(() => Relation, (relation) => relation.baseUser, {onDelete: 'CASCADE'})
+    baseUserRelations: Relation[];
 }

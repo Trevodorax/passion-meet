@@ -10,6 +10,7 @@ import { PassionModule } from './passion/passion.module';
 import { ActivityModule } from './activity/activity.module';
 import { GroupModule } from './group/group.module';
 import { MessageModule } from './message/message.module';
+import { RelationModule } from './relation/relation.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { MessageModule } from './message/message.module';
     ActivityModule,
     GroupModule,
     MessageModule,
+    RelationModule,
   ],
 })
 export class AppModule {}

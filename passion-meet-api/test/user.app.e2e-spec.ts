@@ -9,6 +9,7 @@ import { Passion } from '../src/passion/passion.entity';
 import { Activity } from '../src/activity/activity.entity';
 import { Group } from '../src/group/group.entity';
 import { Message } from '../src/message/message.entity';
+import { Relation } from '../src/relation/relation.entity';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -23,6 +24,7 @@ describe('AppController (e2e)', () => {
     await app.init();
 
     const dataSource = app.get(DataSource);
+    await dataSource.createQueryBuilder().delete().from(Relation).execute();
     await dataSource.createQueryBuilder().delete().from(Message).execute();
     await dataSource.createQueryBuilder().delete().from(Group).execute();
     await dataSource.createQueryBuilder().delete().from(Activity).execute();
@@ -32,6 +34,7 @@ describe('AppController (e2e)', () => {
 
   afterEach(async () => {
     const dataSource = app.get(DataSource);
+    await dataSource.createQueryBuilder().delete().from(Relation).execute();
     await dataSource.createQueryBuilder().delete().from(Message).execute();
     await dataSource.createQueryBuilder().delete().from(Group).execute();
     await dataSource.createQueryBuilder().delete().from(Activity).execute();
@@ -507,6 +510,86 @@ describe('AppController (e2e)', () => {
       .expect(({body}) => {
         expect(body).toHaveLength(1)
         expect(body[0].content).toBe('hello best group in the world')
+      });
+    });
+  });
+  describe('users/:userId/relations', () => {
+    it('should be able to add a relations to a user and mark it as seen', async () => {
+      let baseUser: User;
+      let userMet: User;
+      let relation: Relation;
+      const { token } = await givenUserIsLoggedIn({email: 'email@gmail.com', password: 'password', username: 'user'})
+      await request(app.getHttpServer())
+      .get('/users/me')
+      .set('Authorization', `Bearer ${token}`)
+      .send()
+      .expect(200)
+      .expect(({body}) => {
+        body.password = undefined
+        baseUser = body
+      });
+      await request(app.getHttpServer())
+      .post('/users')
+      .send({
+        email: 'test@example.com',
+        password: 'password123',
+        username: 'testuser',
+      })
+      .expect(201)
+      .expect((res) => {
+        expect(typeof res.body.id).toBe('string')
+        expect(res.body.email).toBe('test@example.com')
+        expect(res.body.username).toBe('testuser')
+        userMet = res.body
+      });
+      await request(app.getHttpServer())
+      .post('/users/' + baseUser.id + '/relations')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        baseUser: baseUser,
+        userMet: userMet,
+      })
+      .expect(201)
+      .expect((res) => {
+        expect(typeof res.body.id).toBe('string')
+        expect(typeof res.body.createdAt).toBe('string')
+        expect(res.body.isSeen).toBe(false)
+        expect(res.body.userMet).toEqual(userMet)
+        relation = res.body
+      });
+      await request(app.getHttpServer())
+      .get('/users/me/relations')
+      .set('Authorization', `Bearer ${token}`)
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.relations).toHaveLength(1)
+        expect(res.body.relations[0].userMet).toEqual(userMet)
+      });
+      await request(app.getHttpServer())
+      .patch('/users/' + baseUser.id + '/relations/' + relation.id + '')
+      .set('Authorization', `Bearer ${token}`)
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.isSeen).toBe(true)
+      });
+      let { token: otherToken } = { token: "" }
+      await request(app.getHttpServer())
+      .post('/users/login')
+      .send({email: 'test@example.com', password: 'password123'})
+      .expect(201)
+      .expect((res) => {
+        otherToken = res.body.token
+      })
+      await request(app.getHttpServer())
+      .get('/users/me/relations')
+      .set('Authorization', `Bearer ${otherToken}`)
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.relations).toHaveLength(1)
+        expect(res.body.relations[0].userMet).toEqual(baseUser)
       });
     });
   });
