@@ -24,4 +24,6 @@
     <string name="login">Connexion</string>
     <string name="submit_button_label">valider</string>
     <string name="select_passion_title">Selectionnez vos passions:</string>
+    <string name="starting_page_sub_text">Partagez enfin votre passion avec le monde</string>
+    <string name="starting_page_app_name">Passion meeter</string>
 </resources>

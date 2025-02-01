@@ -5,45 +5,118 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/image_main_passion_meet"
     tools:context=".MainActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/create_account_button"
-        android:text="@string/signup_button_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/sign_in_account_button"
-        android:layout_marginTop="35dp"
-    />
 
-    <Button
+    <LinearLayout
+        android:id="@+id/main_div"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+        android:id="@+id/large_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/sign_in_account_button"
-        android:text="@string/sign_in_button_label"
+        android:text="@string/starting_page_app_name"
+        android:textSize="42sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        android:layout_marginTop="400dp"
+        android:layout_marginStart="40dp"
+        android:textAlignment="center"/>
 
-    <Button
+    <TextView
+        android:id="@+id/small_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/navigation_select_passion"
-        android:text="selectPassions"
+        android:text="@string/starting_page_sub_text"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_marginStart="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/large_text"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="30dp"
         />
 
+        <LinearLayout
+            android:id="@+id/home_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <androidx.cardview.widget.CardView
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
 
+                <Button
+                    android:id="@+id/create_account_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@string/signup_button_label"
+                    android:background="?attr/colorPrimary"
+                    android:textColor="@android:color/white"
+                    />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <Button
+                    android:id="@+id/sign_in_account_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@string/sign_in_button_label"
+                    android:background="?attr/colorPrimary"
+                    android:textColor="@android:color/white"
+                    />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <Button
+                    android:id="@+id/navigation_select_passion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Select Passions"
+                    android:background="?attr/colorPrimary"
+                    android:textColor="@android:color/white"
+                    />
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/passion_selector_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_div"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 
@@ -56,5 +129,6 @@
         android:layout_marginTop="20dp" />
 
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
