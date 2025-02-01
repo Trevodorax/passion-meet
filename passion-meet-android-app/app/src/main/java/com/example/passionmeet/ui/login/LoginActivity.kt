@@ -17,6 +17,8 @@ import androidx.lifecycle.Observer
 import com.example.passionmeet.R
 import com.example.passionmeet.databinding.ActivityLoginBinding
 import com.example.passionmeet.repositories.LoginRepository
+import com.example.passionmeet.viewmodel.LoginViewModel
+import com.example.passionmeet.viewmodel.factories.LoginViewModelFactory
 
 class LoginActivity : AppCompatActivity() {
 
@@ -65,6 +67,7 @@ class LoginActivity : AppCompatActivity() {
             if (loginResult.error != null) {
                 System.err.println("Login Failed: ${loginResult.error}")
                 showLoginFailed(loginResult.error)
+                return@Observer
             }
             if (loginResult.success != null) {
                 System.err.println("LoginActivity: loginResult.success: ${loginResult.success}")

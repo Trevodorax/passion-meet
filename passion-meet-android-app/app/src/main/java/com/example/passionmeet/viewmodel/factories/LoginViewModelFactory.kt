@@ -1,11 +1,10 @@
-package com.example.passionmeet.ui.login
+package com.example.passionmeet.viewmodel.factories
 
-import android.content.Context
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.passionmeet.data.LoginDataSource
 import com.example.passionmeet.repositories.LoginRepository
+import com.example.passionmeet.ui.login.LoginActivity
+import com.example.passionmeet.viewmodel.LoginViewModel
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

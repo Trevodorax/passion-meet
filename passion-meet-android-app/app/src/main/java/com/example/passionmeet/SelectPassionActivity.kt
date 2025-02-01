@@ -1,34 +1,43 @@
 package com.example.passionmeet
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.passionmeet.models.CategoryModel
+import com.example.passionmeet.models.PassionCategoryModel
 import com.example.passionmeet.models.PassionSelectorModel
+import com.example.passionmeet.repositories.PassionRepository
+import com.example.passionmeet.viewmodel.PassionViewModel
+import com.example.passionmeet.viewmodel.factories.PassionViewModelFactory
 import com.google.android.flexbox.FlexboxLayout
 
 class SelectPassionActivity : AppCompatActivity() {
 
     private lateinit var selectedPassionsContainer: FlexboxLayout
 
+    private val passionViewModel: PassionViewModel by viewModels {
+        PassionViewModelFactory(PassionRepository(), this)
+    }
+
     private lateinit var categoryAdapter: CategoryAdapter
 
     val categories = listOf(
-        CategoryModel(
+        PassionCategoryModel(
             "Music", listOf(
                 PassionSelectorModel("Rap", "https://picsum.photos/1200"),
                 PassionSelectorModel("Pop", "https://picsum.photos/1200"),
                 PassionSelectorModel("K-POP", "https://picsum.photos/1200")
             )
         ),
-        CategoryModel(
+        PassionCategoryModel(
             "Sports", listOf(
                 PassionSelectorModel("Soccer", "https://picsum.photos/1200"),
                 PassionSelectorModel("Basketball", "https://picsum.photos/1200")
@@ -51,10 +60,24 @@ class SelectPassionActivity : AppCompatActivity() {
         selectedPassionsContainer = findViewById(R.id.selected_passions_container)
 
 
+        fetchData()
+    }
+
+    private fun fetchData() {
+        this.passionViewModel.passionData.observe(this) { passions ->
+            // Update the UI with the fetched data
+            setupRecyclerView(passions)
+            Log.e("PassionData", "passions-assign to rv $passions")
+        }
+
+        this.passionViewModel.fetchAllData()
+    }
+
+    private fun setupRecyclerView(passionByCategory: List<PassionCategoryModel> = categories) {
         // Setup categories rv
         val categoryRecyclerView = findViewById<RecyclerView>(R.id.category_recycler_view)
         categoryRecyclerView.layoutManager = LinearLayoutManager(this)
-        categoryAdapter = CategoryAdapter(categories) { selectedPassions ->
+        categoryAdapter = CategoryAdapter(passionByCategory) { selectedPassions ->
             updateSelectedPassions(selectedPassions)
         }
         categoryRecyclerView.adapter = categoryAdapter

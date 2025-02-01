@@ -7,11 +7,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.passionmeet.models.CategoryModel
+import com.example.passionmeet.models.PassionCategoryModel
 import com.example.passionmeet.models.PassionSelectorModel
 
 class CategoryAdapter(
-    private val categories: List<CategoryModel>,
+    private val categories: List<PassionCategoryModel>,
     private val onPassionsSelected: (selectedPassions: List<PassionSelectorModel>) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
