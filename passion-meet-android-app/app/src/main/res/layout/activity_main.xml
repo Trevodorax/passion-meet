@@ -135,6 +135,7 @@
         app:layout_constraintTop_toTopOf="@+id/main_div"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+
     <!-- Parent RecyclerView for categories -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/category_recycler_view"
@@ -142,5 +143,6 @@
         android:layout_height="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="20dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,17 +5,24 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import java.net.HttpURLConnection
-import java.net.URL
+import androidx.lifecycle.Observer
+import com.example.passionmeet.repositories.SignupRepository
+import com.example.passionmeet.viewmodel.SignupViewModel
+import com.example.passionmeet.viewmodel.factories.SignupViewModelFactory
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var emailEditText: EditText
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var submitButton: Button
+
+    private val signupViewModel: SignupViewModel by viewModels() {
+        SignupViewModelFactory(SignupRepository(this), this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,47 +40,24 @@ class SignupActivity : AppCompatActivity() {
             insets
         }
 
+        signupViewModel.signupResult.observe(this@SignupActivity, Observer {
+            val result = it ?: return@Observer
+
+            if (result.isSignupSuccess) {
+                Toast.makeText(this, "Signup successful", Toast.LENGTH_SHORT).show()
+                // close and destroy activity
+                finish()
+            } else {
+                Toast.makeText(this, "Signup failed", Toast.LENGTH_LONG).show()
+            }
+        });
+
         submitButton.setOnClickListener {
-            Thread {
-                try {
-                    val url = URL("http://10.0.2.2:3000/user")
-                    val connection = url.openConnection() as HttpURLConnection
-                    connection.requestMethod = "POST"
-                    connection.setRequestProperty("Content-Type", "application/json")
-                    connection.doOutput = true
+            val email = emailEditText.text.toString()
+            val username = usernameEditText.text.toString()
+            val password = passwordEditText.text.toString()
 
-                    // Create JSON body
-                    val jsonBody = """
-                        {
-                            "email": "${emailEditText.text}",
-                            "username": "${usernameEditText.text}",
-                            "password": "${passwordEditText.text}"
-                        }
-                    """.trimIndent()
-
-                    // Send request
-                    connection.outputStream.use { os ->
-                        os.write(jsonBody.toByteArray())
-                    }
-
-                    // Check response
-                    val responseCode = connection.responseCode
-                    if (responseCode == HttpURLConnection.HTTP_OK ||
-                        responseCode == HttpURLConnection.HTTP_CREATED) {
-                        runOnUiThread {
-                            Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        runOnUiThread {
-                            Toast.makeText(this, "Failed: $responseCode", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                } catch (e: Exception) {
-                    runOnUiThread {
-                        Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }.start()
+            signupViewModel.signup(email, password, username)
         }
     }
 }

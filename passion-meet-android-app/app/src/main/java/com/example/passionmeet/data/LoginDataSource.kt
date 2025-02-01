@@ -2,7 +2,7 @@ package com.example.passionmeet.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.passionmeet.data.model.LoginModel
+import com.example.passionmeet.models.LoginModel
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonSyntaxException
@@ -53,7 +53,7 @@ class LoginDataSource(private val context: Context) {
                 val loginResult = parseLoginResponse(response)
                 if (loginResult is Result.Success) {
                     // Save the token on successful login
-                    saveToken(loginResult.data.token)
+                    loginResult.data.token?.let { saveToken(it) }
                 }
 
                 return@withContext parseLoginResponse(response)

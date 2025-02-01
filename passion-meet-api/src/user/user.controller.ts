@@ -67,6 +67,12 @@ export class UserController {
     await this.userService.addPassionToUser(user, body)
   }
 
+  @Post('me/passions/multiple')
+  async addMultiplePassionsToUser(@GetUser() user: User, @Body() body: AddPassionDto[]): Promise<void> {
+    await this.userService.addMultiplePassionsToUser(user, body)
+  }
+
+
   @Post('me/activities')
   async joinActivity(@GetUser() user: User, @Body() body: {activityId: string}): Promise<void> {
     await this.userService.joinActivity(user, body.activityId)
