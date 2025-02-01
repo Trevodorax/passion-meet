@@ -73,6 +73,9 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
+    // MAPBOX
+    implementation("com.mapbox.maps:android:11.9.1")
+
     // Room components
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
