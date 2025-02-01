@@ -1,11 +1,11 @@
-package com.example.passionmeet.groups
+package com.example.passionmeet
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.passionmeet.R
 import com.example.passionmeet.models.GroupModel
+import com.example.passionmeet.views.GroupsVH
 
 class GroupsListAdapter(private val context: Context, private val groups: List<GroupModel>): RecyclerView.Adapter<GroupsVH>() {
 

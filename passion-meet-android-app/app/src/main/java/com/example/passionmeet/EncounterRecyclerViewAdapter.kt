@@ -1,15 +1,12 @@
-package com.example.passionmeet.encounters
+package com.example.passionmeet
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-import com.example.passionmeet.R
 
-import com.example.passionmeet.databinding.FragmentEncounterBinding
-import com.example.passionmeet.models.GroupModel
 import com.example.passionmeet.models.ShortenedEncounter
+import com.example.passionmeet.views.EncounterVH
 
 
 class EncounterRecyclerViewAdapter(
