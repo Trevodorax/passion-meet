@@ -1,4 +1,4 @@
-package com.example.passionmeet.groups
+package com.example.passionmeet.views
 
 import android.view.View
 import android.widget.ImageView
