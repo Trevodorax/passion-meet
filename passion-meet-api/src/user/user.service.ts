@@ -12,6 +12,8 @@ import { PassionService } from '../passion/passion.service';
 import { AddPassionDto } from './dto/addPassion.dto';
 import { ActivityService } from '../activity/activity.service';
 import { GroupService } from '../group/group.service';
+import { Relation } from '../relation/relation.entity';
+import { RelationService } from '../relation/relation.service';
 
 interface CreatedUser {
     id: string;
@@ -28,7 +30,8 @@ export class UserService {
         private configService: ConfigService,
         private passionService: PassionService,
         private activityService: ActivityService,
-        private groupService: GroupService
+        private groupService: GroupService,
+        private relationService: RelationService
     ) {}
 
     async createUser(dto: CreateUserDto): Promise<CreatedUser> {
@@ -168,6 +171,19 @@ export class UserService {
         }
         user.participatedGroups = user.participatedGroups.filter(a => a.id !== group.id)
         await this.save(user)
+    }
+
+    async getRelations(user: User): Promise<{relations: Relation[]}> {
+        user = await this.userRepository.findOne({where: {id: user.id}, relations: ['baseUserRelations']})
+        let relations = []
+
+        for (let relation of user.baseUserRelations) {
+            relations.push(await this.relationService.findOneByIdWithUserMet(relation.id))
+        }
+
+        return {
+            relations: relations
+        }
     }
 
     async findOneById(id: string): Promise<User | null> {

@@ -62,14 +62,14 @@ export class PassionService {
         return this.passionRepository.save(passion)
     }
 
+    async getAllPassions(): Promise<Passion[]> {
+        return this.passionRepository.find();
+    }
+
     /* === PRIVATE METHODS === */
 
     private async isNameAvailable(name: string): Promise<boolean> {
         const count = await this.passionRepository.count({ where: { name } });
         return count === 0;
-    }
-
-    async getAllPassions(): Promise<Passion[]> {
-        return this.passionRepository.find();
     }
 }

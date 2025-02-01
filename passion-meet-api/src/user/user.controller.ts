@@ -7,6 +7,7 @@ import { User } from './user.entity';
 import { GetUser } from './decorators/get-user.decorator';
 import { Passion } from '../passion/passion.entity';
 import { AddPassionDto } from './dto/addPassion.dto';
+import { Relation } from '../relation/relation.entity';
 
 interface UserResponse {
   id: string;
@@ -20,6 +21,10 @@ interface LoginResponse {
 
 interface GetPassionResponse {
   passions: Passion[]
+}
+
+interface GetRelationsResponse {
+  relations: Relation[]
 }
 
 @Controller('users')
@@ -85,6 +90,11 @@ export class UserController {
   @Post('me/groups/messages')
   async sendMessageToGroup(@GetUser() user: User, @Body() body: {groupId: string}): Promise<void> {
     await this.userService.joinGroup(user, body.groupId)
+  }
+
+  @Get('me/relations')
+  async getRelations(@GetUser() user: User): Promise<GetRelationsResponse> {
+    return await this.userService.getRelations(user)
   }
 
 }
