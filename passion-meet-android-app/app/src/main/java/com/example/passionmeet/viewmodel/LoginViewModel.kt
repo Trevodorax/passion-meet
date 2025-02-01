@@ -1,5 +1,6 @@
-package com.example.passionmeet.ui.login
+package com.example.passionmeet.viewmodel
 
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -7,12 +8,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.passionmeet.R
 import com.example.passionmeet.repositories.LoginRepository
+import com.example.passionmeet.ui.login.LoggedInUserView
+import com.example.passionmeet.ui.login.LoginFormState
+import com.example.passionmeet.ui.login.LoginResult
 
 /**
  * ViewModel for the login screen.
  */
 class LoginViewModel(
-     val loginRepository: LoginRepository,
+    val loginRepository: LoginRepository,
     val context: LifecycleOwner
 ) : ViewModel() {
 
@@ -26,22 +30,21 @@ class LoginViewModel(
      * Calls the login function in the repository, which will use Cronet in the data source
      * Updates loginResult LiveData based on the Result type
      */
-    fun login(username: String, password: String) {
+    fun login(email: String, password: String) {
         this.loginRepository.loginResponse.observe(context) { data ->
 
-            if (data != null) {
-                // Update loginResult LiveData based on the Result type
-                if (data.token != null) {
-                    this@LoginViewModel._loginResult.value =
-                        LoginResult(success = LoggedInUserView(displayName = data.token))
-                } else {
-                    this@LoginViewModel._loginResult.value =
-                        LoginResult(error = R.string.login_failed)
-                }
+            if (data?.token != null && data.token.isNotEmpty()) {
+                Log.e("LoginViewModel", "Login successful")
+                this@LoginViewModel._loginResult.value =
+                    LoginResult(success = LoggedInUserView(displayName = data.token))
+            } else {
+                Log.e("LoginViewModel", "Login failed")
+                this@LoginViewModel._loginForm.value = LoginFormState(isDataValid = true)
+                this@LoginViewModel._loginResult.value = LoginResult(error = R.string.login_failed)
             }
         }
 
-        this.loginRepository.login(username, password)
+        this.loginRepository.login(email, password)
 
 //        viewModelScope.launch {
 //            // Call the login function in the repository, which will use Cronet in the data source

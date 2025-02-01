@@ -53,7 +53,7 @@ class LoginDataSource(private val context: Context) {
                 val loginResult = parseLoginResponse(response)
                 if (loginResult is Result.Success) {
                     // Save the token on successful login
-                    saveToken(loginResult.data.token)
+                    loginResult.data.token?.let { saveToken(it) }
                 }
 
                 return@withContext parseLoginResponse(response)
