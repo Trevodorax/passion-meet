@@ -21,6 +21,7 @@ import com.google.android.flexbox.FlexboxLayout
 
 class SelectPassionActivity : AppCompatActivity() {
 
+    private var passions: List<PassionCategoryModel>? = null
     private lateinit var selectedPassionsContainer: FlexboxLayout
 
     private val passionViewModel: PassionViewModel by viewModels {
@@ -28,23 +29,6 @@ class SelectPassionActivity : AppCompatActivity() {
     }
 
     private lateinit var categoryAdapter: CategoryAdapter
-
-    val categories = listOf(
-        PassionCategoryModel(
-            "Music", listOf(
-                PassionSelectorModel("Rap", "https://picsum.photos/1200"),
-                PassionSelectorModel("Pop", "https://picsum.photos/1200"),
-                PassionSelectorModel("K-POP", "https://picsum.photos/1200")
-            )
-        ),
-        PassionCategoryModel(
-            "Sports", listOf(
-                PassionSelectorModel("Soccer", "https://picsum.photos/1200"),
-                PassionSelectorModel("Basketball", "https://picsum.photos/1200")
-            )
-        )
-        // More categories...
-    )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,13 +51,14 @@ class SelectPassionActivity : AppCompatActivity() {
         this.passionViewModel.passionData.observe(this) { passions ->
             // Update the UI with the fetched data
             setupRecyclerView(passions)
+            this.passions = passions
             Log.e("PassionData", "passions-assign to rv $passions")
         }
 
         this.passionViewModel.fetchAllData()
     }
 
-    private fun setupRecyclerView(passionByCategory: List<PassionCategoryModel> = categories) {
+    private fun setupRecyclerView(passionByCategory: List<PassionCategoryModel>) {
         // Setup categories rv
         val categoryRecyclerView = findViewById<RecyclerView>(R.id.category_recycler_view)
         categoryRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -103,7 +88,7 @@ class SelectPassionActivity : AppCompatActivity() {
                 // Deselect the passion and update UI
                 passion.isSelected = false
                 updateCategoryAdapter() // Update the main adapter to reflect deselection
-                updateSelectedPassions(categories.flatMap { it.items.filter { it.isSelected } })
+                updateSelectedPassions(passions!!.flatMap { it.items.filter { it.isSelected } })
             }
 
             selectedPassionsContainer.addView(chipView)
