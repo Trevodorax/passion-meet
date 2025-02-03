@@ -1,3 +1,4 @@
+import { Group } from "../group/group.entity";
 import { User } from "../user/user.entity";
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -37,4 +38,6 @@ export class Activity {
     @JoinTable()
     participants: User[];
 
+    @ManyToOne(() => Group, (group) => group.activities)
+    group: Group;
 }

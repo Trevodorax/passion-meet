@@ -8,6 +8,8 @@ import { GetUser } from './decorators/get-user.decorator';
 import { Passion } from '../passion/passion.entity';
 import { AddPassionDto } from './dto/addPassion.dto';
 import { Relation } from '../relation/relation.entity';
+import { Activity } from '../activity/activity.entity';
+import { Group } from '../group/group.entity';
 
 interface UserResponse {
   id: string;
@@ -25,6 +27,14 @@ interface GetPassionResponse {
 
 interface GetRelationsResponse {
   relations: Relation[]
+}
+
+interface GetActivitiesResponse {
+  activities: Activity[]
+}
+
+interface GetGroupsResponse {
+  groups: Group[]
 }
 
 @Controller('users')
@@ -72,6 +82,10 @@ export class UserController {
     await this.userService.addMultiplePassionsToUser(user, body)
   }
 
+  @Get('me/activities')
+  async getActivitiesForUser(@GetUser() user: User): Promise<GetActivitiesResponse> {
+    return await this.userService.getActivitiesForUser(user.id)
+  }
 
   @Post('me/activities')
   async joinActivity(@GetUser() user: User, @Body() body: {activityId: string}): Promise<void> {
@@ -91,6 +105,11 @@ export class UserController {
   @Delete('me/groups')
   async leaveGroup(@GetUser() user: User, @Body() body: {groupId: string}): Promise<void> {
     await this.userService.leaveGroup(user, body.groupId)
+  }
+
+  @Get('me/groups')
+  async getGroupsForUser(@GetUser() user: User): Promise<GetGroupsResponse> {
+    return await this.userService.getGroupsForUser(user.id)
   }
 
   @Post('me/groups/messages')

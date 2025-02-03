@@ -3,6 +3,7 @@ import { Public } from '../user/decorators/public.decorator';
 import { User } from '../user/user.entity';
 import { ActivityService } from './activity.service';
 import { CreateActivityDto } from './dto/createActivity.dto';
+import { Group } from '../group/group.entity';
 
 interface ActivityResponse {
   id: string;
@@ -15,6 +16,7 @@ interface ActivityResponse {
   maxParticipants: number;
   imageUrl: string;
   createdBy: User;
+  group: Group;
   participants: User[];
 }
 

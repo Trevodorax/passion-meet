@@ -1,5 +1,6 @@
 import { IsDate, IsEmail, IsNotEmpty, IsNumber, IsString, MinLength } from 'class-validator';
 import { User } from '../../user/user.entity';
+import { Group } from '../../group/group.entity';
 
 export class CreateActivityDto {
 
@@ -35,4 +36,7 @@ export class CreateActivityDto {
 
     @IsNotEmpty()
     createdBy: User;
+
+    @IsNotEmpty()
+    group: Group;
 }
