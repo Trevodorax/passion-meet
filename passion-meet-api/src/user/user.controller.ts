@@ -21,22 +21,6 @@ interface LoginResponse {
   token: string
 }
 
-interface GetPassionResponse {
-  passions: Passion[]
-}
-
-interface GetRelationsResponse {
-  relations: Relation[]
-}
-
-interface GetActivitiesResponse {
-  activities: Activity[]
-}
-
-interface GetGroupsResponse {
-  groups: Group[]
-}
-
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {
@@ -68,7 +52,7 @@ export class UserController {
   }
 
   @Get('me/passions')
-  async getAllPassionsForAnUser(@GetUser() user: User): Promise<GetPassionResponse> {
+  async getAllPassionsForAnUser(@GetUser() user: User): Promise<Passion[]> {
     return await this.userService.getAllPassionsForAnUser(user.id)
   }
 
@@ -83,7 +67,7 @@ export class UserController {
   }
 
   @Get('me/activities')
-  async getActivitiesForUser(@GetUser() user: User): Promise<GetActivitiesResponse> {
+  async getActivitiesForUser(@GetUser() user: User): Promise<Activity[]> {
     return await this.userService.getActivitiesForUser(user.id)
   }
 
@@ -108,7 +92,7 @@ export class UserController {
   }
 
   @Get('me/groups')
-  async getGroupsForUser(@GetUser() user: User): Promise<GetGroupsResponse> {
+  async getGroupsForUser(@GetUser() user: User): Promise<Group[]> {
     return await this.userService.getGroupsForUser(user.id)
   }
 
@@ -118,7 +102,7 @@ export class UserController {
   }
 
   @Get('me/relations')
-  async getRelations(@GetUser() user: User): Promise<GetRelationsResponse> {
+  async getRelations(@GetUser() user: User): Promise<Relation[]> {
     return await this.userService.getRelations(user)
   }
 
