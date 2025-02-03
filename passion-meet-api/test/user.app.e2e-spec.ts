@@ -26,8 +26,8 @@ describe('AppController (e2e)', () => {
     const dataSource = app.get(DataSource);
     await dataSource.createQueryBuilder().delete().from(Relation).execute();
     await dataSource.createQueryBuilder().delete().from(Message).execute();
-    await dataSource.createQueryBuilder().delete().from(Group).execute();
     await dataSource.createQueryBuilder().delete().from(Activity).execute();
+    await dataSource.createQueryBuilder().delete().from(Group).execute();
     await dataSource.createQueryBuilder().delete().from(User).execute();
     await dataSource.createQueryBuilder().delete().from(Passion).execute();
   });
@@ -36,8 +36,8 @@ describe('AppController (e2e)', () => {
     const dataSource = app.get(DataSource);
     await dataSource.createQueryBuilder().delete().from(Relation).execute();
     await dataSource.createQueryBuilder().delete().from(Message).execute();
-    await dataSource.createQueryBuilder().delete().from(Group).execute();
     await dataSource.createQueryBuilder().delete().from(Activity).execute();
+    await dataSource.createQueryBuilder().delete().from(Group).execute();
     await dataSource.createQueryBuilder().delete().from(User).execute();
     await dataSource.createQueryBuilder().delete().from(Passion).execute();
   });
@@ -264,6 +264,8 @@ describe('AppController (e2e)', () => {
     it('user should be able to create, join and leave an activity', async () => {
       let user: User;
       let activity: Activity;
+      let passion: Passion;
+      let group: Group;
       const { token } = await givenUserIsLoggedIn({email: 'email@gmail.com', password: 'password', username: 'user'})
       await request(app.getHttpServer())
       .post('/users')
@@ -280,6 +282,48 @@ describe('AppController (e2e)', () => {
         user = res.body
       });
       await request(app.getHttpServer())
+      .post('/passions')
+      .send({
+          name: 'pokemon',
+          description: 'best passion in the world',
+          picture: 'path/to/the/picture',
+          type: PassionType.GAME
+      })
+      .expect(201)
+      .expect(({body}) => {
+          expect(body).toEqual({
+              id: expect.any(String),
+              name: 'pokemon',
+              description: 'best passion in the world',
+              picture: 'path/to/the/picture',
+              type: PassionType.GAME
+          })
+          passion = body
+      });
+      await request(app.getHttpServer())
+      .post('/groups')
+      .send({
+        name: 'group',
+        description: 'best group in the world',
+        passion: passion,
+        imageUrl: 'path/to/the/picture',
+        createdBy: user
+      })
+      .expect(201)
+      .expect(({body}) => {
+        expect(body).toEqual({
+          id: expect.any(String),
+          name: 'group',
+          description: 'best group in the world',
+          passion: passion,
+          imageUrl: 'path/to/the/picture',
+          createdBy: user,
+          activities: [],
+          participants: []
+        })
+        group = body
+      })
+      await request(app.getHttpServer())
       .post('/activities')
       .send({
         name: 'activity',
@@ -290,7 +334,8 @@ describe('AppController (e2e)', () => {
         location: 'somewhere',
         maxParticipants: 10,
         imageUrl: 'path/to/the/picture',
-        createdBy: user
+        createdBy: user,
+        group: group
       })
       .expect(201)
       .expect(({body}) => {
@@ -305,6 +350,7 @@ describe('AppController (e2e)', () => {
           maxParticipants: 10,
           imageUrl: 'path/to/the/picture',
           createdBy: user,
+          group: group,
           participants: []
         })
         activity = body
@@ -396,6 +442,7 @@ describe('AppController (e2e)', () => {
           passion: passion,
           imageUrl: 'path/to/the/picture',
           createdBy: user,
+          activities: [],
           participants: []
         })
         group = body
@@ -481,6 +528,7 @@ describe('AppController (e2e)', () => {
           passion: passion,
           imageUrl: 'path/to/the/picture',
           createdBy: user,
+          activities: [],
           participants: []
         })
         group = body

@@ -1,9 +1,12 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { User } from '../user/user.entity';
 import { Activity } from './activity.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateActivityDto } from './dto/createActivity.dto';
+import { UserService } from '../user/user.service';
+import { GroupService } from '../group/group.service';
+import { Group } from '../group/group.entity';
 
 interface CreatedActivity {
     id: string;
@@ -16,6 +19,7 @@ interface CreatedActivity {
     maxParticipants: number;
     imageUrl: string;
     createdBy: User;
+    group: Group;
     participants: User[];
 }
 
@@ -24,14 +28,26 @@ export class ActivityService {
     constructor(
         @InjectRepository(Activity)
         private activityRepository: Repository<Activity>,
+        @Inject(forwardRef(() => UserService))
+        private userService: UserService,
+        @Inject(forwardRef(() => GroupService))
+        private groupService: GroupService
     ) {}
 
     async createActivity(dto: CreateActivityDto): Promise<CreatedActivity> {
 
         await this.checkValidDates(dto.startDate, dto.endDate)
-
         if (dto.maxParticipants < 1) {
             throw new UnprocessableEntityException('Max participants must be at least 1')
+        }
+
+        const user = await this.userService.findOneById(dto.createdBy.id)
+        const group = await this.groupService.findOneById(dto.group.id)
+        if (user === null) {
+            throw new NotFoundException('User not found')
+        }
+        if (group === null) {
+            throw new NotFoundException('Group not found')
         }
 
         const draftActivity = this.activityRepository.create({
@@ -43,7 +59,8 @@ export class ActivityService {
             location: dto.location,
             maxParticipants: dto.maxParticipants,
             imageUrl: dto.imageUrl,
-            createdBy: dto.createdBy
+            createdBy: dto.createdBy,
+            group: dto.group
         })
 
         const savedActivity = await this.activityRepository.save(draftActivity)
@@ -59,6 +76,7 @@ export class ActivityService {
             maxParticipants: savedActivity.maxParticipants,
             imageUrl: savedActivity.imageUrl,
             createdBy: savedActivity.createdBy,
+            group: savedActivity.group,
             participants: []
         }
     }

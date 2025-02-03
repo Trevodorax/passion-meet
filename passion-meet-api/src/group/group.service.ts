@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateGroupDto } from './dto/createGroup.dto';
 import { Passion } from '../passion/passion.entity';
 import { Group } from './group.entity';
+import { Activity } from '../activity/activity.entity';
 
 interface CreatedGroup {
     id: string;
@@ -13,6 +14,7 @@ interface CreatedGroup {
     passion: Passion
     imageUrl: string;
     createdBy: User;
+    activities: Activity[];
     participants: User[];
 }
 
@@ -30,7 +32,7 @@ export class GroupService {
             description: dto.description,
             passion: dto.passion,
             imageUrl: dto.imageUrl,
-            createdBy: dto.createdBy
+            createdBy: dto.createdBy,
         })
 
         const savedGroup = await this.groupRepository.save(draftGroup)
@@ -42,6 +44,7 @@ export class GroupService {
             passion: savedGroup.passion,
             imageUrl: savedGroup.imageUrl,
             createdBy: savedGroup.createdBy,
+            activities: [],
             participants: []
         }
     }
@@ -53,6 +56,14 @@ export class GroupService {
 
     async findOneByName(name: string): Promise<Group | null> {
         return this.groupRepository.findOneBy({name})
+    }
+
+    async findAll(): Promise<Group[]> {
+        return this.groupRepository.find()
+    }
+
+    async findActivitiesByGroupId(id: string): Promise<Group | null> {
+        return this.groupRepository.findOne({where: {id: id}, relations: ['activities']})
     }
 
     async findManyByName(name: string): Promise<Group[] | null> {

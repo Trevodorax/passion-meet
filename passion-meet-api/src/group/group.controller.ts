@@ -4,6 +4,7 @@ import { User } from '../user/user.entity';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/createGroup.dto';
 import { Passion } from '../passion/passion.entity';
+import { Activity } from '../activity/activity.entity';
 
 interface GroupResponse {
   id: string;
@@ -12,7 +13,12 @@ interface GroupResponse {
   passion: Passion
   imageUrl: string;
   createdBy: User;
+  activities: Activity[];
   participants: User[];
+}
+
+interface GroupActivitiesResponse {
+  activities: Activity[]
 }
 
 @Controller('groups')
@@ -35,5 +41,22 @@ export class GroupController {
       throw new NotFoundException('Group_NOT_FOUND')
     }
     return group
+  }
+
+  @Public()
+  @Get()
+  async getAllGroups(): Promise<GroupResponse[]> {
+    const groups = await this.groupService.findAll()
+    return groups
+  }
+
+  @Public()
+  @Get('/:groupId/activities')
+  async getGroupActivities(@Param('groupId') groupId: string): Promise<GroupActivitiesResponse> {
+    const group = await this.groupService.findActivitiesByGroupId(groupId)
+    if (group === null) {
+      throw new NotFoundException('Group_NOT_FOUND')
+    }
+    return { activities: group.activities }
   }
 }

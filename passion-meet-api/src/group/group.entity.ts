@@ -1,3 +1,4 @@
+import { Activity } from "../activity/activity.entity";
 import { Message } from "../message/message.entity";
 import { Passion } from "../passion/passion.entity";
 import { User } from "../user/user.entity";
@@ -29,4 +30,7 @@ export class Group {
 
     @OneToMany(() => Message, (message) => message.createdBy, {onDelete: 'CASCADE'})
     messages: Message[];
+
+    @OneToMany(() => Activity, (activity) => activity.group, {onDelete: 'CASCADE'})
+    activities: Activity[];
 }

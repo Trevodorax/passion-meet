@@ -14,6 +14,8 @@ import { ActivityService } from '../activity/activity.service';
 import { GroupService } from '../group/group.service';
 import { Relation } from '../relation/relation.entity';
 import { RelationService } from '../relation/relation.service';
+import { Activity } from '../activity/activity.entity';
+import { Group } from '../group/group.entity';
 
 interface CreatedUser {
     id: string;
@@ -79,6 +81,20 @@ export class UserService {
         const user = await this.userRepository.findOne({where: {id: userId}, relations: ['passions']}) 
         return {
             passions: user.passions
+        }
+    }
+
+    async getActivitiesForUser(userId: string): Promise<{activities: Activity[]}> {
+        const user = await this.userRepository.findOne({where: {id: userId}, relations: ['participatedActivities']})
+        return {
+            activities: user.participatedActivities
+        }
+    }
+
+    async getGroupsForUser(userId: string): Promise<{groups: Group[]}> {
+        const user = await this.userRepository.findOne({where: {id: userId}, relations: ['participatedGroups']})
+        return {
+            groups: user.participatedGroups
         }
     }
 
