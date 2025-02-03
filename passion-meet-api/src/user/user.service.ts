@@ -77,25 +77,19 @@ export class UserService {
         }
     }
 
-    async getAllPassionsForAnUser(userId: string): Promise<{passions: Passion[]}> {
+    async getAllPassionsForAnUser(userId: string): Promise<Passion[]> {
         const user = await this.userRepository.findOne({where: {id: userId}, relations: ['passions']}) 
-        return {
-            passions: user.passions
-        }
+        return user.passions
     }
 
-    async getActivitiesForUser(userId: string): Promise<{activities: Activity[]}> {
+    async getActivitiesForUser(userId: string): Promise<Activity[]> {
         const user = await this.userRepository.findOne({where: {id: userId}, relations: ['participatedActivities']})
-        return {
-            activities: user.participatedActivities
-        }
+        return user.participatedActivities
     }
 
-    async getGroupsForUser(userId: string): Promise<{groups: Group[]}> {
+    async getGroupsForUser(userId: string): Promise<Group[]> {
         const user = await this.userRepository.findOne({where: {id: userId}, relations: ['participatedGroups']})
-        return {
-            groups: user.participatedGroups
-        }
+        return user.participatedGroups
     }
 
     async addPassionToUser(user: User, dto: AddPassionDto): Promise<void> {
@@ -204,7 +198,7 @@ export class UserService {
         await this.save(user)
     }
 
-    async getRelations(user: User): Promise<{relations: Relation[]}> {
+    async getRelations(user: User): Promise<Relation[]> {
         user = await this.userRepository.findOne({where: {id: user.id}, relations: ['baseUserRelations']})
         let relations = []
 
@@ -212,9 +206,7 @@ export class UserService {
             relations.push(await this.relationService.findOneByIdWithUserMet(relation.id))
         }
 
-        return {
-            relations: relations
-        }
+        return relations
     }
 
     async findOneById(id: string): Promise<User | null> {

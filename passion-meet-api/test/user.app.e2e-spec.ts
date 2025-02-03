@@ -256,7 +256,7 @@ describe('AppController (e2e)', () => {
       .send()
       .expect(200)
       .expect((res) => {
-        expect(res.body.passions[0].name).toBe('pokemon')
+        expect(res.body[0].name).toBe('pokemon')
       })
     });
   });
@@ -611,8 +611,8 @@ describe('AppController (e2e)', () => {
       .send()
       .expect(200)
       .expect((res) => {
-        expect(res.body.relations).toHaveLength(1)
-        expect(res.body.relations[0].userMet).toEqual(userMet)
+        expect(res.body).toHaveLength(1)
+        expect(res.body[0].userMet).toEqual(userMet)
       });
       await request(app.getHttpServer())
       .patch('/users/' + baseUser.id + '/relations/' + relation.id + '')
@@ -636,8 +636,8 @@ describe('AppController (e2e)', () => {
       .send()
       .expect(200)
       .expect((res) => {
-        expect(res.body.relations).toHaveLength(1)
-        expect(res.body.relations[0].userMet).toEqual(baseUser)
+        expect(res.body).toHaveLength(1)
+        expect(res.body[0].userMet).toEqual(baseUser)
       });
     });
   });
