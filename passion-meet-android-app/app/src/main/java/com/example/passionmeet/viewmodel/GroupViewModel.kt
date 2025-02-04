@@ -16,7 +16,7 @@ class GroupViewModel(
     private val _groupData = MutableLiveData<List<GroupModel>>()
     val groupData: LiveData<List<GroupModel>> get() = _groupData
 
-    fun fetchAllData() {
+    fun getSelfGroups() {
         this.groupRepository.groupData.observe(context) { data ->
             this@GroupViewModel._groupData.value = data
         }
