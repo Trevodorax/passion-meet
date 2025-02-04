@@ -23,6 +23,7 @@ fun mapPassionCategoryDtoToPassionCategoryModel(dtos: List<PassionDto>): List<Pa
     passionCategoryMap.forEach { (category, dtos) ->
         val passionSelectorModels = dtos.map { dto ->
             PassionSelectorModel(
+                id = dto.id,
                 name = dto.name,
                 image = dto.picture
             )

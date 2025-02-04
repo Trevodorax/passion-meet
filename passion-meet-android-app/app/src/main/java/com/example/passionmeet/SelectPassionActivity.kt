@@ -25,7 +25,7 @@ class SelectPassionActivity : AppCompatActivity() {
     private lateinit var selectedPassionsContainer: FlexboxLayout
 
     private val passionViewModel: PassionViewModel by viewModels {
-        PassionViewModelFactory(PassionRepository(), this)
+        PassionViewModelFactory(PassionRepository(this), this)
     }
 
     private lateinit var categoryAdapter: CategoryAdapter
@@ -43,7 +43,6 @@ class SelectPassionActivity : AppCompatActivity() {
 
         selectedPassionsContainer = findViewById(R.id.selected_passions_container)
 
-
         fetchData()
     }
 
@@ -53,10 +52,37 @@ class SelectPassionActivity : AppCompatActivity() {
             setupRecyclerView(passions)
             this.passions = passions
             Log.e("PassionData", "passions-assign to rv $passions")
+
+            // now get the self passions
+            initSelfPassions()
         }
 
         this.passionViewModel.fetchAllData()
     }
+
+    /**
+     * Observes the self passions (e.g., passions already chosen by the user) and updates the UI.
+     */
+    private fun initSelfPassions() {
+        this.passionViewModel.selfPassionData.observe(this) { selfPassions ->
+            // Iterate over all passions and mark as selected if they appear in selfPassions.
+            passions?.forEach { category ->
+                category.items.forEach { passion ->
+                    // Assume each passion has a unique id and selfPassions is a list of similar models
+                    passion.isSelected = selfPassions
+                        .filter { it.name == category.name }
+                        .flatMap { it.items }
+                        .any { it.id == passion.id }
+                }
+            }
+            // Update the selected passions chips and refresh the adapter
+            updateSelectedPassions(passions!!.flatMap { it.items.filter { it.isSelected } })
+            updateCategoryAdapter()
+        }
+        // Trigger fetching of the user's own passions
+        this.passionViewModel.fetchSelfPassions()
+    }
+
 
     private fun setupRecyclerView(passionByCategory: List<PassionCategoryModel>) {
         // Setup categories rv
@@ -78,7 +104,8 @@ class SelectPassionActivity : AppCompatActivity() {
         selectedPassionsContainer.removeAllViews() // Clear existing chips
 
         for (passion in selectedPassions) {
-            val chipView = LayoutInflater.from(this).inflate(R.layout.chip_selected_passion, selectedPassionsContainer, false)
+            val chipView = LayoutInflater.from(this)
+                .inflate(R.layout.chip_selected_passion, selectedPassionsContainer, false)
 
             // Set passion name
             chipView.findViewById<TextView>(R.id.chip_text).text = passion.name

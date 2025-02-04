@@ -8,8 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.passionmeet.models.PassionCategoryModel
-import com.example.passionmeet.models.PassionSelectorModel
 import com.example.passionmeet.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
@@ -22,48 +20,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var passionSelector: RecyclerView
 
     private lateinit var openGroupList: Button
-
-
-    // fixme for test purpose only
-    val categories = listOf(
-        PassionCategoryModel(
-            "Music", listOf(
-                PassionSelectorModel("Rap", "https://picsum.photos/1200"),
-                PassionSelectorModel("Pop", "https://picsum.photos/1200"),
-                PassionSelectorModel("K-POP", "https://picsum.photos/1200")
-            )
-        ),
-        PassionCategoryModel(
-            "Sports", listOf(
-                PassionSelectorModel("Soccer", "https://picsum.photos/1200"),
-                PassionSelectorModel("Basketball", "https://picsum.photos/1200")
-            )
-        )
-        // More categories...
-    )
-
-
-    // fixme for test purpose only
-    private val passionList: List<PassionSelectorModel> = listOf(
-        PassionSelectorModel("Rap", "https://picsum.photos/1200"),
-        PassionSelectorModel("Pop", "https://picsum.photos/1200"),
-        PassionSelectorModel("K-POP", "https://picsum.photos/1200"),
-        PassionSelectorModel("test", "https://picsum.photos/1200"),
-        PassionSelectorModel("loriane", "https://picsum.photos/1200"),
-        PassionSelectorModel("julien", "https://picsum.photos/1200"),
-        PassionSelectorModel("nino", "https://picsum.photos/1200"),
-        PassionSelectorModel("lucas", "https://picsum.photos/1200"),
-        PassionSelectorModel("lucie", "https://picsum.photos/1200"),
-        PassionSelectorModel("luc", "https://picsum.photos/1200"),
-        PassionSelectorModel("Alexie", "https://picsum.photos/1200"),
-        PassionSelectorModel("Alex", "https://picsum.photos/1200"),
-        PassionSelectorModel("Pierre", "https://picsum.photos/1200"),
-        PassionSelectorModel("Paul", "https://picsum.photos/1200"),
-        PassionSelectorModel("Jean", "https://picsum.photos/1200"),
-        PassionSelectorModel("Jeanne", "https://picsum.photos/1200"),
-        PassionSelectorModel("Marie", "https://picsum.photos/1200"),
-        PassionSelectorModel("Marie", "https://picsum.photos/1200"),
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
