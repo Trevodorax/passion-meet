@@ -1,26 +1,24 @@
 package com.example.passionmeet
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.passionmeet.models.GroupModel
 import com.example.passionmeet.repositories.GroupRepository
-import com.example.passionmeet.repositories.PassionRepository
 import com.example.passionmeet.viewmodel.GroupViewModel
-import com.example.passionmeet.viewmodel.PassionViewModel
 import com.example.passionmeet.viewmodel.factories.GroupViewModelFactory
-import com.example.passionmeet.viewmodel.factories.PassionViewModelFactory
 
-class UserHomeActivity: AppCompatActivity() {
+class UserHomeActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var grouplistAdapter: GroupsListAdapter
     private lateinit var groups: List<GroupModel>
 
     private val groupViewModel: GroupViewModel by viewModels {
-        GroupViewModelFactory(GroupRepository(), this)
+        GroupViewModelFactory(GroupRepository(this), this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +27,8 @@ class UserHomeActivity: AppCompatActivity() {
 
         //Groups recycler view
         recyclerView = findViewById(R.id.groups_list_recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         // Fake data
 //        groups = listOf(
 //            //GroupModel("Pikachu lovers", "https://unsplash.com/fr/photos/cartouche-de-jeu-nintendo-game-boy-pokemon-7P2QXuPmR9I", 90, "A group for Pikachu lovers"),
@@ -45,8 +44,11 @@ class UserHomeActivity: AppCompatActivity() {
         this.groupViewModel.groupData.observe(this) { groups ->
             // Update the UI with the fetched data
             this.groups = groups
+            Log.e("UserHomeActivity", "Data received: $groups")
             setupRecyclerView()
         }
+
+        this.groupViewModel.getSelfGroups()
     }
 
     private fun setupRecyclerView() {
