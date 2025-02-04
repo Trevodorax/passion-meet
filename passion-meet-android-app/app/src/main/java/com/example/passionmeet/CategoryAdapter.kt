@@ -60,9 +60,19 @@ class CategoryAdapter(
 
         // Toggle category expand/collapse
         categoryViewHolder.categoryTitle.setOnClickListener {
-            category.isExpanded = !category.isExpanded
-            notifyItemChanged(position)
+            expandCategory(category, position)
         }
+        categoryViewHolder.toggleButton.setOnClickListener {
+            expandCategory(category, position)
+        }
+    }
+
+    private fun expandCategory(
+        category: PassionCategoryModel,
+        position: Int
+    ) {
+        category.isExpanded = !category.isExpanded
+        notifyItemChanged(position)
     }
 
     override fun getItemCount(): Int = categories.size

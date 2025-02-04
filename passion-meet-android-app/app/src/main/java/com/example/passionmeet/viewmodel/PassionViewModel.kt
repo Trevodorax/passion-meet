@@ -17,11 +17,23 @@ class PassionViewModel (
     private val _passionData = MutableLiveData<List<PassionCategoryModel>>()
     val passionData: LiveData<List<PassionCategoryModel>> get() = _passionData
 
+    // Observable of self data
+    private val _selfPassionData = MutableLiveData<List<PassionCategoryModel>>()
+    val selfPassionData: LiveData<List<PassionCategoryModel>> get() = _selfPassionData
+
     fun fetchAllData() {
         this.passionRepository.passionData.observe(context) { data ->
             this@PassionViewModel._passionData.value = data
         }
 
         this.passionRepository.getAllPassions()
+    }
+
+    fun fetchSelfPassions() {
+        this.passionRepository.selfPassionData.observe(context) { data ->
+            this@PassionViewModel._selfPassionData.value = data
+        }
+
+        this.passionRepository.getSelfPassions()
     }
 }
