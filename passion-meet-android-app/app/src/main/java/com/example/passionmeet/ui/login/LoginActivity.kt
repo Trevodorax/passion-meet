@@ -10,7 +10,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -19,12 +18,12 @@ import com.example.passionmeet.databinding.ActivityLoginBinding
 import com.example.passionmeet.repositories.LoginRepository
 import com.example.passionmeet.viewmodel.LoginViewModel
 import com.example.passionmeet.viewmodel.factories.LoginViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class LoginActivity : AppCompatActivity() {
 
-    private val loginViewModel: LoginViewModel by viewModels() {
-        LoginViewModelFactory(LoginRepository(this), this)
-    }
+    private val loginViewModel: LoginViewModel by viewModel { parametersOf(this) }
     private lateinit var binding: ActivityLoginBinding
 
     /**

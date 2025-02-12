@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.passionmeet.data.local.PassionMeetDatabase
+import com.example.passionmeet.data.local.dao.PassionDao
 import com.example.passionmeet.data.local.entity.PassionEntity
 import com.example.passionmeet.mapper.mapPassionCategoryDtoToPassionCategoryModel
 import com.example.passionmeet.mapper.mapPassionDtoToPassionEntity
@@ -19,9 +20,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.example.passionmeet.utils.NetworkUtils
 
-class PassionRepository(private val context: Context) {
-    private val passionService = RetrofitClient.instance.create(PassionService::class.java)
-    private val passionDao = PassionMeetDatabase.getDatabase(context).passionDao()
+class PassionRepository(
+    private val context: Context,
+    private val passionService: PassionService,
+    private val passionDao: PassionDao
+) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val _passionData = MutableLiveData<List<PassionCategoryModel>>()

@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.passionmeet.data.local.PassionMeetDatabase
+import com.example.passionmeet.data.local.dao.GroupDao
 import com.example.passionmeet.mapper.mapGroupDtoToGroupEntity
 import com.example.passionmeet.mapper.mapGroupEntityToGroupModel
 import com.example.passionmeet.mapper.mapGroupToGroupModel
@@ -18,9 +19,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.example.passionmeet.utils.NetworkUtils
 
-class GroupRepository(private val context: Context) {
-    private val groupService = RetrofitClient.instance.create(GroupService::class.java)
-    private val groupDao = PassionMeetDatabase.getDatabase(context).groupDao()
+class GroupRepository(
+    private val context: Context,
+    private val groupService: GroupService,
+    private val groupDao: GroupDao
+) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val _groupData = MutableLiveData<List<GroupModel>>()

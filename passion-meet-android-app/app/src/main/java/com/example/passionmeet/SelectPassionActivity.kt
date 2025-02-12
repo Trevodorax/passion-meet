@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -16,17 +15,16 @@ import com.example.passionmeet.models.PassionCategoryModel
 import com.example.passionmeet.models.PassionSelectorModel
 import com.example.passionmeet.repositories.PassionRepository
 import com.example.passionmeet.viewmodel.PassionViewModel
-import com.example.passionmeet.viewmodel.factories.PassionViewModelFactory
 import com.google.android.flexbox.FlexboxLayout
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class SelectPassionActivity : AppCompatActivity() {
 
     private var passions: List<PassionCategoryModel>? = null
     private lateinit var selectedPassionsContainer: FlexboxLayout
 
-    private val passionViewModel: PassionViewModel by viewModels {
-        PassionViewModelFactory(PassionRepository(this), this)
-    }
+    private val passionViewModel: PassionViewModel by viewModel { parametersOf(this) }
 
     private lateinit var categoryAdapter: CategoryAdapter
 
