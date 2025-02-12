@@ -4,18 +4,24 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.example.passionmeet.data.local.PassionMeetDatabase
+import com.example.passionmeet.mapper.mapGroupDtoToGroupEntity
+import com.example.passionmeet.mapper.mapGroupEntityToGroupModel
 import com.example.passionmeet.mapper.mapGroupToGroupModel
 import com.example.passionmeet.models.GroupModel
 import com.example.passionmeet.network.RetrofitClient
 import com.example.passionmeet.network.dto.GroupResponseDTO
 import com.example.passionmeet.network.services.GroupService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import com.example.passionmeet.utils.NetworkUtils
 
-class GroupRepository(context: Context) {
-
+class GroupRepository(private val context: Context) {
     private val groupService = RetrofitClient.instance.create(GroupService::class.java)
+    private val groupDao = PassionMeetDatabase.getDatabase(context).groupDao()
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val _groupData = MutableLiveData<List<GroupModel>>()
     val groupData get() = _groupData
@@ -28,48 +34,71 @@ class GroupRepository(context: Context) {
     }
 
     fun getSelfGroups() {
-        val call = this.groupService.getSelfGroups(
-            "Bearer ${
-                sharedPreferences.getString(
-                    "auth_token",
-                    ""
+        coroutineScope.launch {
+            if (!NetworkUtils.isNetworkAvailable(context) || !NetworkUtils.hasInternetConnection()) {
+                // No network available, load from local database only
+                val localGroups = groupDao.getAllGroups()
+                withContext(Dispatchers.Main) {
+                    _groupData.value = mapGroupEntityToGroupModel(localGroups)
+                }
+                return@launch
+            }
+
+            try {
+                val call = groupService.getSelfGroups(
+                    "Bearer ${sharedPreferences.getString("auth_token", "")}"
                 )
-            }"
-        )
 
-        call.enqueue(object : Callback<List<GroupResponseDTO>> {
-            override fun onResponse(
-                call: Call<List<GroupResponseDTO>>,
-                response: Response<List<GroupResponseDTO>>
-            ) {
-                val bodyString = response.errorBody()?.string() ?: response.body().toString()
-                Log.e("GroupRepository", "Response body: $bodyString")
+                call.enqueue(object : retrofit2.Callback<List<GroupResponseDTO>> {
+                    override fun onResponse(
+                        call: retrofit2.Call<List<GroupResponseDTO>>,
+                        response: retrofit2.Response<List<GroupResponseDTO>>
+                    ) {
+                        if (!response.isSuccessful || response.body() == null) {
+                            Log.e("GroupRepository", "Error: ${response.code()} - ${response.message()}")
+                            // Load from local database on error response
+                            coroutineScope.launch {
+                                val localGroups = groupDao.getAllGroups()
+                                withContext(Dispatchers.Main) {
+                                    _groupData.value = mapGroupEntityToGroupModel(localGroups)
+                                }
+                            }
+                            return
+                        }
 
-                if (!response.isSuccessful || response.body() == null) {
-                    Log.e("GroupRepository", "Error: ${response.code()} - ${response.message()}")
-                    return
-                }
+                        val body = response.body()
+                        body?.let {
+                            val groupModels = mapGroupToGroupModel(it)
+                            _groupData.value = groupModels
 
-                val body = response.body()
+                            // Save to local database
+                            coroutineScope.launch {
+                                val entities = it.map { dto -> mapGroupDtoToGroupEntity(dto) }
+                                groupDao.deleteAll() // Clear old data
+                                groupDao.insertAll(entities)
+                            }
+                        }
+                    }
 
-                this@GroupRepository._groupData.value = body?.let {
-                    Log.e("GroupRepository", "Response received: ${response.body()}")
-                    mapGroupToGroupModel(
-                        it
-                    )
-                        //TODO: Implementer une logique de sauvegarde des données avant de renvoyer la donnée à la vue
+                    override fun onFailure(call: retrofit2.Call<List<GroupResponseDTO>>, t: Throwable) {
+                        Log.e("GroupRepository", "Error fetching groups: ${t.message}")
+                        // Load from local database on failure
+                        coroutineScope.launch {
+                            val localGroups = groupDao.getAllGroups()
+                            withContext(Dispatchers.Main) {
+                                _groupData.value = mapGroupEntityToGroupModel(localGroups)
+                            }
+                        }
+                    }
+                })
+            } catch (e: Exception) {
+                Log.e("GroupRepository", "Error fetching groups", e)
+                // Load from local database on error
+                val localGroups = groupDao.getAllGroups()
+                withContext(Dispatchers.Main) {
+                    _groupData.value = mapGroupEntityToGroupModel(localGroups)
                 }
             }
-
-            override fun onFailure(call: Call<List<GroupResponseDTO>>, t: Throwable) {
-                Log.e("GroupRepository", "Error fetching groups: ${t.message}")
-                Log.e("GroupRepository", "Error fetching groups: ${t.stackTrace}")
-
-                // log respons if any
-                Log.e("GroupRepository", "Error fetching groups: ${t.cause}")
-            }
-
-        })
+        }
     }
-
 }
