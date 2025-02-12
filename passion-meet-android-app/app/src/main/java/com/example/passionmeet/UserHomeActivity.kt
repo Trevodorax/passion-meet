@@ -10,6 +10,8 @@ import com.example.passionmeet.models.GroupModel
 import com.example.passionmeet.repositories.GroupRepository
 import com.example.passionmeet.viewmodel.GroupViewModel
 import com.example.passionmeet.viewmodel.factories.GroupViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class UserHomeActivity : AppCompatActivity() {
 
@@ -17,9 +19,7 @@ class UserHomeActivity : AppCompatActivity() {
     private lateinit var grouplistAdapter: GroupsListAdapter
     private lateinit var groups: List<GroupModel>
 
-    private val groupViewModel: GroupViewModel by viewModels {
-        GroupViewModelFactory(GroupRepository(this), this)
-    }
+    private val groupViewModel: GroupViewModel by viewModel { parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
