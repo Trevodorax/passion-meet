@@ -15,9 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.passionmeet.R
 import com.example.passionmeet.databinding.ActivityLoginBinding
-import com.example.passionmeet.repositories.LoginRepository
 import com.example.passionmeet.viewmodel.LoginViewModel
-import com.example.passionmeet.viewmodel.factories.LoginViewModelFactory
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 

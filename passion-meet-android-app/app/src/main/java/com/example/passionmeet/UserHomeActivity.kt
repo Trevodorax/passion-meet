@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.passionmeet.models.GroupModel
 import com.example.passionmeet.repositories.GroupRepository
+import com.example.passionmeet.viewmodel.EncounterViewModel
 import com.example.passionmeet.viewmodel.GroupViewModel
 import com.example.passionmeet.viewmodel.factories.GroupViewModelFactory
 import org.koin.androidx.viewmodel.ext.android.viewModel

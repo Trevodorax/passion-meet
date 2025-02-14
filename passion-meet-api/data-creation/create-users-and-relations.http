@@ -1,0 +1,155 @@
+### Create first user
+POST {{url}}/users
+Content-Type: application/json
+
+{
+  "email": "pikap@test.fr",
+  "username": "pikachu",
+  "password": "password"
+}
+> {%
+
+  // get the user ids
+  client.global.set("pikachuId", response.body.id);
+%}
+
+### Create second user
+POST {{url}}/users
+Content-Type: application/json
+
+{
+  "email": "salamp@test.fr",
+  "username": "salamèche",
+  "password": "password"
+}
+> {%
+
+  client.test("Status code is 201", function() {
+    client.assert(response.status === 201, "Status code is not 201");
+  });
+  // get the user ids
+  client.global.set("salamecheId", response.body.id);
+
+%}
+
+### Create third user
+POST {{url}}/users
+Content-Type: application/json
+
+{
+  "email": "bulbip@test.fr",
+  "username": "bulbizarre",
+  "password": "password"
+}
+> {%
+  client.test("Status code is 201", function() {
+    client.assert(response.status === 201, "Status code is not 201");
+  });
+  // get the user ids
+  client.global.set("bulbizarreId", response.body.id);
+%}
+
+### Login with pikachu
+POST {{url}}/users/login
+Content-Type: application/json
+
+{
+  "email": "pikap@test.fr",
+  "password": "password"
+}
+> {%
+  client.test("Status code is 201", function() {
+    client.assert(response.status === 201, "Status code is not 201");
+  });
+  // get the user ids
+  client.global.set("pikachuToken", response.body.token);
+%}
+
+### Create encounters
+POST {{url}}/users/{{bulbizarreId}}/relations
+Content-Type: application/json
+Authorization: Bearer {{pikachuToken}}
+
+{
+    "baseUser": {
+        "id": "{{bulbizarreId}}"
+    },
+    "userMet": {
+        "id": "{{salamecheId}}"
+    }
+}
+
+> {%
+  client.test("Status code is 201", function() {
+    client.assert(response.status === 201, "Status code is not 201");
+  });
+
+  client.test("User met is pikachu", function() {
+    client.assert(response.body.userMet.id === client.global.get("salamecheId"), "User met is not pikachu");
+  });
+%}
+
+### Create encounters
+POST {{url}}/users/{{pikachuId}}/relations
+Content-Type: application/json
+Authorization: Bearer {{pikachuToken}}
+
+{
+    "baseUser": {
+        "id": "{{pikachuId}}"
+    },
+    "userMet": {
+        "id": "{{salamecheId}}"
+    }
+}
+
+> {%
+  client.test("Status code is 201", function() {
+    client.assert(response.status === 201, "Status code is not 201");
+  });
+
+  client.test("User met is salameche", function() {
+    client.assert(response.body.userMet.id === client.global.get("salamecheId"), "User met is not salameche");
+  });
+%}
+
+### Create encounters
+POST {{url}}/users/{{pikachuId}}/relations
+Content-Type: application/json
+Authorization: Bearer {{pikachuToken}}
+
+{
+    "baseUser": {
+        "id": "{{pikachuId}}"
+    },
+    "userMet": {
+        "id": "{{bulbizarreId}}"
+    }
+}
+
+> {%
+  client.test("Status code is 201", function() {
+    client.assert(response.status === 201, "Status code is not 201");
+  });
+
+  client.test("User met is bulbizarre", function() {
+    client.assert(response.body.userMet.id === client.global.get("bulbizarreId"), "User met is not bulbizarre");
+  });
+%}
+
+### Get self encounters for pikachu should return 2 encounters
+GET {{url}}/users/me/relations
+Content-Type: application/json
+Authorization: Bearer {{pikachuToken}}
+
+> {%
+  client.test("Status code is 200", function() {
+    client.assert(response.status === 200, "Status code is not 200");
+  });
+  client.test("Number of encounters is 2", function() {
+    client.assert(response.body.relations.length === 2, "Number of encounters is not 2");
+  });
+%}
+
+
+

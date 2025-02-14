@@ -1,7 +1,7 @@
 ### Création de passions
 
 ### Passion 1 - Jeux vidéo
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ### Passion 2 - Films de science-fiction
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ### Passion 3 - Cuisine italienne
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -34,7 +34,7 @@ Content-Type: application/json
 }
 
 ### Passion 4 - Voitures de collection
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -45,7 +45,7 @@ Content-Type: application/json
 }
 
 ### Passion 5 - Peinture à l'huile
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -56,7 +56,7 @@ Content-Type: application/json
 }
 
 ### Passion 6 - Nouvelles technologies
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -67,7 +67,7 @@ Content-Type: application/json
 }
 
 ### Passion 7 - Randonnée en montagne
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -78,7 +78,7 @@ Content-Type: application/json
 }
 
 ### Passion 8 - Chiens et dressage
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -89,7 +89,7 @@ Content-Type: application/json
 }
 
 ### Passion 9 - Photographie urbaine
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -100,7 +100,7 @@ Content-Type: application/json
 }
 
 ### Passion 10 - Dégustation de vin
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -111,7 +111,7 @@ Content-Type: application/json
 }
 
 ### Passion 11 - Moto et sensations fortes
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -122,7 +122,7 @@ Content-Type: application/json
 }
 
 ### Passion 12 - Modélisme ferroviaire
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -133,7 +133,7 @@ Content-Type: application/json
 }
 
 ### Passion 13 - Jardinage biologique
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -144,7 +144,7 @@ Content-Type: application/json
 }
 
 ### Passion 14 - Astuces de bricolage
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -155,7 +155,7 @@ Content-Type: application/json
 }
 
 ### Passion 15 - Dessin numérique
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -166,7 +166,7 @@ Content-Type: application/json
 }
 
 ### Passion 16 - Astronomie
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -178,7 +178,7 @@ Content-Type: application/json
 
 
 ### Passion 17 - Musique électronique
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {
@@ -189,7 +189,7 @@ Content-Type: application/json
 }
 
 ### Passion 18 - Théâtre et comédie
-POST https://passion-meet.onrender.com/passions
+POST {{url}}/passions
 Content-Type: application/json
 
 {

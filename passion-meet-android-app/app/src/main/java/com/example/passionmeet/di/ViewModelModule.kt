@@ -5,6 +5,7 @@ import com.example.passionmeet.viewmodel.GroupViewModel
 import com.example.passionmeet.viewmodel.LoginViewModel
 import com.example.passionmeet.viewmodel.PassionViewModel
 import com.example.passionmeet.viewmodel.SignupViewModel
+import com.example.passionmeet.viewmodel.EncounterViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -33,6 +34,13 @@ val viewModelModule = module {
     viewModel { 
         SignupViewModel(
             signupRepository = get(),
+            context = get()
+        )
+    }
+    
+    viewModel {
+        EncounterViewModel(
+            encounterRepository = get(),
             context = get()
         )
     }
