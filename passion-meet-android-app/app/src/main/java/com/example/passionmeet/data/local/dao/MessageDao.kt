@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MessageDao {
     @Query("SELECT * FROM messages WHERE groupId = :groupId ORDER BY timestamp ASC")
-    fun getMessagesByGroup(groupId: Long): Flow<List<MessageEntity>>
+    fun getMessagesByGroup(groupId: Long): List<MessageEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMessage(message: MessageEntity)

@@ -1,13 +1,15 @@
 package com.example.passionmeet
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.passionmeet.models.GroupModel
 import com.example.passionmeet.views.GroupsVH
 
-class GroupsListAdapter(private val context: Context, private val groups: List<GroupModel>): RecyclerView.Adapter<GroupsVH>() {
+class GroupsListAdapter(private val context: Context, private val groups: List<GroupModel>) :
+    RecyclerView.Adapter<GroupsVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupsVH {
         val view = LayoutInflater.from(context).inflate(R.layout.group_card, parent, false)
@@ -17,6 +19,14 @@ class GroupsListAdapter(private val context: Context, private val groups: List<G
     override fun onBindViewHolder(holder: GroupsVH, position: Int) {
         val group = groups[position]
         holder.bind(group)
+
+        holder.groupCard.setOnClickListener {
+            // open group chat activity
+            Intent(context, GroupChatActivity::class.java).apply {
+                putExtra("group_id", group.id)
+                context.startActivity(this)
+            }
+        }
     }
 
     override fun getItemCount(): Int {

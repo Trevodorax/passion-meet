@@ -13,11 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.passionmeet.R
-import dagger.hilt.android.AndroidEntrypoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@AndroidEntrypoint
 class GroupChatFragment : Fragment() {
     private val viewModel: GroupChatViewModel by viewModels()
     private lateinit var messageAdapter: ChatMessageAdapter
@@ -65,26 +63,24 @@ class GroupChatFragment : Fragment() {
     }
 
     private fun observeMessages() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.messages.collectLatest { messages ->
-                messageAdapter.submitList(messages) {
-                    if (messages.isNotEmpty()) {
-                        recyclerView.scrollToPosition(messages.size - 1)
-                    }
+        viewModel.messages.observe(viewLifecycleOwner) { messages ->
+            messageAdapter.submitList(messages) {
+                if (messages.isNotEmpty()) {
+                    recyclerView.scrollToPosition(messages.size - 1)
                 }
             }
         }
     }
 
-    private fun observeErrors() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.error.collectLatest { error ->
-                error?.let {
-                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
+//    private fun observeErrors() {
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewModel.error.collectLatest { error ->
+//                error?.let {
+//                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
+//    }
 
     private fun setupMessageSending() {
         sendButton.setOnClickListener {
