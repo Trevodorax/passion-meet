@@ -8,6 +8,13 @@ import com.example.passionmeet.viewmodel.SignupViewModel
 import com.example.passionmeet.viewmodel.EncounterViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import androidx.lifecycle.ViewModel
+import com.example.passionmeet.ui.chat.GroupChatViewModel
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.multibindings.IntoMap
 
 val viewModelModule = module {
     viewModel { 
@@ -44,4 +51,13 @@ val viewModelModule = module {
             context = get()
         )
     }
+}
+
+@Module
+@InstallIn(ActivityRetainedComponent::class)
+abstract class ViewModelModule {
+    @Binds
+    @IntoMap
+    @ViewModelKey(GroupChatViewModel::class)
+    abstract fun bindGroupChatViewModel(viewModel: GroupChatViewModel): ViewModel
 } 
