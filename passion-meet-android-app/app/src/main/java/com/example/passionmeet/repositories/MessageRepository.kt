@@ -1,104 +1,176 @@
 package com.example.passionmeet.repositories
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.example.passionmeet.data.local.dao.MessageDao
 import com.example.passionmeet.data.local.entity.MessageEntity
-import com.example.passionmeet.data.remote.api.MessageApi
 import com.example.passionmeet.data.remote.dto.MessageDto
-import com.example.passionmeet.util.NetworkResult
-import com.example.passionmeet.util.SharedPreferencesUtil
-import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.example.passionmeet.network.services.MessageService
+import com.example.passionmeet.utils.NetworkUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
 
-@Singleton
-class MessageRepository @Inject constructor(
+class MessageRepository(
     private val context: Context,
-    private val messageDao: MessageDao,
-    private val messageApi: MessageApi
+    private val messageService: MessageService,
+    private val messageDao: MessageDao
 ) {
-    private val sharedPreferencesUtil = SharedPreferencesUtil(context)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    fun getMessagesByGroup(groupId: Long): Flow<List<MessageEntity>> {
-        return messageDao.getMessagesByGroup(groupId)
+    private val _messages = MutableLiveData<List<MessageEntity>>()
+    val messages get() = _messages
+
+    /**
+     * Shared preferences for getting the auth token
+     */
+    private val sharedPreferences: SharedPreferences by lazy {
+        context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
     }
 
-    suspend fun fetchMessagesFromApi(groupId: Long): NetworkResult<List<MessageDto>> {
-        return try {
-            val token = "Bearer ${sharedPreferencesUtil.getToken()}"
-            val response = messageApi.getMessages(groupId, token)
-            
-            if (response.isSuccessful) {
-                val messages = response.body()
-                if (messages != null) {
-                    // Convert and save to local database
-                    val entities = messages.map { it.toEntity(groupId) }
-                    messageDao.insertMessages(entities)
-                    NetworkResult.Success(messages)
-                } else {
-                    NetworkResult.Error("Empty response body")
+    fun getMessages(groupId: Long) {
+        coroutineScope.launch {
+            if (!NetworkUtils.isNetworkAvailable(context) || !NetworkUtils.hasInternetConnection()) {
+                // No network available, load from local database only
+                val localMessages = messageDao.getMessagesByGroup(groupId)
+                withContext(Dispatchers.Main) {
+                    _messages.value = localMessages
                 }
-            } else {
-                NetworkResult.Error("Error: ${response.code()}")
+                return@launch
             }
-        } catch (e: Exception) {
-            NetworkResult.Error("Network error: ${e.message}")
-        }
-    }
 
-    suspend fun sendMessage(groupId: Long, content: String, userId: String, userName: String): NetworkResult<MessageDto> {
-        return try {
-            val token = "Bearer ${sharedPreferencesUtil.getToken()}"
-            val message = mapOf(
-                "content" to content,
-                "sendedAt" to Date(),
-                "createdBy" to mapOf(
-                    "id" to userId,
-                    "username" to userName
-                ),
-                "group" to mapOf(
-                    "id" to groupId
+            try {
+                val call = messageService.getMessages(
+                    groupId,
+                    "Bearer ${sharedPreferences.getString("auth_token", "")}"
                 )
-            )
-            
-            val response = messageApi.createMessage(groupId, message, token)
-            
-            if (response.isSuccessful) {
-                val createdMessage = response.body()
-                if (createdMessage != null) {
-                    // Save to local database
-                    messageDao.insertMessage(createdMessage.toEntity(groupId))
-                    NetworkResult.Success(createdMessage)
-                } else {
-                    NetworkResult.Error("Empty response body")
+
+                call.enqueue(object : retrofit2.Callback<List<MessageDto>> {
+                    override fun onResponse(
+                        call: retrofit2.Call<List<MessageDto>>,
+                        response: retrofit2.Response<List<MessageDto>>
+                    ) {
+                        val body = response.body()
+                        body?.let {
+                            val messageEntities = it.map { dto -> dto.toEntity(groupId) }
+                            _messages.value = messageEntities
+                            
+                            // Save to local database
+                            coroutineScope.launch {
+                                messageDao.deleteMessagesByGroup(groupId) // Clear old messages for this group
+                                messageDao.insertMessages(messageEntities)
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: retrofit2.Call<List<MessageDto>>, t: Throwable) {
+                        Log.e("Error getMessages()", "Error: ${t.message}")
+                        // Load from local database on failure
+                        coroutineScope.launch {
+                            val localMessages = messageDao.getMessagesByGroup(groupId)
+                            withContext(Dispatchers.Main) {
+                                _messages.value = localMessages
+                            }
+                        }
+                    }
+                })
+            } catch (e: Exception) {
+                Log.e("MessageRepository", "Error fetching messages", e)
+                // Load from local database on error
+                val localMessages = messageDao.getMessagesByGroup(groupId)
+                withContext(Dispatchers.Main) {
+                    _messages.value = localMessages
                 }
-            } else {
-                NetworkResult.Error("Error: ${response.code()}")
             }
-        } catch (e: Exception) {
-            NetworkResult.Error("Network error: ${e.message}")
         }
     }
 
-    suspend fun insertMessage(message: MessageEntity) {
-        messageDao.insertMessage(message)
-    }
+    fun sendMessage(groupId: Long, content: String, userId: String, userName: String) {
+        coroutineScope.launch {
+            if (!NetworkUtils.isNetworkAvailable(context) || !NetworkUtils.hasInternetConnection()) {
+                // Save message locally when offline
+                val localMessage = MessageEntity(
+                    groupId = groupId,
+                    senderId = userId,
+                    senderName = userName,
+                    content = content,
+                    timestamp = Date(),
+                    isNew = true
+                )
+                messageDao.insertMessage(localMessage)
+                return@launch
+            }
 
-    suspend fun insertMessages(messages: List<MessageEntity>) {
-        messageDao.insertMessages(messages)
-    }
+            try {
+                val message = mapOf(
+                    "content" to content,
+                    "sendedAt" to Date(),
+                    "createdBy" to mapOf(
+                        "id" to userId,
+                        "username" to userName
+                    ),
+                    "group" to mapOf(
+                        "id" to groupId
+                    )
+                )
 
-    suspend fun deleteMessagesByGroup(groupId: Long) {
-        messageDao.deleteMessagesByGroup(groupId)
-    }
+                val call = messageService.createMessage(
+                    groupId,
+                    message,
+                    "Bearer ${sharedPreferences.getString("auth_token", "")}"
+                )
 
-    suspend fun markMessagesAsRead(groupId: Long) {
-        messageDao.markMessagesAsRead(groupId)
-    }
+                call.enqueue(object : retrofit2.Callback<MessageDto> {
+                    override fun onResponse(
+                        call: retrofit2.Call<MessageDto>,
+                        response: retrofit2.Response<MessageDto>
+                    ) {
+                        val body = response.body()
+                        body?.let {
+                            val messageEntity = it.toEntity(groupId)
+                            // Save to local database
+                            coroutineScope.launch {
+                                messageDao.insertMessage(messageEntity)
+                            }
+                            // Refresh messages
+                            getMessages(groupId)
+                        }
+                    }
 
-    fun getUnreadMessageCount(groupId: Long): Flow<Int> {
-        return messageDao.getUnreadMessageCount(groupId)
+                    override fun onFailure(call: retrofit2.Call<MessageDto>, t: Throwable) {
+                        Log.e("Error sendMessage()", "Error: ${t.message}")
+                        // Save message locally on failure
+                        coroutineScope.launch {
+                            val localMessage = MessageEntity(
+                                groupId = groupId,
+                                senderId = userId,
+                                senderName = userName,
+                                content = content,
+                                timestamp = Date(),
+                                isNew = true
+                            )
+                            messageDao.insertMessage(localMessage)
+                        }
+                    }
+                })
+            } catch (e: Exception) {
+                Log.e("MessageRepository", "Error sending message", e)
+                // Save message locally on error
+                val localMessage = MessageEntity(
+                    groupId = groupId,
+                    senderId = userId,
+                    senderName = userName,
+                    content = content,
+                    timestamp = Date(),
+                    isNew = true
+                )
+                messageDao.insertMessage(localMessage)
+            }
+        }
     }
 
     private fun MessageDto.toEntity(groupId: Long): MessageEntity {

@@ -3,12 +3,14 @@ package com.example.passionmeet.views
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.passionmeet.R
 import com.example.passionmeet.models.GroupModel
 
 class GroupsVH(view: View): RecyclerView.ViewHolder(view) {
+    val groupCard: CardView = view.findViewById(R.id.group_card)
     val groupNameTv: TextView = view.findViewById(R.id.group_card_title)
     val groupMembers: TextView = view.findViewById(R.id.group_card_memberCount)
     val groupDescription:TextView = view.findViewById(R.id.group_card_description)
