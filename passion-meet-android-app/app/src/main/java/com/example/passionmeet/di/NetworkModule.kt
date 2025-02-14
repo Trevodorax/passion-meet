@@ -5,29 +5,35 @@ import com.example.passionmeet.network.services.GroupService
 import com.example.passionmeet.network.services.LoginService
 import com.example.passionmeet.network.services.PassionService
 import com.example.passionmeet.network.services.SignupService
+import com.example.passionmeet.network.services.EncounterService
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
 val networkModule = module {
     single { RetrofitClient.instance }
-    
-    single { 
+
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(PassionService::class.java)
     }
-    
-    single { 
+
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(GroupService::class.java)
     }
-    
-    single { 
+
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(LoginService::class.java)
     }
-    
-    single { 
+
+    single {
         val retrofit: Retrofit = get()
         retrofit.create(SignupService::class.java)
+    }
+
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(EncounterService::class.java)
     }
 } 

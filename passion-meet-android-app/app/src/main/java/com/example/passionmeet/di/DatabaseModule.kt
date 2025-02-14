@@ -8,4 +8,5 @@ val databaseModule = module {
     single { PassionMeetDatabase.getDatabase(androidContext()) }
     single { get<PassionMeetDatabase>().passionDao() }
     single { get<PassionMeetDatabase>().groupDao() }
+    single { get<PassionMeetDatabase>().encounterDao() }
 } 
