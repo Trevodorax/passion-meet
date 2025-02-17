@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/background"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <ImageButton
+                android:id="@+id/close_icon_activity"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_close"
+                android:scaleType="centerCrop"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/texts_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mil0w0 propose l'activité 'Boire un café' à Paris XXIème le 05/2025 à 18h"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/close_icon_activity"
+                android:layout_marginVertical="16dp"
+                android:textSize="20sp"
+                />
+            <ImageView
+                android:id="@+id/map_for_activity"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:src="@drawable/pokemon_group_img"
+                android:scaleType="centerCrop"
+                android:layout_marginVertical="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/texts_activity"
+                />
+            <TextView
+                android:id="@+id/subtext_map_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cliquez sur la carte pour ouvrir dans Maps"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/map_for_activity"
+                android:textSize="11sp"
+                />
+
+            <TextView
+                android:id="@+id/description_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:text="Description:"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/subtext_map_activity"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/activity_description_content_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:text="Hello, je serais sur Nation ce weekend, je reviens du PokemonGo Fest, j’ai hâte de partager toutes mes anecdotes !"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description_title"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:id="@+id/activity_participants_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Participants:"
+                app:layout_constraintTop_toBottomOf="@id/activity_description_content_tv"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textStyle="bold"
+                android:layout_marginVertical="16dp"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:id="@+id/icon_participants"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_groups"
+                android:layout_marginVertical="16dp"
+                app:layout_constraintStart_toEndOf="@id/activity_participants_title"
+                app:layout_constraintTop_toBottomOf="@+id/activity_description_content_tv"/>
+            <TextView
+                android:id="@+id/activity_participants_max_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                app:layout_constraintStart_toEndOf="@id/icon_participants"
+                app:layout_constraintTop_toBottomOf="@id/activity_description_content_tv"
+                android:text="4 max"/>
+            <TextView
+                android:id="@+id/activity_list_participants"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MouToo\nClaronce\nTrevodorax"
+                app:layout_constraintTop_toBottomOf="@id/activity_participants_title"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginVertical="8dp"
+                android:textSize="14sp"/>
+
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_list_participants"
+                android:layout_marginVertical="32dp">
+
+            <Button
+                android:id="@+id/create_account_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Sign up for the activity"
+                android:background="?attr/colorPrimary"
+                android:textColor="@android:color/white"
+                />
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
