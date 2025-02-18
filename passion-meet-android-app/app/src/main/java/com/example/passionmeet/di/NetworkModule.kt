@@ -1,10 +1,10 @@
 package com.example.passionmeet.di
 
-import com.example.passionmeet.data.remote.api.MessageApi
 import com.example.passionmeet.network.RetrofitClient
 import com.example.passionmeet.network.services.EncounterService
 import com.example.passionmeet.network.services.GroupService
 import com.example.passionmeet.network.services.LoginService
+import com.example.passionmeet.network.services.MessageService
 import com.example.passionmeet.network.services.PassionService
 import com.example.passionmeet.network.services.SignupService
 import org.koin.dsl.module
@@ -40,6 +40,6 @@ val networkModule = module {
 
     single {
         val retrofit: Retrofit = get()
-        retrofit.create(MessageApi::class.java)
+        retrofit.create(MessageService::class.java)
     }
 }

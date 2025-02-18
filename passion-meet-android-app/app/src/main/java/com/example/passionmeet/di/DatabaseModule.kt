@@ -9,4 +9,5 @@ val databaseModule = module {
     single { get<PassionMeetDatabase>().passionDao() }
     single { get<PassionMeetDatabase>().groupDao() }
     single { get<PassionMeetDatabase>().encounterDao() }
+    single { get<PassionMeetDatabase>().messageDao() }
 } 

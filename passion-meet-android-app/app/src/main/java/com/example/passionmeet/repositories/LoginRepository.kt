@@ -4,10 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.passionmeet.models.LoginModel
 import com.example.passionmeet.mapper.mapLoginDtoToLoginModel
+import com.example.passionmeet.models.LoginModel
 import com.example.passionmeet.network.RetrofitClient
 import com.example.passionmeet.network.dto.LoginResponseDTO
+import com.example.passionmeet.network.dto.UserResponseDTO
 import com.example.passionmeet.network.services.LoginService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -58,6 +59,9 @@ class LoginRepository(
                                 saveToken(token)
                             }
                         }
+
+                        getSelfInfo()
+
                         mappedData
                     }
                 } else {
@@ -75,6 +79,53 @@ class LoginRepository(
                 Log.e("LoginRepository", "Login request failed", t)
             }
         })
+    }
+
+    private fun getSelfInfo() {
+        val call = loginService.getSelfInfo("Bearer ${sharedPreferences.getString("auth_token", "")}")
+
+        call.enqueue(object: Callback<UserResponseDTO> {
+            override fun onResponse(
+                call: Call<UserResponseDTO>,
+                response: Response<UserResponseDTO>
+            ) {
+                Log.d("LoginRepository", "Self info response received: ${response.code()}")
+
+                if (response.isSuccessful && response.body() != null) {
+                    val body = response.body()
+                    Log.d("LoginRepository", "Self info received: $body")
+
+                    saveUserInfo(body)
+                } else {
+                    Log.e("LoginRepository", "Self info request failed: ${response.code()} - ${response.message()}")
+                    try {
+                        Log.e("LoginRepository", "Self info error body: ${response.errorBody()?.string()}")
+                    } catch (e: Exception) {
+                        Log.e("LoginRepository", "Failed to read self info error body", e)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<UserResponseDTO>, t: Throwable) {
+                Log.e("LoginRepository", "Self info request failed", t)
+            }
+        })
+    }
+
+    private fun saveUserInfo(body: UserResponseDTO?): UserResponseDTO {
+        body?.let {
+            val editor = sharedPreferences.edit()
+            editor.putString("user_id", it.id)
+            editor.putString("user_name", it.name)
+            editor.putString("user_email", it.email)
+            editor.apply()
+        }
+
+        return UserResponseDTO(
+            id = sharedPreferences.getString("user_id", "") ?: throw IllegalStateException("User ID not found"),
+            name = sharedPreferences.getString("user_name", "") ?: throw IllegalStateException("User name not found"),
+            email = sharedPreferences.getString("user_email", "") ?: throw IllegalStateException("User email not found")
+        )
     }
 
 
