@@ -2,44 +2,39 @@ package com.example.passionmeet.ui.chat
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.passionmeet.data.local.entity.MessageEntity
 import com.example.passionmeet.repositories.MessageRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 
-@HiltViewModel
-class GroupChatViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+class GroupChatViewModel (
+    private val context: Context,
     private val messageRepository: MessageRepository
 ) : ViewModel() {
 
-    private val sharedPreferencesUtil = SharedPreferencesUtil(context)
-    private var groupId: Long = -1
-    private val _messages = MutableStateFlow<List<MessageEntity>>(emptyList())
-    val messages: StateFlow<List<MessageEntity>> = _messages
+    private var groupId: String = ""
+    private val _messages = MediatorLiveData<List<MessageEntity>>()
+    val messages: LiveData<List<MessageEntity>> get() = _messages
 
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> get() = _error
 
-    fun setGroupId(id: Long) {
+    fun setGroupId(id: String) {
         groupId = id
-        messageRepository.getMessages(groupId)
+        _messages.addSource(messageRepository.getMessages(groupId)) { messages ->
+            _messages.value = messages
+        }
     }
 
     fun sendMessage(content: String) {
-        if (groupId == -1L) return
-        
-        val sharedPreferences = context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
-        val userId = sharedPreferences.getString("user_id", "") ?: ""
-        val userName = sharedPreferences.getString("username", "") ?: ""
+        if (groupId.isEmpty()) return
 
-        messageRepository.sendMessage(groupId, content, userId, userName)
+        messageRepository.sendMessage(groupId, content, getCurrentUserId())
     }
 
     fun getCurrentUserId(): String {
         return context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
-            .getString("user_id", "") ?: ""
+            .getString("user_id", "") ?: throw IllegalStateException("User ID not found")
     }
 } 

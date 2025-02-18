@@ -8,16 +8,16 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.passionmeet.R
+import com.example.passionmeet.data.local.entity.MessageEntity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class GroupChatFragment : Fragment() {
-    private val viewModel: GroupChatViewModel by viewModels()
+    private val viewModel: GroupChatViewModel by viewModel()
     private lateinit var messageAdapter: ChatMessageAdapter
     private lateinit var messageInput: EditText
     private lateinit var sendButton: ImageButton
@@ -35,14 +35,14 @@ class GroupChatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Get groupId from arguments
-        arguments?.getLong("groupId")?.let { groupId ->
+        arguments?.getString("groupId")?.let { groupId ->
             viewModel.setGroupId(groupId)
         }
 
         setupViews(view)
         setupRecyclerView()
         observeMessages()
-        observeErrors()
+//        observeErrors()
         setupMessageSending()
     }
 
@@ -63,7 +63,7 @@ class GroupChatFragment : Fragment() {
     }
 
     private fun observeMessages() {
-        viewModel.messages.observe(viewLifecycleOwner) { messages ->
+        viewModel.messages.observe(viewLifecycleOwner) { messages: List<MessageEntity> ->
             messageAdapter.submitList(messages) {
                 if (messages.isNotEmpty()) {
                     recyclerView.scrollToPosition(messages.size - 1)
@@ -93,9 +93,9 @@ class GroupChatFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(groupId: Long) = GroupChatFragment().apply {
+        fun newInstance(groupId: String) = GroupChatFragment().apply {
             arguments = Bundle().apply {
-                putLong("groupId", groupId)
+                putString("groupId", groupId)
             }
         }
     }

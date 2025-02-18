@@ -19,7 +19,7 @@ import java.util.Date
 data class MessageEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val groupId: Long,
+    val groupId: String,
     val senderId: String,
     val senderName: String,
     val content: String,

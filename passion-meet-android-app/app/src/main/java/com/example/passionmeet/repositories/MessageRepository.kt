@@ -3,10 +3,16 @@ package com.example.passionmeet.repositories
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.passionmeet.data.local.dao.MessageDao
 import com.example.passionmeet.data.local.entity.MessageEntity
 import com.example.passionmeet.data.remote.dto.MessageDto
+import com.example.passionmeet.data.remote.dto.CreateMessageRequest
+import com.example.passionmeet.data.remote.dto.UserDto
+import com.example.passionmeet.data.remote.dto.GroupDto
+import com.example.passionmeet.data.remote.dto.GroupRequestDto
+import com.example.passionmeet.data.remote.dto.UserRequestDto
 import com.example.passionmeet.network.services.MessageService
 import com.example.passionmeet.utils.NetworkUtils
 import kotlinx.coroutines.CoroutineScope
@@ -32,7 +38,7 @@ class MessageRepository(
         context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
     }
 
-    fun getMessages(groupId: Long) {
+    fun getMessages(groupId: String): LiveData<List<MessageEntity>> {
         coroutineScope.launch {
             if (!NetworkUtils.isNetworkAvailable(context) || !NetworkUtils.hasInternetConnection()) {
                 // No network available, load from local database only
@@ -55,6 +61,7 @@ class MessageRepository(
                         response: retrofit2.Response<List<MessageDto>>
                     ) {
                         val body = response.body()
+                        Log.e("MessageRepository", "Messages received: $body")
                         body?.let {
                             val messageEntities = it.map { dto -> dto.toEntity(groupId) }
                             _messages.value = messageEntities
@@ -87,12 +94,14 @@ class MessageRepository(
                 }
             }
         }
+        return messages
     }
 
-    fun sendMessage(groupId: Long, content: String, userId: String, userName: String) {
+    fun sendMessage(groupId: String, content: String, userId: String) {
         coroutineScope.launch {
             if (!NetworkUtils.isNetworkAvailable(context) || !NetworkUtils.hasInternetConnection()) {
                 // Save message locally when offline
+                val userName = sharedPreferences.getString("user_name", "") ?: "You"
                 val localMessage = MessageEntity(
                     groupId = groupId,
                     senderId = userId,
@@ -106,21 +115,22 @@ class MessageRepository(
             }
 
             try {
-                val message = mapOf(
-                    "content" to content,
-                    "sendedAt" to Date(),
-                    "createdBy" to mapOf(
-                        "id" to userId,
-                        "username" to userName
+                val request = CreateMessageRequest(
+                    content = content,
+                    sentAt = Date(),
+                    sender = UserRequestDto(
+                        id = userId,
                     ),
-                    "group" to mapOf(
-                        "id" to groupId
+                    group = GroupRequestDto(
+                        id = groupId
                     )
                 )
 
+                Log.e("MessageRepository", "Sending message: $request")
+
                 val call = messageService.createMessage(
                     groupId,
-                    message,
+                    request,
                     "Bearer ${sharedPreferences.getString("auth_token", "")}"
                 )
 
@@ -148,7 +158,7 @@ class MessageRepository(
                             val localMessage = MessageEntity(
                                 groupId = groupId,
                                 senderId = userId,
-                                senderName = userName,
+                                senderName = "You",
                                 content = content,
                                 timestamp = Date(),
                                 isNew = true
@@ -163,7 +173,7 @@ class MessageRepository(
                 val localMessage = MessageEntity(
                     groupId = groupId,
                     senderId = userId,
-                    senderName = userName,
+                    senderName = "You",
                     content = content,
                     timestamp = Date(),
                     isNew = true
@@ -173,14 +183,14 @@ class MessageRepository(
         }
     }
 
-    private fun MessageDto.toEntity(groupId: Long): MessageEntity {
+    private fun MessageDto.toEntity(groupId: String): MessageEntity {
         return MessageEntity(
             id = 0, // Room will auto-generate
             groupId = groupId,
-            senderId = this.sender.id,
-            senderName = this.sender.username,
+            senderId = this.createdBy?.id ?: "",
+            senderName =  this.createdBy?.username ?: "",
             content = this.content,
-            timestamp = this.sentAt,
+            timestamp = this.sendedAt,
             isNew = true
         )
     }

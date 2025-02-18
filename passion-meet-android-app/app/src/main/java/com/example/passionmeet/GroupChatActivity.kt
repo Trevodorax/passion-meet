@@ -12,7 +12,7 @@ class GroupChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group_chat)
 
-        val groupId = intent.getLongExtra(EXTRA_GROUP_ID, -1)
+        val groupId = intent.getStringExtra(EXTRA_GROUP_ID) ?: ""
         val groupName = intent.getStringExtra(EXTRA_GROUP_NAME) ?: ""
 
         // Set the title to the group name
@@ -35,7 +35,7 @@ class GroupChatActivity : AppCompatActivity() {
         private const val EXTRA_GROUP_ID = "extra_group_id"
         private const val EXTRA_GROUP_NAME = "extra_group_name"
 
-        fun createIntent(context: Context, groupId: Long, groupName: String): Intent {
+        fun createIntent(context: Context, groupId: String, groupName: String): Intent {
             return Intent(context, GroupChatActivity::class.java).apply {
                 putExtra(EXTRA_GROUP_ID, groupId)
                 putExtra(EXTRA_GROUP_NAME, groupName)

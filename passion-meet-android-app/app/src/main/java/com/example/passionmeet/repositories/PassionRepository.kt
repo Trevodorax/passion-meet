@@ -4,21 +4,18 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.passionmeet.data.local.PassionMeetDatabase
 import com.example.passionmeet.data.local.dao.PassionDao
-import com.example.passionmeet.data.local.entity.PassionEntity
 import com.example.passionmeet.mapper.mapPassionCategoryDtoToPassionCategoryModel
 import com.example.passionmeet.mapper.mapPassionDtoToPassionEntity
 import com.example.passionmeet.mapper.mapPassionEntityToPassionCategoryModel
 import com.example.passionmeet.models.PassionCategoryModel
-import com.example.passionmeet.network.RetrofitClient
 import com.example.passionmeet.network.dto.PassionDto
 import com.example.passionmeet.network.services.PassionService
+import com.example.passionmeet.utils.NetworkUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.example.passionmeet.utils.NetworkUtils
 
 class PassionRepository(
     private val context: Context,
