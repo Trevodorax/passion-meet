@@ -68,7 +68,10 @@ export class MessageService {
             throw new UnauthorizedException('User is not a participant of this group')
         }
 
-        return this.messageRepository.find({where: {group: group}})
+        return this.messageRepository.find(
+            {where: {group: group},
+            relations: ['createdBy', 'group'],
+            });
     }
 
     async save(Message: Message): Promise<Message> {
