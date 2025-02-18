@@ -18,11 +18,19 @@ import com.example.passionmeet.databinding.ActivityLoginBinding
 import com.example.passionmeet.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.util.Date
 
 class LoginActivity : AppCompatActivity() {
 
     private val loginViewModel: LoginViewModel by viewModel { parametersOf(this) }
     private lateinit var binding: ActivityLoginBinding
+
+    companion object {
+        private const val TOKEN_KEY = "auth_token"
+        private const val STAY_CONNECTED_KEY = "stay_connected"
+        private const val TOKEN_EXPIRY_KEY = "token_expiry"
+        private const val TOKEN_EXPIRY_DURATION = 7 * 24 * 60 * 60 * 1000L // 7 days in milliseconds
+    }
 
     /**
      * Shared preferences for storing the auth token
@@ -41,7 +49,12 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.password
         val login = binding.login
         val loading = binding.loading
+        val stayConnected = binding.stayConnectedCheckbox
 
+        // Restore stay connected preference
+        if (stayConnected != null) {
+            stayConnected.isChecked = sharedPreferences.getBoolean(STAY_CONNECTED_KEY, false)
+        }
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
@@ -69,6 +82,22 @@ class LoginActivity : AppCompatActivity() {
             if (loginResult.success != null) {
                 System.err.println("LoginActivity: loginResult.success: ${loginResult.success}")
                 updateUiWithUser(loginResult.success)
+                
+                // Save stay connected preference and token expiry if checked
+                if (stayConnected != null) {
+                    if (stayConnected.isChecked) {
+                        sharedPreferences.edit()
+                            .putBoolean(STAY_CONNECTED_KEY, true)
+                            .putLong(TOKEN_EXPIRY_KEY, System.currentTimeMillis() + TOKEN_EXPIRY_DURATION)
+                            .apply()
+                    } else {
+                        // Clear stay connected preference if unchecked
+                        sharedPreferences.edit()
+                            .remove(STAY_CONNECTED_KEY)
+                            .remove(TOKEN_EXPIRY_KEY)
+                            .apply()
+                    }
+                }
             }
             System.err.println("LoginActivity: loginResult: $loginResult")
             setResult(Activity.RESULT_OK)
@@ -114,7 +143,7 @@ class LoginActivity : AppCompatActivity() {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
         // get the user's token from the preferences
-        val token = sharedPreferences.getString("auth_token", null)
+        val token = sharedPreferences.getString(TOKEN_KEY, null)
         // TODO : initiate successful logged in experience
         Toast.makeText(
             applicationContext,
@@ -125,6 +154,28 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    }
+
+    /**
+     * Check if the stored token is valid and not expired
+     */
+    fun isTokenValid(): Boolean {
+        val token = sharedPreferences.getString(TOKEN_KEY, null) ?: return false
+        val expiryTime = sharedPreferences.getLong(TOKEN_EXPIRY_KEY, 0)
+        val stayConnected = sharedPreferences.getBoolean(STAY_CONNECTED_KEY, false)
+
+        return stayConnected && System.currentTimeMillis() < expiryTime
+    }
+
+    /**
+     * Clear stored token and preferences
+     */
+    fun clearToken() {
+        sharedPreferences.edit()
+            .remove(TOKEN_KEY)
+            .remove(TOKEN_EXPIRY_KEY)
+            .remove(STAY_CONNECTED_KEY)
+            .apply()
     }
 }
 
