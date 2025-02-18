@@ -22,6 +22,6 @@ class FullMapActivity: AppCompatActivity() {
                 .bearing(0.0)
                 .build()
         )
-        setContentView(R.layout.activity_group_activity_focussed)
+        setContentView(mapView)
     }
 }

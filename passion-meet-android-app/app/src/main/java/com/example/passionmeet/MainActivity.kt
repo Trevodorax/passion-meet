@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateAuthenticationUI() {
         val isAuthenticated = isTokenValid()
-        
+
         // Show/hide buttons based on authentication state
         createAccountButton.visibility = if (isAuthenticated) android.view.View.GONE else android.view.View.VISIBLE
         signInButton.visibility = if (isAuthenticated) android.view.View.GONE else android.view.View.VISIBLE
