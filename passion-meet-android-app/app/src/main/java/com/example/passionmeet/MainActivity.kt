@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var selectPassionButton: Button
     private lateinit var passionSelector: RecyclerView
     private lateinit var openGroupList: Button
+    private lateinit var logoutButton: Button
 
     companion object {
         private const val TOKEN_KEY = "auth_token"
@@ -36,9 +37,9 @@ class MainActivity : AppCompatActivity() {
         // Check if user is already logged in with valid token
         if (isTokenValid()) {
             // Navigate to UserHomeActivity directly
-            startActivity(Intent(this, UserHomeActivity::class.java))
-            finish()
-            return
+//            startActivity(Intent(this, UserHomeActivity::class.java))
+//            finish()
+//            return
         }
 
         setContentView(R.layout.activity_main)
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         this.signInButton = findViewById(R.id.sign_in_account_button)
         this.selectPassionButton = findViewById(R.id.navigation_select_passion)
         this.openGroupList = findViewById(R.id.open_groups_list_button)
+        this.logoutButton = findViewById(R.id.logout_button)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -77,17 +79,35 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Setup passion rv
-//        this.passionSelector = findViewById(R.id.passion_selector_rv)
-//        this.passionSelector.layoutManager =
-//            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-//        this.passionSelector.adapter = PassionSelectorAdapter(passionList)
+        logoutButton.setOnClickListener {
+            logout()
+        }
 
+        // Update UI based on authentication state
+        updateAuthenticationUI()
+    }
 
-//        // Setup categories rv
-//        val categoryRecyclerView = findViewById<RecyclerView>(R.id.category_recycler_view)
-//        categoryRecyclerView.layoutManager = LinearLayoutManager(this)
-//        categoryRecyclerView.adapter = CategoryAdapter(categories)
+    private fun updateAuthenticationUI() {
+        val isAuthenticated = isTokenValid()
+        
+        // Show/hide buttons based on authentication state
+        createAccountButton.visibility = if (isAuthenticated) android.view.View.GONE else android.view.View.VISIBLE
+        signInButton.visibility = if (isAuthenticated) android.view.View.GONE else android.view.View.VISIBLE
+        logoutButton.visibility = if (isAuthenticated) android.view.View.VISIBLE else android.view.View.GONE
+        openGroupList.visibility = if (isAuthenticated) android.view.View.VISIBLE else android.view.View.GONE
+        selectPassionButton.visibility = if (isAuthenticated) android.view.View.VISIBLE else android.view.View.GONE
+    }
+
+    private fun logout() {
+        // Clear all authentication related data
+        sharedPreferences.edit()
+            .remove(TOKEN_KEY)
+            .remove(STAY_CONNECTED_KEY)
+            .remove(TOKEN_EXPIRY_KEY)
+            .apply()
+
+        // Update UI
+        updateAuthenticationUI()
     }
 
     /**
