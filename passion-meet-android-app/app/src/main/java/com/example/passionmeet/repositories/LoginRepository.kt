@@ -18,15 +18,19 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LoginRepository(
-    context: Context,
+    private val context: Context,
 ) {
-
     private val loginService = RetrofitClient.instance.create(LoginService::class.java)
-
     private val _loginResponse = MutableLiveData<LoginModel>()
     val loginResponse: MutableLiveData<LoginModel> get() = _loginResponse
-
     val scope = CoroutineScope(SupervisorJob())
+
+    companion object {
+        private const val TOKEN_KEY = "auth_token"
+        private const val STAY_CONNECTED_KEY = "stay_connected"
+        private const val TOKEN_EXPIRY_KEY = "token_expiry"
+        private const val TOKEN_EXPIRY_DURATION = 7 * 24 * 60 * 60 * 1000L // 7 days in milliseconds
+    }
 
     /**
      * Shared preferences for storing the auth token
@@ -77,6 +81,56 @@ class LoginRepository(
 
             override fun onFailure(call: Call<LoginResponseDTO>, t: Throwable) {
                 Log.e("LoginRepository", "Login request failed", t)
+                _loginResponse.value = LoginModel(null)
+            }
+        })
+    }
+
+    /**
+     * Refresh the token if it's about to expire
+     */
+    fun refreshTokenIfNeeded(onComplete: (Boolean) -> Unit) {
+        val token = sharedPreferences.getString(TOKEN_KEY, null)
+        val expiryTime = sharedPreferences.getLong(TOKEN_EXPIRY_KEY, 0)
+        val stayConnected = sharedPreferences.getBoolean(STAY_CONNECTED_KEY, false)
+
+        if (token == null || !stayConnected) {
+            onComplete(false)
+            return
+        }
+
+        // Refresh token if it's going to expire in the next hour
+        val oneHourFromNow = System.currentTimeMillis() + (60 * 60 * 1000)
+        if (expiryTime > oneHourFromNow) {
+            onComplete(true)
+            return
+        }
+
+        // Call refresh token endpoint
+        val call = loginService.refreshToken("Bearer $token")
+        call.enqueue(object : Callback<LoginResponseDTO> {
+            override fun onResponse(
+                call: Call<LoginResponseDTO>,
+                response: Response<LoginResponseDTO>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    val newToken = response.body()?.token
+                    if (newToken != null) {
+                        saveToken(newToken)
+                        onComplete(true)
+                    } else {
+                        clearToken()
+                        onComplete(false)
+                    }
+                } else {
+                    clearToken()
+                    onComplete(false)
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponseDTO>, t: Throwable) {
+                clearToken()
+                onComplete(false)
             }
         })
     }
@@ -128,13 +182,21 @@ class LoginRepository(
         )
     }
 
-
     /**
      * Saves the auth token to shared preferences
      */
     private fun saveToken(token: String) {
         sharedPreferences.edit()
-            .putString("auth_token", token)
+            .putString(TOKEN_KEY, token)
+            .putLong(TOKEN_EXPIRY_KEY, System.currentTimeMillis() + TOKEN_EXPIRY_DURATION)
+            .apply()
+    }
+
+    private fun clearToken() {
+        sharedPreferences.edit()
+            .remove(TOKEN_KEY)
+            .remove(TOKEN_EXPIRY_KEY)
+            .remove(STAY_CONNECTED_KEY)
             .apply()
     }
 }
