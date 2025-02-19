@@ -1,4 +1,4 @@
-package com.example.passionmeet.util
+package com.example.passionmeet.utils
 
 import androidx.room.TypeConverter
 import java.util.Date

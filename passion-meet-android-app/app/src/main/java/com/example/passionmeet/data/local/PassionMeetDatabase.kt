@@ -1,7 +1,6 @@
 package com.example.passionmeet.data.local
 
 import android.content.Context
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -14,7 +13,7 @@ import com.example.passionmeet.data.local.entity.GroupEntity
 import com.example.passionmeet.data.local.entity.MessageEntity
 import com.example.passionmeet.data.local.entity.EncounterEntity
 import com.example.passionmeet.data.local.dao.EncounterDao
-import com.example.passionmeet.util.Converters
+import com.example.passionmeet.utils.Converters
 
 @Database(
     entities = [
