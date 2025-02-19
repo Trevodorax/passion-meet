@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity() {
             // Switch to the LoginActivity
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            updateAuthenticationUI()
         }
 
         selectPassionButton.setOnClickListener {
