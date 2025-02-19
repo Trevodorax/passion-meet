@@ -15,7 +15,9 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical"
+        android:focusable="true"
         android:src="@drawable/ic_account"
+        android:clickable="true"
         />
 
     <ImageView
@@ -27,13 +29,13 @@
         android:src="@drawable/passion_meet_logo"
         android:scaleType="centerCrop" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/logoutBtn"
         android:layout_width="48dp"
         android:layout_gravity="center_vertical"
         android:layout_height="48dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_help"
+        android:src="@drawable/ic_logout"
         android:clickable="true"
         android:focusable="true"/>
 </LinearLayout>

@@ -26,6 +26,12 @@ class UserHomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_home)
 
+        val headerFragment = HeaderFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.header_container, headerFragment)
+            .commit()
+
+
         //Groups recycler view
         recyclerView = findViewById(R.id.groups_list_recycler_view)
         recyclerView.layoutManager =
