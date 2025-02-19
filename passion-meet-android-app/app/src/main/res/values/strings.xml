@@ -26,7 +26,8 @@
     <string name="select_passion_title">Selectionnez vos passions:</string>
     <string name="starting_page_sub_text">Partagez enfin votre passion avec le monde</string>
     <string name="starting_page_app_name">Passion meet</string>
-    <string name="groups">Groupes</string>
-    <string name="notif_encounter_text">a croisé votre chemin !</string>
-    <string name="last_encounters">Dernières rencontres</string>
+    <string name="groups">My groups</string>
+    <string name="notif_encounter_text">crossed your path!</string>
+    <string name="last_encounters">My last encounters</string>
+    <string name="my_account">My account</string>
 </resources>
