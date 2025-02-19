@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -18,12 +19,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var selectPassionButton: Button
     private lateinit var passionSelector: RecyclerView
     private lateinit var openGroupList: Button
-    private lateinit var logoutButton: Button
 
     companion object {
-        private const val TOKEN_KEY = "auth_token"
-        private const val STAY_CONNECTED_KEY = "stay_connected"
-        private const val TOKEN_EXPIRY_KEY = "token_expiry"
+        public const val TOKEN_KEY = "auth_token"
+        public const val STAY_CONNECTED_KEY = "stay_connected"
+        public const val TOKEN_EXPIRY_KEY = "token_expiry"
     }
 
     private val sharedPreferences: SharedPreferences by lazy {
@@ -34,15 +34,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-
-
         setContentView(R.layout.activity_main)
         this.createAccountButton = findViewById(R.id.create_account_button)
         this.signInButton = findViewById(R.id.sign_in_account_button)
         this.selectPassionButton = findViewById(R.id.navigation_select_passion)
         this.openGroupList = findViewById(R.id.open_groups_list_button)
-        this.logoutButton = findViewById(R.id.logout_button)
-
         // Check if user is already logged in with valid token
         if (isTokenValid()) {
             // Navigate to UserHomeActivity directly
@@ -53,8 +49,6 @@ class MainActivity : AppCompatActivity() {
             // fixme later
             selectPassionButton.visibility = android.view.View.VISIBLE
             openGroupList.visibility = android.view.View.VISIBLE
-            logoutButton.visibility = android.view.View.VISIBLE
-
             signInButton.visibility = android.view.View.GONE
             createAccountButton.visibility = android.view.View.GONE
         }
@@ -90,9 +84,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        logoutButton.setOnClickListener {
-            logout()
-        }
+
 
         // Update UI based on authentication state
         updateAuthenticationUI()
@@ -104,21 +96,8 @@ class MainActivity : AppCompatActivity() {
         // Show/hide buttons based on authentication state
         createAccountButton.visibility = if (isAuthenticated) android.view.View.GONE else android.view.View.VISIBLE
         signInButton.visibility = if (isAuthenticated) android.view.View.GONE else android.view.View.VISIBLE
-        logoutButton.visibility = if (isAuthenticated) android.view.View.VISIBLE else android.view.View.GONE
         openGroupList.visibility = if (isAuthenticated) android.view.View.VISIBLE else android.view.View.GONE
         selectPassionButton.visibility = if (isAuthenticated) android.view.View.VISIBLE else android.view.View.GONE
-    }
-
-    private fun logout() {
-        // Clear all authentication related data
-        sharedPreferences.edit()
-            .remove(TOKEN_KEY)
-            .remove(STAY_CONNECTED_KEY)
-            .remove(TOKEN_EXPIRY_KEY)
-            .apply()
-
-        // Update UI
-        updateAuthenticationUI()
     }
 
     /**
