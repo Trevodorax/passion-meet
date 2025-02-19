@@ -34,13 +34,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Check if user is already logged in with valid token
-        if (isTokenValid()) {
-            // Navigate to UserHomeActivity directly
-//            startActivity(Intent(this, UserHomeActivity::class.java))
-//            finish()
-//            return
-        }
+
 
         setContentView(R.layout.activity_main)
         this.createAccountButton = findViewById(R.id.create_account_button)
@@ -48,6 +42,22 @@ class MainActivity : AppCompatActivity() {
         this.selectPassionButton = findViewById(R.id.navigation_select_passion)
         this.openGroupList = findViewById(R.id.open_groups_list_button)
         this.logoutButton = findViewById(R.id.logout_button)
+
+        // Check if user is already logged in with valid token
+        if (isTokenValid()) {
+            // Navigate to UserHomeActivity directly
+//            startActivity(Intent(this, UserHomeActivity::class.java))
+//            finish()
+//            return
+
+            // fixme later
+            selectPassionButton.visibility = android.view.View.VISIBLE
+            openGroupList.visibility = android.view.View.VISIBLE
+            logoutButton.visibility = android.view.View.VISIBLE
+
+            signInButton.visibility = android.view.View.GONE
+            createAccountButton.visibility = android.view.View.GONE
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

@@ -64,7 +64,7 @@ class LoginRepository(
                             }
                         }
 
-                        getSelfInfo()
+                        getSelfInfo(mappedData.token ?: throw IllegalStateException("Token not found"))
 
                         mappedData
                     }
@@ -135,8 +135,8 @@ class LoginRepository(
         })
     }
 
-    private fun getSelfInfo() {
-        val call = loginService.getSelfInfo("Bearer ${sharedPreferences.getString("auth_token", "")}")
+    private fun getSelfInfo(token: String) {
+        val call = loginService.getSelfInfo("Bearer $token")
 
         call.enqueue(object: Callback<UserResponseDTO> {
             override fun onResponse(
@@ -190,6 +190,8 @@ class LoginRepository(
             .putString(TOKEN_KEY, token)
             .putLong(TOKEN_EXPIRY_KEY, System.currentTimeMillis() + TOKEN_EXPIRY_DURATION)
             .apply()
+
+        Log.d("LoginRepository", sharedPreferences.getString(TOKEN_KEY, "No token found") ?: "No token found")
     }
 
     private fun clearToken() {
