@@ -1,7 +1,9 @@
 package com.example.passionmeet
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +21,7 @@ class UserHomeActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var grouplistAdapter: GroupsListAdapter
     private lateinit var groups: List<GroupModel>
+    private lateinit var selectPassionBtn: Button
 
     private val groupViewModel: GroupViewModel by viewModel { parametersOf(this) }
 
@@ -31,6 +34,12 @@ class UserHomeActivity : AppCompatActivity() {
             .replace(R.id.header_container, headerFragment)
             .commit()
 
+        selectPassionBtn = findViewById(R.id.update_passion_button)
+        selectPassionBtn.setOnClickListener {
+            // switch to select passion activity
+            val intent = Intent(this, SelectPassionActivity::class.java)
+            startActivity(intent)
+        }
 
         //Groups recycler view
         recyclerView = findViewById(R.id.groups_list_recycler_view)

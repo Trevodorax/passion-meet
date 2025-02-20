@@ -5,20 +5,15 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.RecyclerView
 import com.example.passionmeet.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var createAccountButton: Button
     private lateinit var signInButton: Button
-    private lateinit var selectPassionButton: Button
-    private lateinit var passionSelector: RecyclerView
-    private lateinit var openGroupList: Button
 
     companion object {
         public const val TOKEN_KEY = "auth_token"
@@ -37,20 +32,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         this.createAccountButton = findViewById(R.id.create_account_button)
         this.signInButton = findViewById(R.id.sign_in_account_button)
-        this.selectPassionButton = findViewById(R.id.navigation_select_passion)
-        this.openGroupList = findViewById(R.id.open_groups_list_button)
+
         // Check if user is already logged in with valid token
         if (isTokenValid()) {
             // Navigate to UserHomeActivity directly
-//            startActivity(Intent(this, UserHomeActivity::class.java))
-//            finish()
-//            return
-
-            // fixme later
-            selectPassionButton.visibility = android.view.View.VISIBLE
-            openGroupList.visibility = android.view.View.VISIBLE
-            signInButton.visibility = android.view.View.GONE
-            createAccountButton.visibility = android.view.View.GONE
+            startActivity(Intent(this, UserHomeActivity::class.java))
+            finish()
+            return
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -65,27 +53,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        openGroupList.setOnClickListener {
-            // Switch to the UserHomeActivity
-            val intent = Intent(this, UserHomeActivity::class.java)
-            startActivity(intent)
-        }
-
         signInButton.setOnClickListener {
             // Switch to the LoginActivity
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             updateAuthenticationUI()
         }
-
-        selectPassionButton.setOnClickListener {
-            // switch to select passion activity
-            val intent = Intent(this, SelectPassionActivity::class.java)
-            startActivity(intent)
-        }
-
-
-
         // Update UI based on authentication state
         updateAuthenticationUI()
     }
@@ -96,8 +69,6 @@ class MainActivity : AppCompatActivity() {
         // Show/hide buttons based on authentication state
         createAccountButton.visibility = if (isAuthenticated) android.view.View.GONE else android.view.View.VISIBLE
         signInButton.visibility = if (isAuthenticated) android.view.View.GONE else android.view.View.VISIBLE
-        openGroupList.visibility = if (isAuthenticated) android.view.View.VISIBLE else android.view.View.GONE
-        selectPassionButton.visibility = if (isAuthenticated) android.view.View.VISIBLE else android.view.View.GONE
     }
 
     /**

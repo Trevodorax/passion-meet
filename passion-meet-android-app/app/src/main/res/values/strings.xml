@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">Passion Meet</string>
-    <string name="signup_button_label">Create account</string>
+    <string name="signup_button_label">Sign up</string>
     <string name="signup_email_hint">Ex: user@example.com</string>
     <string name="signup_username_hint">Ex: Trevodorax</string>
-    <string name="signup_submit_button_label">Je crée un compte</string>
-    <string name="signup_page_title">Inscription</string>
-    <string name="signup_mandatory_fields_explanation">Les champs marqués d’une astérisque (*) sont obligatoires.</string>
+    <string name="signup_submit_button_label">Start the adventure</string>
+    <string name="signup_page_title">Registering</string>
+    <string name="signup_mandatory_fields_explanation">Fields with the asterix (*) are required.</string>
     <string name="signup_email_label">Email <font color='#FF0000'>*</font></string>
     <string name="signup_username_label">Username <font color='#FF0000'>*</font></string>
-    <string name="signup_password_label">Password <font color='#FF0000'>*</font></string>
-    <string name="cgu_signup">En cliquant sur “Je crée un compte”, j’accepte les conditions générales d’utilisation de Passion Meeter.</string>
+    <string name="signup_password_label">Password (> 5 chars) <font color='#FF0000'>*</font></string>
+    <string name="cgu_signup">When i click on Start the adventure, i hereby agree to the Terms of Service of Passion Meet.</string>
     <string name="sign_in_button_label">Sign in</string>
     <!-- Strings related to login -->
     <string name="title_activity_login">LoginActivity</string>
@@ -21,13 +21,14 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="login">Connexion</string>
-    <string name="submit_button_label">valider</string>
-    <string name="select_passion_title">Selectionnez vos passions:</string>
-    <string name="starting_page_sub_text">Partagez enfin votre passion avec le monde</string>
+    <string name="login">Login</string>
+    <string name="submit_button_label">Save</string>
+    <string name="select_passion_title">Select your passions </string>
+    <string name="starting_page_sub_text">Now you can share your passion with the world</string>
     <string name="starting_page_app_name">Passion meet</string>
     <string name="groups">My groups</string>
     <string name="notif_encounter_text">crossed your path!</string>
     <string name="last_encounters">My last encounters</string>
     <string name="my_account">My account</string>
+    <string name="update_passions">Update my passions</string>
 </resources>
