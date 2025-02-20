@@ -38,7 +38,7 @@ class HeaderFragment: Fragment() {
             Toast.makeText(context, "Logged out", Toast.LENGTH_SHORT).show()
             logout()
         }
-        logoutButton.setOnClickListener {
+        userHomeButton.setOnClickListener {
             val intent = Intent( requireActivity(), UserHomeActivity::class.java)
             startActivity(intent)
         }
