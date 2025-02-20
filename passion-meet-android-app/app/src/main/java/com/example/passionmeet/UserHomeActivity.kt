@@ -4,15 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.passionmeet.models.GroupModel
-import com.example.passionmeet.repositories.GroupRepository
-import com.example.passionmeet.viewmodel.EncounterViewModel
+import com.example.passionmeet.ui.groups.GroupsListAdapter
 import com.example.passionmeet.viewmodel.GroupViewModel
-import com.example.passionmeet.viewmodel.factories.GroupViewModelFactory
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 

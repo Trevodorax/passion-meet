@@ -187,7 +187,7 @@
                 android:id="@+id/fragment_list_activities"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:name="com.example.passionmeet.ActivityFragment" />
+                android:name="com.example.passionmeet.ui.activities.ActivityFragment" />
 
 
         </LinearLayout>

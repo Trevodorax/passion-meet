@@ -1,4 +1,4 @@
-package com.example.passionmeet
+package com.example.passionmeet.ui.passions
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.passionmeet.R
 import com.example.passionmeet.models.PassionCategoryModel
 import com.example.passionmeet.models.PassionSelectorModel
 
