@@ -1,9 +1,10 @@
-package com.example.passionmeet
+package com.example.passionmeet.ui.passions
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.passionmeet.R
 import com.example.passionmeet.models.PassionSelectorModel
 import com.example.passionmeet.views.PassionSelectorVH
 

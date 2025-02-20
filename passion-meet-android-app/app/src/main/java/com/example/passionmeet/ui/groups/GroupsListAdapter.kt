@@ -1,10 +1,12 @@
-package com.example.passionmeet
+package com.example.passionmeet.ui.groups
 
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.passionmeet.GroupPageActivity
+import com.example.passionmeet.R
 import com.example.passionmeet.models.GroupModel
 import com.example.passionmeet.views.GroupsVH
 

@@ -36,7 +36,7 @@
             android:name=".SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".DetailledActivityFragment"
+            android:name=".ui.activities.DetailledActivityFragment"
             android:exported="false" />
         <activity
             android:name=".FullMapActivity"

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.passionmeet.models.PassionCategoryModel
 import com.example.passionmeet.models.PassionSelectorModel
-import com.example.passionmeet.repositories.PassionRepository
+import com.example.passionmeet.ui.passions.CategoryAdapter
 import com.example.passionmeet.viewmodel.PassionViewModel
 import com.google.android.flexbox.FlexboxLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel

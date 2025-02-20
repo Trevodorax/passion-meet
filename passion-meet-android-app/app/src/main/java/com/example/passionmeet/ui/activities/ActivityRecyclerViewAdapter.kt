@@ -1,10 +1,10 @@
-package com.example.passionmeet
+package com.example.passionmeet.ui.activities
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import com.example.passionmeet.R
 import com.example.passionmeet.models.ActivityModel
 import com.example.passionmeet.views.ActivityVH
 // Interface for the click listener
