@@ -1,9 +1,10 @@
-package com.example.passionmeet
+package com.example.passionmeet.ui.encounters
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.example.passionmeet.R
 
 import com.example.passionmeet.models.ShortenedEncounter
 import com.example.passionmeet.views.EncounterVH

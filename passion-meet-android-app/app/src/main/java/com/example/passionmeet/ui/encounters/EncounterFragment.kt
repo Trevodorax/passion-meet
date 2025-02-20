@@ -1,4 +1,4 @@
-package com.example.passionmeet
+package com.example.passionmeet.ui.encounters
 
 import android.os.Bundle
 import android.util.Log
@@ -9,8 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.passionmeet.R
 import com.example.passionmeet.mapper.mapEncounterModelTOShortenedEncounterModel
-import com.example.passionmeet.models.EncounterStatus
 import com.example.passionmeet.models.ShortenedEncounter
 import com.example.passionmeet.viewmodel.EncounterViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
