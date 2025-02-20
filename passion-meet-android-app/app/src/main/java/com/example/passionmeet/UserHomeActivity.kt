@@ -34,16 +34,7 @@ class UserHomeActivity : AppCompatActivity() {
 
         //Groups recycler view
         recyclerView = findViewById(R.id.groups_list_recycler_view)
-        recyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        // Fake data
-//        groups = listOf(
-//            //GroupModel("Pikachu lovers", "https://unsplash.com/fr/photos/cartouche-de-jeu-nintendo-game-boy-pokemon-7P2QXuPmR9I", 90, "A group for Pikachu lovers"),
-//            GroupModel("id","Pikachu lovers", "https://robohash.org/testeuuuh", 90, "A group for Pikachu lovers"),
-//            GroupModel("id","Salamache lovers", "https://robohash.org/estuh2", 7, "A group for Salamche lovers"),
-//            GroupModel("id","Tortipousse lovers", "https://robohash.org/steuuteuhw", 10, "A group for Tortipousse lovers"),
-//        )
-
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         fetchData()
     }
 

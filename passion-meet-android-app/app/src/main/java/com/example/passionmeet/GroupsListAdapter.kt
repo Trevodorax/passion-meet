@@ -21,11 +21,11 @@ class GroupsListAdapter(private val context: Context, private val groups: List<G
         holder.bind(group)
 
         holder.groupCard.setOnClickListener {
-            val intent = GroupChatActivity.createIntent(
-                context,
-                group.id,
-                group.name
-            )
+
+            val intent = Intent(context, GroupPageActivity::class.java)
+            intent.putExtra("group_id", group.id)
+            intent.putExtra("group_name", group.name)
+            //todo: and all the data need to display the group page
             context.startActivity(intent)
         }
     }
