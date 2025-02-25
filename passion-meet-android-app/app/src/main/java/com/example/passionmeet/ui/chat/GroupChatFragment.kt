@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.passionmeet.R
 import com.example.passionmeet.data.local.entity.MessageEntity
+import com.example.passionmeet.utils.getCurrentUserId
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -53,7 +54,7 @@ class GroupChatFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        messageAdapter = ChatMessageAdapter(viewModel.getCurrentUserId())
+        messageAdapter = ChatMessageAdapter(getCurrentUserId(requireContext()))
         recyclerView.apply {
             layoutManager = LinearLayoutManager(context).apply {
                 stackFromEnd = true
