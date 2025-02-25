@@ -32,4 +32,16 @@
     <string name="my_account">My account</string>
     <string name="update_passions">Update my passions</string>
     <string name="stay_connected">Stay Connected</string>
+    <string name="create_activity_page_title">Create an activity</string>
+    <string name="activity_name_label">Activity name <font color='#FF0000'>*</font></string>
+    <string name="activity_name_hint">Share a coffee</string>
+    <string name="activity_description_hint">I love coffee, let\'s make some great ones together !</string>
+    <string name="activity_description_label">Description <font color='#FF0000'>*</font></string>
+    <string name="activity_start_date_label">Début de l\'activité ? <font color='#FF0000'>*</font></string>
+    <string name="create_activity_btn">Create this activity</string>
+    <string name="activity_date_hint">05/12/2025</string>
+    <string name="activity_participant_hint">4</string>
+    <string name="activity_max_participants_label">Max participants <font color='#FF0000'>*</font></string>
+    <string name="activity_location_hint">242 rue du faubourg saint antoine, Paris</string>
+    <string name="activity_location_label">Location <font color='#FF0000'>*</font></string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.passionmeet.data.local.entity.MessageEntity
 import com.example.passionmeet.repositories.MessageRepository
+import com.example.passionmeet.utils.getCurrentUserId
 
 class GroupChatViewModel (
     private val context: Context,
@@ -29,12 +30,12 @@ class GroupChatViewModel (
 
     fun sendMessage(content: String) {
         if (groupId.isEmpty()) return
+        val userId = getCurrentUserId(context)
+        if (userId.isEmpty()) {
+            _error.value = "User ID not found"
+            return
+        }
 
-        messageRepository.sendMessage(groupId, content, getCurrentUserId())
-    }
-
-    fun getCurrentUserId(): String {
-        return context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
-            .getString("user_id", "") ?: throw IllegalStateException("User ID not found")
+        messageRepository.sendMessage(groupId, content, userId)
     }
 } 

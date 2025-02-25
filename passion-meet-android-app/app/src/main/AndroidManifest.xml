@@ -58,6 +58,9 @@
         <activity
             android:name=".GroupPageActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.activities.CreateActivityActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
