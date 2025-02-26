@@ -1,5 +1,7 @@
 package com.example.passionmeet.models
 
+import com.example.passionmeet.data.remote.dto.UserRequestDto
+
 data class ActivityModel(
         val id: String,
         val name: String,
@@ -8,5 +10,5 @@ data class ActivityModel(
         val location: String,
         val startDate: String,
         val description: String,
-        val participants: List<String> = emptyList(),
+        val participants: List<UserRequestDto> = emptyList(),
     )
