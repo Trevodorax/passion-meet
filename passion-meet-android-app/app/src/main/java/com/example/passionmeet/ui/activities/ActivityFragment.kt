@@ -68,7 +68,12 @@ class ActivityFragment : Fragment() {
         this.activityViewModel.activitiesData.observe(viewLifecycleOwner) { activities ->
             Log.e("ActivityFragment", "Data received 2: $activities")
             this.activities = activities
+
+            setupRecyclerView()
         }
+    }
+
+    private fun setupRecyclerView() {
         this.activitiesRecyclerView = ActivityRecyclerViewAdapter(requireContext(), activities)
         this.recylcerView.adapter = activitiesRecyclerView
     }
