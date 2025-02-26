@@ -370,6 +370,14 @@ describe('AppController (e2e)', () => {
         expect(body.participants).toHaveLength(1)
       });
       await request(app.getHttpServer())
+      .get('/groups/' + group.id + '/activities')
+      .send()
+      .expect(200)
+      .expect(({body}) => {
+        expect(body.activities[0].participants).toHaveLength(1)
+        expect(body.activities[0].createdBy.username).toEqual(user.username)
+      });
+      await request(app.getHttpServer())
       .delete('/users/me/activities')
       .set('Authorization', `Bearer ${token}`)
       .send({
