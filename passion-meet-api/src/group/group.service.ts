@@ -6,6 +6,7 @@ import { CreateGroupDto } from './dto/createGroup.dto';
 import { Passion } from '../passion/passion.entity';
 import { Group } from './group.entity';
 import { Activity } from '../activity/activity.entity';
+import { ActivityService } from 'src/activity/activity.service';
 
 interface CreatedGroup {
     id: string;
@@ -23,6 +24,7 @@ export class GroupService {
     constructor(
         @InjectRepository(Group)
         private groupRepository: Repository<Group>,
+        private activityService: ActivityService
     ) {}
 
     async createGroup(dto: CreateGroupDto): Promise<CreatedGroup> {
@@ -63,7 +65,11 @@ export class GroupService {
     }
 
     async findActivitiesByGroupId(id: string): Promise<Group | null> {
-        return this.groupRepository.findOne({where: {id: id}, relations: ['activities']})
+        const group = await this.groupRepository.findOne({where: {id: id}, relations: ['activities']})
+        for (let activity of group.activities) {
+            activity = await this.activityService.findOneById(activity.id)
+        }
+        return group
     }
 
     async findManyByName(name: string): Promise<Group[] | null> {
