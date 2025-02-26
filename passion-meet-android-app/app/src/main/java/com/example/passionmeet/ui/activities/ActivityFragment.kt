@@ -2,29 +2,40 @@ package com.example.passionmeet.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.passionmeet.R
 import com.example.passionmeet.models.ActivityModel
+import com.example.passionmeet.viewmodel.ActivityViewModel
+import org.koin.core.parameter.parametersOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * A fragment representing a list of activities.
  */
 class ActivityFragment : Fragment() {
 
+    private val activityViewModel : ActivityViewModel by viewModel { parametersOf(this) }
     private lateinit var recylcerView: RecyclerView
     private lateinit var activitiesRecyclerView: ActivityRecyclerViewAdapter
     private lateinit var activities: List<ActivityModel>
+    private lateinit var groupId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_activities_list, container, false)
+        activityViewModel.groupId.observe(viewLifecycleOwner, Observer { data ->
+            this.groupId = data
+            Log.e("ActivityFragment", "Group ID received: $data")
+        })
         return view
     }
 
@@ -33,10 +44,7 @@ class ActivityFragment : Fragment() {
 
         this.recylcerView = view.findViewById(R.id.activities_list_recycler_view)
         recylcerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        this.activities = listOf(
-        ActivityModel("1","Hiking", "Moutoo", 12, "242 rue du faubourg Saint Antoine, Paris 12ème", "10-03-2025", "Hiking in the mountain", listOf("Moutoo", "Milowo")),
-        ActivityModel("2","Boire un café", "Mil0w0", 4, "242 rue du faubourg Saint Antoine, Paris 12ème", "10-03-2025", "Boire un café pour discuter de la vie", listOf("Moutoo", "Milowo")),
-         )
+        fetchData()
         this.activitiesRecyclerView = ActivityRecyclerViewAdapter(requireContext(), activities)
         activitiesRecyclerView.setOnClickListener(object : OnClickListener {
             override fun onClick(position: Int, model: ActivityModel) {
@@ -52,6 +60,15 @@ class ActivityFragment : Fragment() {
             }
         })
         this.recylcerView.adapter = activitiesRecyclerView
+
+    }
+
+    private fun fetchData()  {
+        this.activityViewModel.activitiesData.observe(viewLifecycleOwner) { activities ->
+            Log.e("ActivityFragment", "Data received: $activities")
+            this.activities = activities
+        }
+        this.activityViewModel.getActivities(groupId)
 
     }
 
