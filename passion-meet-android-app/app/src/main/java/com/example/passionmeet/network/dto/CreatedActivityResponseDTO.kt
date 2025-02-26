@@ -1,5 +1,7 @@
 package com.example.passionmeet.network.dto
 
+import com.example.passionmeet.data.remote.dto.UserRequestDto
+
 data class CreatedActivityResponseDTO (
     val id: String,
     val name: String,
@@ -10,7 +12,5 @@ data class CreatedActivityResponseDTO (
     val location: String,
     val maxParticipants: Int,
     val imageUrl: String,
-//    val createdBy: User;
-//    group: Group;
-//    participants: User[];
+    val createdBy: UserRequestDto,
 )
