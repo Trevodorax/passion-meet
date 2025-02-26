@@ -4,13 +4,13 @@ import { Group } from './group.entity';
 import { GroupController } from './group.controller';
 import { GroupService } from './group.service';
 import { PassionModule } from '../passion/passion.module';
-import { ActivityModule } from 'src/activity/activity.module';
+import { ActivityModule } from '../activity/activity.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Group]),
-    forwardRef(() => ActivityModule),    
-    PassionModule
+    forwardRef(() => PassionModule),
+    forwardRef(() => ActivityModule)      
   ],
   controllers: [GroupController],
   providers: [

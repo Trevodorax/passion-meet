@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { User } from '../user/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,7 +6,7 @@ import { CreateGroupDto } from './dto/createGroup.dto';
 import { Passion } from '../passion/passion.entity';
 import { Group } from './group.entity';
 import { Activity } from '../activity/activity.entity';
-import { ActivityService } from 'src/activity/activity.service';
+import { ActivityService } from '../activity/activity.service';
 
 interface CreatedGroup {
     id: string;
@@ -24,6 +24,7 @@ export class GroupService {
     constructor(
         @InjectRepository(Group)
         private groupRepository: Repository<Group>,
+        @Inject(forwardRef(() => ActivityService))
         private activityService: ActivityService
     ) {}
 
@@ -66,9 +67,11 @@ export class GroupService {
 
     async findActivitiesByGroupId(id: string): Promise<Group | null> {
         const group = await this.groupRepository.findOne({where: {id: id}, relations: ['activities']})
+        let activities = []
         for (let activity of group.activities) {
-            activity = await this.activityService.findOneById(activity.id)
+            activities.push(await this.activityService.findOneById(activity.id))
         }
+        group.activities = activities
         return group
     }
 
