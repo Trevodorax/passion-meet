@@ -4,9 +4,9 @@ data class ActivityModel(
         val id: String,
         val name: String,
         val createdBy: String,
-        val maxParticipant: Int,
+        val maxParticipants: Int,
         val location: String,
-        val date: String,
+        val startDate: String,
         val description: String,
-        val participants: List<String>,
+        val participants: List<String> = emptyList(),
     )

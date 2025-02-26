@@ -41,13 +41,13 @@ class ActivityFragment : Fragment() {
         activitiesRecyclerView.setOnClickListener(object : OnClickListener {
             override fun onClick(position: Int, model: ActivityModel) {
                 val intent = Intent(requireContext(), DetailledActivityFragment::class.java)
-                val activitySentence= "${model.createdBy} wants to ${model.name} at ${model.location} on ${model.date}"
+                val activitySentence= "${model.createdBy} wants to ${model.name} at ${model.location} on ${model.startDate}"
                 intent.putExtra("activity_sentence", activitySentence)
                 intent.putExtra("activity_id", model.id)
                 intent.putExtra("activity_location", model.location)
                 intent.putExtra("activity_description", model.description)
                 intent.putExtra("participants", ArrayList(model.participants))
-                intent.putExtra("max_participants", model.maxParticipant)
+                intent.putExtra("max_participants", model.maxParticipants)
                 startActivity(intent)
             }
         })

@@ -3,9 +3,12 @@ package com.example.passionmeet.repositories
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.example.passionmeet.data.remote.dto.CreateActivityRequestDTO
 import com.example.passionmeet.data.remote.dto.GroupRequestDto
 import com.example.passionmeet.data.remote.dto.UserRequestDto
+import com.example.passionmeet.models.ActivityModel
+import com.example.passionmeet.models.SignupModel
 import com.example.passionmeet.network.RetrofitClient
 import com.example.passionmeet.network.dto.CreatedActivityResponseDTO
 import com.example.passionmeet.network.services.ActivityService
@@ -13,15 +16,19 @@ import com.example.passionmeet.utils.NetworkUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
+import java.util.Calendar
 import java.util.Date
 
 class ActivityRepository(
     private val context: Context,
 ) {
 
+    private val _createActivityResponse = MutableLiveData<Boolean>()
+    val createActivityResponse: MutableLiveData<Boolean> get() = _createActivityResponse
     private val activityService=  RetrofitClient.instance.create(ActivityService::class.java)
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-//
+
 //    private val _messages = MutableLiveData<List<MessageEntity>>()
 //    val messages get() = _messages
 
@@ -92,8 +99,13 @@ class ActivityRepository(
 //    }
 
     fun createActivity(groupId: String, userId: String, startDate: String, name: String, description: String, maxParticipants: Int, location: String) {
+        //Data preparation
         val type= "unknown"
         val imageUrl = "unknown"
+        val endDate = Calendar.getInstance()
+        endDate.time = Date(startDate)
+        endDate.add(Calendar.HOUR, 1)
+
         coroutineScope.launch {
             if (!NetworkUtils.isNetworkAvailable(context) || !NetworkUtils.hasInternetConnection()) {
                 // Save message locally when offline
@@ -119,7 +131,7 @@ class ActivityRepository(
                     id = groupId
                 ),
                 startDate = Date(startDate),
-                endDate = Date(startDate),
+                endDate = endDate.time,
                 name = name,
                 description = description,
                 maxParticipants = maxParticipants,
@@ -127,8 +139,6 @@ class ActivityRepository(
                 imageUrl = imageUrl,
                 type = type
                 )
-
-                Log.e("ActivityRepository", "Create activity: $request")
 
                 val call = activityService.createActivity(
                     request,
@@ -140,9 +150,17 @@ class ActivityRepository(
                         call: retrofit2.Call<CreatedActivityResponseDTO>,
                         response: retrofit2.Response<CreatedActivityResponseDTO>
                     ) {
-                        val body = response.body()
-                        body?.let {
+
+                        if(response.isSuccessful && response.body() != null){
+                            val body = response.body()
                             Log.e("ActivityRepository", "Activity created: $body")
+                            _createActivityResponse.value = true
+                            }
+
+
+                       else {
+                            Log.e("ActivityRepository", "Error response: ${response.errorBody()?.string()}")
+                            _createActivityResponse.value = false
                             //val messageEntity = it.toEntity(groupId)
                             // Save to local database
                             // coroutineScope.launch {
@@ -155,7 +173,8 @@ class ActivityRepository(
 
                     override fun onFailure(call: retrofit2.Call<CreatedActivityResponseDTO>, t: Throwable) {
                         Log.e("Error createActivity()", "Error: ${t.message}")
-                        // Save message locally on failure
+                        _createActivityResponse.value = false
+                    // Save message locally on failure
 //                        coroutineScope.launch {
 //                            val localMessage = MessageEntity(
 //                                groupId = groupId,
@@ -170,6 +189,7 @@ class ActivityRepository(
                     }
                 })
             } catch (e: Exception) {
+                _createActivityResponse.value = false
                 Log.e("ActivityRepository", "Error creating activity", e)
                 // Save message locally on error
 //                val localMessage = MessageEntity(
