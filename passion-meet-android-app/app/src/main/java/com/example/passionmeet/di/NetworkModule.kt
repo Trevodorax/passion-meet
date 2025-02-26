@@ -1,6 +1,7 @@
 package com.example.passionmeet.di
 
 import com.example.passionmeet.network.RetrofitClient
+import com.example.passionmeet.network.services.ActivityService
 import com.example.passionmeet.network.services.EncounterService
 import com.example.passionmeet.network.services.GroupService
 import com.example.passionmeet.network.services.LoginService
@@ -41,5 +42,9 @@ val networkModule = module {
     single {
         val retrofit: Retrofit = get()
         retrofit.create(MessageService::class.java)
+    }
+    single {
+        val retrofit: Retrofit = get()
+        retrofit.create(ActivityService::class.java)
     }
 }

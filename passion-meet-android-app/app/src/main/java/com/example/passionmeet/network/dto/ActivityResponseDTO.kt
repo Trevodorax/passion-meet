@@ -12,6 +12,10 @@ data class ActivityResponseDTO (
     val location: String,
     val maxParticipants: Int,
     val imageUrl: String,
-    val createdBy: UserRequestDto,
-    val participants: List<UserRequestDto>
+//    val createdBy: UserRequestDto,
+//    val participants: List<UserRequestDto>
+)
+
+data class ListActivityDTO (
+    val activities: List<ActivityResponseDTO>
 )

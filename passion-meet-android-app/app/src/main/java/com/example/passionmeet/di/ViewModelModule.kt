@@ -10,6 +10,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import androidx.lifecycle.ViewModel
 import com.example.passionmeet.ui.chat.GroupChatViewModel
+import com.example.passionmeet.viewmodel.ActivityViewModel
 
 val viewModelModule = module {
     viewModel { 
@@ -53,4 +54,12 @@ val viewModelModule = module {
             context = get()
         )
     }
+
+    viewModel {
+        ActivityViewModel(
+            activityRepository = get(),
+            context = get()
+        )
+    }
+
 }

@@ -13,6 +13,7 @@ import com.example.passionmeet.models.SignupModel
 import com.example.passionmeet.network.RetrofitClient
 import com.example.passionmeet.network.dto.ActivityResponseDTO
 import com.example.passionmeet.network.dto.CreatedActivityResponseDTO
+import com.example.passionmeet.network.dto.ListActivityDTO
 import com.example.passionmeet.network.services.ActivityService
 import com.example.passionmeet.utils.NetworkUtils
 import kotlinx.coroutines.CoroutineScope
@@ -27,13 +28,12 @@ class ActivityRepository(
 
     private val _activities = MutableLiveData<List<ActivityModel>?>()
     val activities: MutableLiveData<List<ActivityModel>?> get() = _activities
+
     private val _createActivityResponse = MutableLiveData<Boolean>()
     val createActivityResponse: MutableLiveData<Boolean> get() = _createActivityResponse
+
     private val activityService = RetrofitClient.instance.create(ActivityService::class.java)
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
-//    private val _messages = MutableLiveData<List<MessageEntity>>()
-//    val messages get() = _messages
 
     /**
      * Shared preferences for getting the auth token
@@ -50,10 +50,10 @@ class ActivityRepository(
                     "Bearer ${sharedPreferences.getString("auth_token", "")}"
                 )
 
-                call.enqueue(object : retrofit2.Callback<List<ActivityResponseDTO>> {
+                call.enqueue(object : retrofit2.Callback<ListActivityDTO> {
                     override fun onResponse(
-                        call: retrofit2.Call<List<ActivityResponseDTO>>,
-                        response: retrofit2.Response<List<ActivityResponseDTO>>
+                        call: retrofit2.Call<ListActivityDTO>,
+                        response: retrofit2.Response<ListActivityDTO>
                     ) {
 
                         if (!response.isSuccessful || response.body() == null) {
@@ -65,20 +65,20 @@ class ActivityRepository(
                         }else {
                             val body = response.body()
                             Log.e("ActivityRepo", "Activities received: $body")
-                            val activitiesFormatted = body?.map { it ->
+                            val activitiesFormatted = body?.activities?.map { it ->
                                 ActivityModel(
                                     id = it.id,
-                                    createdBy = it.createdBy.id,
+                                   // createdBy = it.createdBy.id,
                                     name = it.name,
                                     description = it.description,
                                     startDate = it.startDate,
                                     location = it.location,
                                     maxParticipants = it.maxParticipants,
-                                    participants = it.participants.map { user ->
-                                        UserRequestDto(
-                                            id = user.id,
-                                        )
-                                    }
+//                                    participants = it.participants.map { user ->
+//                                        UserRequestDto(
+//                                            id = user.id,
+//                                        )
+//                                    }
                                 )
                             }
                             _activities.value = activitiesFormatted
@@ -86,14 +86,14 @@ class ActivityRepository(
                     }
 
                     override fun onFailure(
-                        call: retrofit2.Call<List<ActivityResponseDTO>>,
+                        call: retrofit2.Call<ListActivityDTO>,
                         t: Throwable
                     ) {
-                        Log.e("Error getMessages()", "Error: ${t.message}")
+                        Log.e("Error getActivities()", "Error: ${t.message}")
                     }
                 })
             } catch (e: Exception) {
-                Log.e("MessageRepository", "Error fetching messages", e)
+                Log.e("ActivityRepository", "Error fetching activities", e)
             }
         }
     }

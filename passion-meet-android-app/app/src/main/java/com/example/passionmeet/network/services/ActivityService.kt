@@ -1,8 +1,8 @@
 package com.example.passionmeet.network.services
 
 import com.example.passionmeet.data.remote.dto.CreateActivityRequestDTO
-import com.example.passionmeet.network.dto.ActivityResponseDTO
 import com.example.passionmeet.network.dto.CreatedActivityResponseDTO
+import com.example.passionmeet.network.dto.ListActivityDTO
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -25,6 +25,6 @@ interface ActivityService {
     fun getActivities(
         @Path("groupId") groupId: String,
         @Header("Authorization") token: String
-    ): Call<List<ActivityResponseDTO>>
+    ): Call<ListActivityDTO>
 
 }

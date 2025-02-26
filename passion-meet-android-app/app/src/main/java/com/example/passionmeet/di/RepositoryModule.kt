@@ -1,5 +1,6 @@
 package com.example.passionmeet.di
 
+import com.example.passionmeet.repositories.ActivityRepository
 import com.example.passionmeet.repositories.GroupRepository
 import com.example.passionmeet.repositories.LoginRepository
 import com.example.passionmeet.repositories.PassionRepository
@@ -16,4 +17,5 @@ val repositoryModule = module {
     single { SignupRepository(androidContext()) }
     single { EncounterRepository(androidContext(), get(), get()) }
     single { MessageRepository(androidContext(), get(), get()) }
-} 
+    single { ActivityRepository(androidContext()) }
+}
