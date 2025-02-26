@@ -82,7 +82,7 @@ export class ActivityService {
     }
 
     async findOneById(id: string): Promise<Activity | null> {
-        const activity = await this.activityRepository.findOne({where: {id: id}, relations: ['participants']}) 
+        const activity = await this.activityRepository.findOne({where: {id: id}, relations: ['participants', 'createdBy']}) 
         return activity
     }
 
