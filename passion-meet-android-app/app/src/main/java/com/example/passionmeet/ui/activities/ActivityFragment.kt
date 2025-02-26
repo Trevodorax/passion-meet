@@ -24,28 +24,31 @@ class ActivityFragment : Fragment() {
     private val activityViewModel : ActivityViewModel by viewModel { parametersOf(this) }
     private lateinit var recylcerView: RecyclerView
     private lateinit var activitiesRecyclerView: ActivityRecyclerViewAdapter
-    private lateinit var activities: List<ActivityModel>
-    private lateinit var groupId: String
+    private var activities: List<ActivityModel> = emptyList()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_activities_list, container, false)
-        activityViewModel.groupId.observe(viewLifecycleOwner, Observer { data ->
-            this.groupId = data
-            Log.e("ActivityFragment", "Group ID received: $data")
-        })
+        //this.groupId = requireArguments().getString("group_id")!!
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.e("ActivityFragment", "View created")
         super.onViewCreated(view, savedInstanceState)
 
         this.recylcerView = view.findViewById(R.id.activities_list_recycler_view)
         recylcerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        fetchData()
+
         this.activitiesRecyclerView = ActivityRecyclerViewAdapter(requireContext(), activities)
+        this.recylcerView.adapter = activitiesRecyclerView
+
+        observeViewModel()
+        activityViewModel.initialize()
+
         activitiesRecyclerView.setOnClickListener(object : OnClickListener {
             override fun onClick(position: Int, model: ActivityModel) {
                 val intent = Intent(requireContext(), DetailledActivityFragment::class.java)
@@ -59,17 +62,16 @@ class ActivityFragment : Fragment() {
                 startActivity(intent)
             }
         })
-        this.recylcerView.adapter = activitiesRecyclerView
-
     }
 
-    private fun fetchData()  {
+    private fun observeViewModel() {
         this.activityViewModel.activitiesData.observe(viewLifecycleOwner) { activities ->
-            Log.e("ActivityFragment", "Data received: $activities")
+            Log.e("ActivityFragment", "Data received 2: $activities")
             this.activities = activities
         }
-        this.activityViewModel.getActivities(groupId)
-
+        this.activitiesRecyclerView = ActivityRecyclerViewAdapter(requireContext(), activities)
+        this.recylcerView.adapter = activitiesRecyclerView
     }
+
 
 }
