@@ -9,7 +9,7 @@
         android:name="com.example.passionmeet.ActivityListFragment"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:layout_marginTop="8dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"

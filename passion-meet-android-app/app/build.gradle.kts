@@ -75,6 +75,7 @@ dependencies {
 
     // MAPBOX
     implementation("com.mapbox.maps:android:11.9.1")
+    implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:7.3.1")
 
     // Room components
     val roomVersion = "2.6.1"
