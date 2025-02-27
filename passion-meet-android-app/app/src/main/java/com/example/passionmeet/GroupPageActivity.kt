@@ -19,6 +19,12 @@ class GroupPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group_page)
         enableEdgeToEdge()
+
+        val headerFragment = HeaderFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.header_container, headerFragment)
+            .commit()
+
         val bundle = intent.extras
         if (bundle != null) {
             val groupId = bundle.getString("group_id")

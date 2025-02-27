@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/form_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingVertical="16dp"
     android:paddingHorizontal="64dp"
-    android:background="@color/white"
-    android:gravity="center_horizontal">
+     android:background="?attr/backgroundColor"
+    android:paddingVertical="16dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingVertical="32dp"
         android:text="@string/create_activity_page_title"
-        android:textSize="32sp"
-        android:paddingVertical="32dp" />
+        android:textSize="32sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="40dp"
         android:text="@string/signup_mandatory_fields_explanation"
-        android:textSize="12sp"
-        android:paddingBottom="40dp" />
+        android:textSize="12sp" />
 
     <!-- Name Field -->
     <LinearLayout
@@ -34,18 +33,18 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
             android:text="@string/activity_name_label"
-            android:textSize="16sp"
-            android:paddingHorizontal="8dp" />
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/activity_name_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:hint="@string/activity_name_hint"
             android:inputType="text"
             android:padding="12dp"
-            android:layout_marginBottom="16dp"
             android:paddingBottom="40dp" />
     </LinearLayout>
 
@@ -58,20 +57,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/activity_description_label"
-            android:textSize="16sp"
             android:paddingHorizontal="8dp"
-            />
+            android:text="@string/activity_description_label"
+            android:textSize="16sp" />
+
         <EditText
             android:id="@+id/activity_description_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:hint="@string/activity_description_hint"
             android:inputType="text"
             android:padding="12dp"
-            android:layout_marginBottom="16dp"
-            android:paddingBottom="40dp"
-            />
+            android:paddingBottom="40dp" />
     </LinearLayout>
 
     <!-- Start Date Field -->
@@ -80,21 +78,21 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         >
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/activity_start_date_label"
-            android:textSize="16sp"
             android:paddingHorizontal="8dp"
-            />
+            android:text="@string/activity_start_date_label"
+            android:textSize="16sp" />
+
         <EditText
             android:id="@+id/activity_start_date_field"
             android:layout_width="match_parent"
-            android:hint="@string/activity_date_hint"
             android:layout_height="wrap_content"
-            android:focusable="false"
             android:layout_marginBottom="16dp"
-            />
+            android:focusable="false"
+            android:hint="@string/activity_date_hint" />
     </LinearLayout>
 
 
@@ -107,19 +105,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/activity_location_label"
-            android:textSize="16sp"
             android:paddingHorizontal="8dp"
-            />
+            android:text="@string/activity_location_label"
+            android:textSize="16sp" />
+
         <EditText
             android:id="@+id/activity_location_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:hint="@string/activity_location_hint"
             android:inputType="text"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"
-            />
+            android:padding="12dp" />
     </LinearLayout>
 
 
@@ -132,18 +129,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/activity_max_participants_label"
-            android:textSize="16sp"
             android:paddingHorizontal="8dp"
-            />
+            android:text="@string/activity_max_participants_label"
+            android:textSize="16sp" />
+
         <EditText
             android:id="@+id/activity_max_participant_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
             android:hint="@string/activity_participant_hint"
             android:inputType="numberSigned"
             android:padding="12dp"
-            android:layout_marginBottom="40dp"
 
             />
     </LinearLayout>
@@ -160,25 +157,25 @@
             android:id="@+id/submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/create_activity_btn"
-            android:padding="12dp"
             android:background="?attr/colorPrimary"
-            android:textColor="@android:color/white"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
             android:insetLeft="0dp"
-            android:insetRight="0dp"/>
+            android:insetTop="0dp"
+
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:padding="12dp"
+            android:text="@string/create_activity_btn" />
 
     </androidx.cardview.widget.CardView>
 
 
     <ProgressBar
         android:id="@+id/activity_loading"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="64dp"
-        android:layout_marginBottom="64dp"/>
+        android:layout_marginBottom="64dp"
+        android:visibility="gone" />
 
 </LinearLayout>

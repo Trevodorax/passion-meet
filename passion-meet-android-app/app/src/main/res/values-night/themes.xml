@@ -1,7 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.PassionMeet" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="backgroundColor">@color/darkBackground</item>
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="colorControlNormal">@color/colorPrimaryDark</item>
+        <item name="editTextStyle">@style/CustomEditTextStyleDark</item>
+        <item name="colorError">#572424</item>
     </style>
+
+    <style name="RoundedImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="Theme.PassionMeet" parent="Base.Theme.PassionMeet" />
 </resources>

@@ -45,7 +45,6 @@
         android:maxWidth="75dp"
         android:text="Joe"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="15sp"
         android:layout_marginStart="10dp"

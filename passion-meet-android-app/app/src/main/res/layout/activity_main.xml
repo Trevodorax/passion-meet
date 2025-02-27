@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?attr/backgroundColor"
     tools:context=".MainActivity">
 
     <ImageView
@@ -32,7 +32,11 @@
         android:id="@+id/main_div"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:orientation="vertical">
 
     <ImageView
@@ -40,26 +44,16 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:src="@drawable/passion_meet_logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="200dp"
-        android:layout_marginStart="40dp"
+
         />
 
     <TextView
         android:id="@+id/small_text"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="@string/starting_page_sub_text"
         android:textSize="24sp"
-        android:textColor="@color/black"
-        android:layout_marginStart="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="80dp"
         android:layout_marginBottom="30dp"
         />
 
@@ -86,7 +80,7 @@
                     android:text="@string/signup_button_label"
                     android:textSize="16sp"
                     android:background="?attr/colorPrimary"
-                    android:textColor="@android:color/white"
+
                     />
             </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
@@ -105,7 +99,7 @@
                     android:text="@string/sign_in_button_label"
                     android:textSize="16sp"
                     android:background="?attr/colorPrimary"
-                    android:textColor="@android:color/white"
+
                     />
             </androidx.cardview.widget.CardView>
         </LinearLayout>
