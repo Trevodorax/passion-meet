@@ -44,4 +44,10 @@
     <string name="activity_max_participants_label">Max participants <font color='#FF0000'>*</font></string>
     <string name="activity_location_hint">242 rue du faubourg saint antoine, Paris</string>
     <string name="activity_location_label">Location <font color='#FF0000'>*</font></string>
+    <string name="text_chat">Text chat</string>
+    <string name="activities_suggested">Activities suggested</string>
+    <string name="audio_chat">Audio chat</string>
+    <string name="add_activity">Add activity</string>
+    <string name="see_map_activities">See map</string>
+    <string name="leave_group">Leave group</string>
 </resources>

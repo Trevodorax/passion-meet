@@ -5,8 +5,8 @@
     android:layout_height="100dp"
     android:orientation="horizontal"
     android:padding="16dp"
-    android:background="@color/white"
     android:gravity="center"
+     android:background="?attr/backgroundColor"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
@@ -16,8 +16,8 @@
         android:layout_height="48dp"
         android:layout_gravity="center_vertical"
         android:focusable="true"
-        android:background="@color/white"
         android:scaleType="centerCrop"
+         android:background="?attr/backgroundColor"
         android:src="@drawable/ic_account"
         android:clickable="true"
         />
@@ -34,10 +34,10 @@
     <ImageButton
         android:id="@+id/logoutBtn"
         android:layout_width="48dp"
-        android:background="@color/white"
         android:layout_gravity="center_vertical"
         android:layout_height="48dp"
         android:scaleType="centerCrop"
+         android:background="?attr/backgroundColor"
         android:src="@drawable/ic_logout"
         android:clickable="true"
         android:focusable="true"/>
