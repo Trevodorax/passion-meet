@@ -17,7 +17,6 @@ class ActivityViewModel(
     val context: LifecycleOwner
 ) : ViewModel() {
 
-    val groupId = MutableLiveData<String>()
 
     private val _activityResult = MutableLiveData<Boolean>()
     val createActivityResult: MutableLiveData<Boolean> = _activityResult
@@ -30,7 +29,7 @@ class ActivityViewModel(
 
     private var _isInitialized = false
 
-    fun initialize() {
+    fun initialize(groupId: String) {
         if (_isInitialized) return
         _isInitialized = true
 
@@ -38,8 +37,8 @@ class ActivityViewModel(
             Log.d("ActivityViewModel", "Received $data activities")
             this.activities.value = data
         }
-        //TODO: deal with group id later
-        this.activityRepository.getActivities("49540ff4-db56-4cbe-9e01-2506714ede73")
+
+        this.activityRepository.getActivities(groupId) //"49540ff4-db56-4cbe-9e01-2506714ede73
     }
 
 
