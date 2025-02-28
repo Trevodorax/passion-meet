@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.passionmeet.R
 import com.mapbox.maps.MapView
@@ -36,6 +37,7 @@ class DetailledActivityFragment : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group_activity_focussed)
+        enableEdgeToEdge()
 
         val bundle = intent.extras
         if (bundle != null) {
@@ -50,10 +52,15 @@ class DetailledActivityFragment : AppCompatActivity() {
             activityDescriptionTV = findViewById(R.id.activity_description_content_tv)
             activityParticipantsTV = findViewById(R.id.activity_list_participants)
             activityMaxParticipantsTV= findViewById(R.id.activity_participants_max_tv)
+            this.activitySignUpBtn = findViewById(R.id.sign_up_activity_button)
             activitySentenceTV.text = activitySentence
             activityDescriptionTV.text = activityDescription
             activityParticipantsTV.text = participants?.joinToString(", ")
             activityMaxParticipantsTV.text = maxParticipants
+            activitySignUpBtn.setOnClickListener {
+                Log.d("ActivitySignUp", "User wants to sign up for activity $activityId")
+            }
+
             activityMap = findViewById(R.id.map_for_activity)
             updateMapSettings(activityLocation)
         }

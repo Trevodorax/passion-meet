@@ -63,7 +63,7 @@
                 android:id="@+id/subtext_map_activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cliquez sur la carte pour ouvrir dans Maps"
+                android:text="@string/hint_for_maps"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/map_for_activity"
                 android:textSize="11sp"
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="16dp"
-                android:text="Description:"
+                android:text="@string/description"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/subtext_map_activity"
                 android:textSize="16sp"
@@ -95,7 +95,7 @@
                 android:id="@+id/activity_participants_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Participants:"
+                android:text="@string/participants"
                 app:layout_constraintTop_toBottomOf="@id/activity_description_content_tv"
                 app:layout_constraintStart_toStartOf="parent"
                 android:textStyle="bold"
@@ -142,11 +142,11 @@
                 android:layout_marginVertical="32dp">
 
             <Button
-                android:id="@+id/create_account_button"
+                android:id="@+id/sign_up_activity_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Sign up for the activity"
+                android:text="@string/sign_up_activity"
                 android:background="?attr/colorPrimary"
 
                 />

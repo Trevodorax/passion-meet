@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.passionmeet.MainActivity.Companion.STAY_CONNECTED_KEY
@@ -17,6 +18,7 @@ import com.example.passionmeet.MainActivity.Companion.TOKEN_KEY
 class HeaderFragment: Fragment() {
     private lateinit var logoutButton: ImageButton
     private lateinit var userHomeButton: ImageButton
+    private lateinit var logo: ImageView
     private val sharedPreferences: SharedPreferences by lazy {
         requireActivity().getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
     }
@@ -31,6 +33,11 @@ class HeaderFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        this.logo = view.findViewById(R.id.appHeaderLogo)
+
+        if(resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK == android.content.res.Configuration.UI_MODE_NIGHT_YES) {
+            logo.setImageResource(R.drawable.app_logo_dark)
+        }
 
         this.logoutButton = view.findViewById(R.id.logoutBtn)
         this.userHomeButton = view.findViewById(R.id.userAvatar)
