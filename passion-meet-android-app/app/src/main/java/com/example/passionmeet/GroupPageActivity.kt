@@ -21,6 +21,11 @@ class GroupPageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_group_page)
         enableEdgeToEdge()
 
+        val headerFragment = HeaderFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.header_container, headerFragment)
+            .commit()
+
         val activitiesRVFragement = ActivityFragment()
         val bundleForFragment = Bundle()
 

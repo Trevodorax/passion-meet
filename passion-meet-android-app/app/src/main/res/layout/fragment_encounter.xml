@@ -58,9 +58,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:text="12/02/2025"
-        android:textColor="@color/transparentGrey"
+        android:textColor="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

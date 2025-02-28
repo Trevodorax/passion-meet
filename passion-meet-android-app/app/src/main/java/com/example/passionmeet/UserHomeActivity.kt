@@ -4,11 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.passionmeet.models.GroupModel
 import com.example.passionmeet.ui.groups.GroupsListAdapter
 import com.example.passionmeet.viewmodel.GroupViewModel
@@ -21,6 +23,7 @@ class UserHomeActivity : AppCompatActivity() {
     private lateinit var grouplistAdapter: GroupsListAdapter
     private lateinit var groups: List<GroupModel>
     private lateinit var selectPassionBtn: Button
+    private lateinit var gifContainer : ImageView
 
     private val groupViewModel: GroupViewModel by viewModel { parametersOf(this) }
 
@@ -35,6 +38,8 @@ class UserHomeActivity : AppCompatActivity() {
             .replace(R.id.header_container, headerFragment)
             .commit()
 
+        gifContainer = findViewById(R.id.gif_hello)
+        Glide.with(this).asGif().load("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExemc0Y3oyamc3NzBkaTBxbzhxazYyMGZzdmozeW41dzI4OXlqbnYwcCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0JMaNj0xZ6cDFLvq/giphy.gif").into(gifContainer)
         selectPassionBtn = findViewById(R.id.update_passion_button)
         selectPassionBtn.setOnClickListener {
             // switch to select passion activity
