@@ -1,6 +1,5 @@
 package com.example.passionmeet.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

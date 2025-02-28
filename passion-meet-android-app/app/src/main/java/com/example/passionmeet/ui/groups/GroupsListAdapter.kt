@@ -35,8 +35,4 @@ class GroupsListAdapter(private val context: Context, private val groups: List<G
     override fun getItemCount(): Int {
         return groups.size
     }
-
-    fun getItem(position: Int): GroupModel {
-        return groups[position]
-    }
 }

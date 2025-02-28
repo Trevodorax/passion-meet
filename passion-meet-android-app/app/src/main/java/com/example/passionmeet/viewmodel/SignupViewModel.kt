@@ -1,17 +1,12 @@
 package com.example.passionmeet.viewmodel
 
 import android.util.Log
-import android.util.Patterns
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.passionmeet.R
 import com.example.passionmeet.models.SignupModel
 import com.example.passionmeet.repositories.SignupRepository
-import com.example.passionmeet.ui.login.LoggedInUserView
-import com.example.passionmeet.ui.login.LoginFormState
-import com.example.passionmeet.ui.login.LoginResult
 
 /**
  * ViewModel for the login screen.

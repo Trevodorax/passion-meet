@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.passionmeet.models.EncounterModel
-import com.example.passionmeet.models.ShortenedEncounter
 import com.example.passionmeet.repositories.EncounterRepository
 
 class EncounterViewModel(

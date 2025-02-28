@@ -17,12 +17,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.passionmeet.MainActivity
 import com.example.passionmeet.R
-import com.example.passionmeet.UserHomeActivity
 import com.example.passionmeet.databinding.ActivityLoginBinding
 import com.example.passionmeet.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.util.Date
 
 class LoginActivity : AppCompatActivity() {
 
@@ -150,7 +148,6 @@ class LoginActivity : AppCompatActivity() {
         val displayName = model.displayName
         // get the user's token from the preferences
         val token = sharedPreferences.getString(TOKEN_KEY, null)
-        // TODO : initiate successful logged in experience
         Toast.makeText(
             applicationContext,
             welcome,

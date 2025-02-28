@@ -1,6 +1,5 @@
 package com.example.passionmeet.network.services
 
-import com.example.passionmeet.network.dto.LoginResponseDTO
 import com.example.passionmeet.network.dto.SignupResponseDTO
 import retrofit2.Call
 import retrofit2.http.Field

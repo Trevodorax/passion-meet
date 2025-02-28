@@ -9,8 +9,6 @@ import com.example.passionmeet.data.local.dao.MessageDao
 import com.example.passionmeet.data.local.entity.MessageEntity
 import com.example.passionmeet.data.remote.dto.MessageDto
 import com.example.passionmeet.data.remote.dto.CreateMessageRequest
-import com.example.passionmeet.data.remote.dto.UserDto
-import com.example.passionmeet.data.remote.dto.GroupDto
 import com.example.passionmeet.data.remote.dto.GroupRequestDto
 import com.example.passionmeet.data.remote.dto.UserRequestDto
 import com.example.passionmeet.network.services.MessageService

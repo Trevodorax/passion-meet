@@ -1,6 +1,5 @@
 package com.example.passionmeet.di
 
-import androidx.lifecycle.LifecycleOwner
 import com.example.passionmeet.viewmodel.GroupViewModel
 import com.example.passionmeet.viewmodel.LoginViewModel
 import com.example.passionmeet.viewmodel.PassionViewModel
@@ -8,7 +7,6 @@ import com.example.passionmeet.viewmodel.SignupViewModel
 import com.example.passionmeet.viewmodel.EncounterViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import androidx.lifecycle.ViewModel
 import com.example.passionmeet.ui.chat.GroupChatViewModel
 import com.example.passionmeet.viewmodel.ActivityViewModel
 

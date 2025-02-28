@@ -8,6 +8,10 @@ import androidx.lifecycle.ViewModel
 import com.example.passionmeet.models.ActivityModel
 import com.example.passionmeet.repositories.ActivityRepository
 
+enum class JoinStatus {
+    JOIN,
+    LEAVE
+}
 class ActivityViewModel(
     val activityRepository: ActivityRepository,
     val context: LifecycleOwner
@@ -20,6 +24,9 @@ class ActivityViewModel(
 
     private val activities = MutableLiveData<List<ActivityModel>>()
     val activitiesData: LiveData<List<ActivityModel>> get() = activities
+
+    private val _joinActivityResult = MutableLiveData<Boolean>()
+    val joinActivityResult: LiveData<Boolean> get() = _joinActivityResult
 
     private var _isInitialized = false
 
@@ -44,4 +51,13 @@ class ActivityViewModel(
 
         this.activityRepository.createActivity(groupId, userId, startDate, name, description, maxParticipants, location)
     }
+
+    fun joinActivity(activityId: String, status: JoinStatus) {
+        this.activityRepository.joinActivityResponse.observe(context) { data ->
+            this@ActivityViewModel._joinActivityResult.value = data
+        }
+        if (status == JoinStatus.JOIN) this.activityRepository.joinActivity(activityId)
+        else this.activityRepository.leaveActivity(activityId)
+    }
+
 }
