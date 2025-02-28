@@ -14,6 +14,7 @@ class GroupPageActivity : AppCompatActivity() {
     //TODO: implement data from intent so far it's just the layout data
     private lateinit var groupChatBtn: CardView
     private lateinit var creatActivityBtn: Button
+    private lateinit var fullActivitiesMap: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,14 @@ class GroupPageActivity : AppCompatActivity() {
 
             bundleForFragment.putString("group_id", groupId)
             activitiesRVFragement.arguments = bundleForFragment
+
+            this.fullActivitiesMap = findViewById(R.id.see_group_activities_map)
+            fullActivitiesMap.setOnClickListener {
+                val intent = Intent(this, FullMapActivity::class.java)
+                intent.putExtra("group_id", groupId)
+                intent.putExtra("group_name", groupName)
+                startActivity(intent)
+            }
 
             this.groupChatBtn = findViewById(R.id.card_group_chat)
             groupChatBtn.setOnClickListener {
