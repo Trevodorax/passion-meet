@@ -23,6 +23,7 @@
         android:layout_margin="8dp"
         app:cardCornerRadius="24dp"
         app:cardElevation="2dp"
+        app:cardBackgroundColor="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
@@ -37,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:hint="Ecrivez quelque chose..."
+                android:textColor="?attr/colorOnPrimary"
+                android:hint="@string/send_message_hint"
                 android:inputType="textMultiLine"
                 android:maxLines="4"
                 android:padding="8dp" />
@@ -49,7 +51,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Envoyer"
                 android:src="@android:drawable/ic_menu_send"
-                android:tint="?attr/colorPrimary" />
+                app:tint="?attr/colorOnPrimary" />
 
         </LinearLayout>
 

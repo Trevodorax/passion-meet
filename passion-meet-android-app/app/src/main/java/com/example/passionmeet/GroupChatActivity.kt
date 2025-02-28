@@ -3,6 +3,7 @@ package com.example.passionmeet
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.passionmeet.ui.chat.GroupChatFragment
 
@@ -11,6 +12,7 @@ class GroupChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group_chat)
+        enableEdgeToEdge()
 
         val groupId = intent.getStringExtra(EXTRA_GROUP_ID) ?: ""
         val groupName = intent.getStringExtra(EXTRA_GROUP_NAME) ?: ""

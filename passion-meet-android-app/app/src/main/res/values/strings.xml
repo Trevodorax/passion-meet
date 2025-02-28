@@ -50,4 +50,9 @@
     <string name="add_activity">Add activity</string>
     <string name="see_map_activities">See map</string>
     <string name="leave_group">Leave group</string>
+    <string name="send_message_hint">Ecrivez quelque chose...</string>
+    <string name="sign_up_activity">Sign up for the activity</string>
+    <string name="participants">Participants:</string>
+    <string name="description">Description:</string>
+    <string name="hint_for_maps">Cliquez sur la carte pour ouvrir dans Maps</string>
 </resources>

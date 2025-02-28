@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -14,6 +15,7 @@ import com.example.passionmeet.ui.login.LoginActivity
 class MainActivity : AppCompatActivity() {
     private lateinit var createAccountButton: Button
     private lateinit var signInButton: Button
+    private lateinit var logo: ImageView
 
     companion object {
         public const val TOKEN_KEY = "auth_token"
@@ -30,6 +32,11 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
 
         setContentView(R.layout.activity_main)
+
+        this.logo = findViewById(R.id.logo)
+        if(resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK == android.content.res.Configuration.UI_MODE_NIGHT_YES) {
+            logo.setImageResource(R.drawable.app_logo_dark)
+        }
         this.createAccountButton = findViewById(R.id.create_account_button)
         this.signInButton = findViewById(R.id.sign_in_account_button)
 
@@ -57,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             // Switch to the LoginActivity
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            updateAuthenticationUI()
+            finish() // Close the MainActivity so when it comes back goes to UserHomeActivity
         }
         // Update UI based on authentication state
         updateAuthenticationUI()
