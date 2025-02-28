@@ -45,11 +45,7 @@ class CategoryAdapter(
         )
         val adapter = PassionSelectorAdapter(category.items) { selectedItems ->
             category.items.forEach { item ->
-                if (selectedItems.contains(item)) {
-                    item.isSelected = true
-                } else {
-                    item.isSelected = false
-                }
+                item.isSelected = selectedItems.contains(item)
             }
             onPassionsSelected(getAllSelectedPassions())
         }

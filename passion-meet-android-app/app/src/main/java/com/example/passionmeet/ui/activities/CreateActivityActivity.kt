@@ -21,7 +21,7 @@ import java.util.Locale
 class CreateActivityActivity : AppCompatActivity(){
     private val calendar = Calendar.getInstance()
 
-    private val createActivityViewModel: ActivityViewModel by viewModels() {
+    private val createActivityViewModel: ActivityViewModel by viewModels {
         ActivityViewModelFactory(ActivityRepository(this), this)
     }
     private lateinit var nameEditText: EditText

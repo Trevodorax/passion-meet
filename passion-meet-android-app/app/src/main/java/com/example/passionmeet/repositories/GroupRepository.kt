@@ -4,13 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.passionmeet.data.local.PassionMeetDatabase
 import com.example.passionmeet.data.local.dao.GroupDao
 import com.example.passionmeet.mapper.mapGroupDtoToGroupEntity
 import com.example.passionmeet.mapper.mapGroupEntityToGroupModel
 import com.example.passionmeet.mapper.mapGroupToGroupModel
 import com.example.passionmeet.models.GroupModel
-import com.example.passionmeet.network.RetrofitClient
 import com.example.passionmeet.network.dto.GroupResponseDTO
 import com.example.passionmeet.network.services.GroupService
 import kotlinx.coroutines.CoroutineScope

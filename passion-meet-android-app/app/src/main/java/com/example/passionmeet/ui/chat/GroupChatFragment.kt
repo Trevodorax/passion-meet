@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,8 +13,6 @@ import com.example.passionmeet.R
 import com.example.passionmeet.data.local.entity.MessageEntity
 import com.example.passionmeet.utils.getCurrentUserId
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class GroupChatFragment : Fragment() {
     private val viewModel: GroupChatViewModel by viewModel()

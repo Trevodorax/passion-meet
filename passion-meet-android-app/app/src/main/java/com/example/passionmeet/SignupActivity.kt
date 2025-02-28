@@ -20,7 +20,7 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var passwordEditText: EditText
     private lateinit var submitButton: Button
 
-    private val signupViewModel: SignupViewModel by viewModels() {
+    private val signupViewModel: SignupViewModel by viewModels {
         SignupViewModelFactory(SignupRepository(this), this)
     }
 
@@ -50,7 +50,7 @@ class SignupActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Signup failed", Toast.LENGTH_LONG).show()
             }
-        });
+        })
 
         submitButton.setOnClickListener {
             val email = emailEditText.text.toString()

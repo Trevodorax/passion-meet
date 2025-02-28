@@ -4,11 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.passionmeet.models.LoginModel
 import com.example.passionmeet.mapper.mapSignupDtoToSignupModel
 import com.example.passionmeet.models.SignupModel
 import com.example.passionmeet.network.RetrofitClient
-import com.example.passionmeet.network.dto.LoginResponseDTO
 import com.example.passionmeet.network.dto.SignupResponseDTO
 import com.example.passionmeet.network.services.SignupService
 import kotlinx.coroutines.CoroutineScope

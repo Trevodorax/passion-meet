@@ -27,7 +27,4 @@ class EncounterRecyclerViewAdapter(
 
     override fun getItemCount(): Int = lastEncounters.size
 
-    fun getItem(position: Int): ShortenedEncounter {
-        return lastEncounters[position]
-    }
 }

@@ -2,8 +2,6 @@ package com.example.passionmeet.viewmodel.factories;
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.passionmeet.MainActivity
-import com.example.passionmeet.SelectPassionActivity
 import com.example.passionmeet.UserHomeActivity
 import com.example.passionmeet.repositories.GroupRepository
 import com.example.passionmeet.viewmodel.GroupViewModel

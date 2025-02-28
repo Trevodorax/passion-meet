@@ -6,4 +6,4 @@ data class GroupModel(
     val image: String,
     val members: Number,
     val description: String
-) {}
+)

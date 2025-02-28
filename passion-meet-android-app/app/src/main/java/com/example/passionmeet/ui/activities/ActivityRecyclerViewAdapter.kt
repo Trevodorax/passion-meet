@@ -34,10 +34,6 @@ class ActivityRecyclerViewAdapter(
 
     override fun getItemCount(): Int = activities.size
 
-    fun getItem(position: Int): ActivityModel {
-        return activities[position]
-    }
-
     fun setOnClickListener(listener: OnClickListener?) {
         this.onClickListener = listener
     }

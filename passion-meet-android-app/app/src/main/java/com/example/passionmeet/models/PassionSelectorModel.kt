@@ -5,5 +5,4 @@ data class PassionSelectorModel(
     val name: String,
     val image: String,
     var isSelected: Boolean = false
-) {
-}
+)
