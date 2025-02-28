@@ -24,6 +24,7 @@ class ActivityFragment : Fragment() {
     private lateinit var recylcerView: RecyclerView
     private lateinit var activitiesRecyclerView: ActivityRecyclerViewAdapter
     private var activities: List<ActivityModel> = emptyList()
+    private lateinit var groupId: String
 
 
     override fun onCreateView(
@@ -31,7 +32,6 @@ class ActivityFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_activities_list, container, false)
-        //this.groupId = requireArguments().getString("group_id")!!
         return view
     }
 
@@ -42,18 +42,19 @@ class ActivityFragment : Fragment() {
         this.recylcerView = view.findViewById(R.id.activities_list_recycler_view)
         recylcerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
+        this.groupId= arguments?.getString("group_id") ?: ""
+        Log.d("ActivityFragment", "Group ID: $groupId")
         this.activitiesRecyclerView = ActivityRecyclerViewAdapter(requireContext(), activities)
         this.recylcerView.adapter = activitiesRecyclerView
 
         observeViewModel()
-        activityViewModel.initialize()
+        activityViewModel.initialize(groupId)
     }
 
     private fun observeViewModel() {
         this.activityViewModel.activitiesData.observe(viewLifecycleOwner) { activities ->
             Log.e("ActivityFragment", "Data received 2: $activities")
             this.activities = activities
-
             setupRecyclerView()
         }
     }
@@ -61,6 +62,7 @@ class ActivityFragment : Fragment() {
     private fun setupRecyclerView() {
         this.activitiesRecyclerView = ActivityRecyclerViewAdapter(requireContext(), activities)
         this.recylcerView.adapter = activitiesRecyclerView
+
         activitiesRecyclerView.setOnClickListener(object : OnClickListener {
             override fun onClick(position: Int, model: ActivityModel) {
                 val intent = Intent(requireContext(), DetailledActivityFragment::class.java)

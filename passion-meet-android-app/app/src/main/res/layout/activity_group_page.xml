@@ -182,13 +182,12 @@
                 android:layout_marginBottom="16dp"
                 android:textSize="24sp"/>
 
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragment_list_activities"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:id="@+id/activities_recycler_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:name="com.example.passionmeet.ui.activities.ActivityFragment" />
-
+                />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

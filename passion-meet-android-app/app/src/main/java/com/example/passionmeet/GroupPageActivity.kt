@@ -6,6 +6,7 @@ import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import com.example.passionmeet.ui.activities.ActivityFragment
 import com.example.passionmeet.ui.activities.CreateActivityActivity
 
 class GroupPageActivity : AppCompatActivity() {
@@ -19,15 +20,16 @@ class GroupPageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_group_page)
         enableEdgeToEdge()
 
-        val headerFragment = HeaderFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.header_container, headerFragment)
-            .commit()
+        val activitiesRVFragement = ActivityFragment()
+        val bundleForFragment = Bundle()
 
         val bundle = intent.extras
         if (bundle != null) {
             val groupId = bundle.getString("group_id")
             val groupName = bundle.getString("group_name")
+
+            bundleForFragment.putString("group_id", groupId)
+            activitiesRVFragement.arguments = bundleForFragment
 
             this.groupChatBtn = findViewById(R.id.card_group_chat)
             groupChatBtn.setOnClickListener {
@@ -45,5 +47,9 @@ class GroupPageActivity : AppCompatActivity() {
             }
         }
 
-        }
+        // Add the fragment to the container with the groupID
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.activities_recycler_container, activitiesRVFragement)
+            .commit()
+    }
 }

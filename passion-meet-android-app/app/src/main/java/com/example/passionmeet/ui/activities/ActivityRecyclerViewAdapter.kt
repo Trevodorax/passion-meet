@@ -16,7 +16,6 @@ class ActivityRecyclerViewAdapter(
     private val context: Context,
     private val activities: List<ActivityModel>,
     private var onClickListener: OnClickListener? = null
-
 ) : RecyclerView.Adapter<ActivityVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivityVH {
