@@ -48,6 +48,9 @@ class DetailledActivityFragment : AppCompatActivity() {
         DetailledActivityViewModelFactory(ActivityRepository(this), this)
     }
 
+    private val sharedPreferences by lazy {
+        getSharedPreferences("app_preferences", MODE_PRIVATE)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group_activity_focussed)
@@ -61,7 +64,6 @@ class DetailledActivityFragment : AppCompatActivity() {
             val activityLocation = bundle.getString("activity_location")
             val maxParticipants = bundle.getString("max_participants")
             val participants = bundle.getStringArrayList("participants")
-           // val participants = arrayOf("You", "John", "Jane", "Doe")
 
             closeActivityBtn = findViewById(R.id.close_icon_activity)
             activitySentenceTV = findViewById(R.id.texts_activity)
@@ -75,14 +77,13 @@ class DetailledActivityFragment : AppCompatActivity() {
             activityParticipantsTV.text = participants?.joinToString(", ")
             activityMaxParticipantsTV.text = maxParticipants
 
-//            // TODO: remove once it's possible to get the participants from the backend
-//            if(participants?.contains("You") == true) {
-//                activitySignUpBtn.isVisible = false
-//                activitySignOffBtn.isVisible = true
-//            } else {
-//                activitySignUpBtn.isVisible = true
-//                activitySignOffBtn.isVisible = false
-//            }
+            if(participants?.contains(sharedPreferences.getString("username", "user")) == true) {
+                activitySignUpBtn.isVisible = false
+                activitySignOffBtn.isVisible = true
+            } else {
+                activitySignUpBtn.isVisible = true
+                activitySignOffBtn.isVisible = false
+            }
 
             closeActivityBtn.setOnClickListener {
                 finish()

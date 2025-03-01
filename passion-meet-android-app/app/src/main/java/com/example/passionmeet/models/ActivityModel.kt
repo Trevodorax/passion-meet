@@ -1,6 +1,6 @@
 package com.example.passionmeet.models
 
-import com.example.passionmeet.data.remote.dto.UserRequestDto
+import com.example.passionmeet.data.remote.dto.UserDto
 
 data class ActivityModel(
         val id: String,
@@ -10,5 +10,5 @@ data class ActivityModel(
         val location: String,
         val startDate: String,
         val description: String,
-        val participants: List<UserRequestDto> = emptyList(),
+        val participants: List<UserDto> = emptyList(),
     )
