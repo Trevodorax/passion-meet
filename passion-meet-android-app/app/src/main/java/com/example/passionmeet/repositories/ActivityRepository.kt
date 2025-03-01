@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.passionmeet.data.remote.dto.CreateActivityRequestDTO
 import com.example.passionmeet.data.remote.dto.GroupRequestDto
 import com.example.passionmeet.data.remote.dto.JoinActivityRequestDTO
+import com.example.passionmeet.data.remote.dto.UserDto
 import com.example.passionmeet.data.remote.dto.UserRequestDto
 import com.example.passionmeet.models.ActivityModel
 import com.example.passionmeet.network.RetrofitClient
@@ -68,17 +69,19 @@ class ActivityRepository(
                             val activitiesFormatted = body?.activities?.map { it ->
                                 ActivityModel(
                                     id = it.id,
-                                    // createdBy = it.createdBy.id,
+                                    createdBy = it.createdBy.username,
                                     name = it.name,
                                     description = it.description,
                                     startDate = it.startDate,
                                     location = it.location,
                                     maxParticipants = it.maxParticipants,
-//                                    participants = it.participants.map { user ->
-//                                        UserRequestDto(
-//                                            id = user.id,
-//                                        )
-//                                    }
+                                    participants = it.participants.map { user ->
+                                        UserDto(
+                                            id = user.id,
+                                            username = user.username,
+                                            email = user.email,
+                                        )
+                                    }
                                 )
                             }
                             _activities.value = activitiesFormatted
