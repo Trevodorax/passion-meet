@@ -70,7 +70,7 @@ export class RelationService {
     }
 
     async findOneByIdWithUserMet(id: string): Promise<Relation | null> {
-        const relation = await this.relationRepository.findOne({where: {id: id}, relations: ['userMet']})
+        const relation = await this.relationRepository.findOne({where: {id: id}, relations: ['userMet', 'userMet.participatedGroups']})
         relation.userMet.password = undefined
         return relation
     }

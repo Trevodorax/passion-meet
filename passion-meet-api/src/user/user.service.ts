@@ -88,7 +88,7 @@ export class UserService {
     }
 
     async getGroupsForUser(userId: string): Promise<Group[]> {
-        const user = await this.userRepository.findOne({where: {id: userId}, relations: ['participatedGroups']})
+        const user = await this.userRepository.findOne({where: {id: userId}, relations: ['participatedGroups', 'participatedGroups.participants']})
         return user.participatedGroups
     }
 
