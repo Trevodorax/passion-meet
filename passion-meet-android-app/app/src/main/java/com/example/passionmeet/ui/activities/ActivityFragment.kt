@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.passionmeet.R
+import com.example.passionmeet.mapper.formatDate
 import com.example.passionmeet.models.ActivityModel
 import com.example.passionmeet.viewmodel.ActivityViewModel
 import org.koin.core.parameter.parametersOf
@@ -67,7 +68,7 @@ class ActivityFragment : Fragment() {
             override fun onClick(position: Int, model: ActivityModel) {
                 val intent = Intent(requireContext(), DetailledActivityFragment::class.java)
                 val participantsNames = model.participants.map { it.username }
-                val activitySentence= "${model.createdBy} wants to ${model.name} at ${model.location} on ${model.startDate}"
+                val activitySentence= "${model.createdBy} wants to ${model.name} at ${model.location} on ${formatDate(model.startDate)}"
                 intent.putExtra("activity_sentence", activitySentence)
                 intent.putExtra("activity_id", model.id)
                 intent.putExtra("activity_location", model.location)

@@ -77,7 +77,7 @@ class DetailledActivityFragment : AppCompatActivity() {
             activityParticipantsTV.text = participants?.joinToString(", ")
             activityMaxParticipantsTV.text = maxParticipants
 
-            if(participants?.contains(sharedPreferences.getString("username", "user")) == true) {
+            if(participants?.contains(sharedPreferences.getString("user_name", "user")) == true) {
                 activitySignUpBtn.isVisible = false
                 activitySignOffBtn.isVisible = true
             } else {
