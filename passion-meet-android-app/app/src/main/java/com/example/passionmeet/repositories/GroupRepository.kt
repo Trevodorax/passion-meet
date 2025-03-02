@@ -37,7 +37,7 @@ class GroupRepository(
     private val leaveGroupResult = MutableLiveData<Boolean>()
     val leaveGroupResultData get() = leaveGroupResult
 
-    private val _createGroupData = MutableLiveData<List<GroupModel>>()
+    private val _createGroupData = MutableLiveData<GroupModel>()
     val createGroupData get() = _createGroupData
 
     /**
@@ -211,10 +211,10 @@ class GroupRepository(
                     request
                 )
 
-                call.enqueue(object : retrofit2.Callback<Void> {
+                call.enqueue(object : retrofit2.Callback<GroupResponseDTO> {
                     override fun onResponse(
-                        call: retrofit2.Call<Void>,
-                        response: retrofit2.Response<Void>
+                        call: retrofit2.Call<GroupResponseDTO>,
+                        response: retrofit2.Response<GroupResponseDTO>
                     ) {
                         if (!response.isSuccessful) {
                             Log.e(
@@ -223,10 +223,22 @@ class GroupRepository(
                             )
                             return
                         }
+                        val body = response.body()
+                        if (body != null) {
+                            _createGroupData.postValue(
+                                GroupModel(
+                                    id =  body.id,
+                                    name = body.name,
+                                    description = body.description,
+                                    image = body.imageUrl,
+                                    members = body.participants.size
+                                )
+                            )
+                        }
 
                     }
 
-                    override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
+                    override fun onFailure(call: retrofit2.Call<GroupResponseDTO>, t: Throwable) {
                         Log.e("GroupRepository", "Error creating group: ${t.message}")
                     }
                 })
