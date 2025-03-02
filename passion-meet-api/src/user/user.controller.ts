@@ -76,7 +76,7 @@ export class UserController {
     await this.userService.joinActivity(user, body.activityId)
   }
 
-  @Delete('me/activities')
+  @Post('me/activities')
   async leaveActivity(@GetUser() user: User, @Body() body: {activityId: string}): Promise<void> {
     await this.userService.leaveActivity(user, body.activityId)
   }
@@ -86,7 +86,7 @@ export class UserController {
     await this.userService.joinGroup(user, body.groupId)
   }
 
-  @Delete('me/groups')
+  @Post('me/groups')
   async leaveGroup(@GetUser() user: User, @Body() body: {groupId: string}): Promise<void> {
     await this.userService.leaveGroup(user, body.groupId)
   }

@@ -213,6 +213,10 @@ export class UserService {
         return this.userRepository.findOneBy({id})
     }
 
+    async findOneByIdWithRelations(id: string): Promise<User | null> {
+        return this.userRepository.findOne({where: {id: id}, relations: ['baseUserRelations', 'userMetRelations']})
+    }
+
     async save(user: User): Promise<User> {
         return this.userRepository.save(user)
     }

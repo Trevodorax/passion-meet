@@ -21,12 +21,12 @@ export class RelationService {
 
     async createRelation(dto: CreatedRelation): Promise<Relation> {
 
-        const baseUser = await this.userService.findOneById(dto.baseUser.id)
+        const baseUser = await this.userService.findOneByIdWithRelations(dto.baseUser.id)
         if (!baseUser) {
             throw new NotFoundException('Base user not found')
         }
 
-        const userMet = await this.userService.findOneById(dto.userMet.id)
+        const userMet = await this.userService.findOneByIdWithRelations(dto.userMet.id)
         if (!userMet) {
             throw new NotFoundException('User met not found')
         }
