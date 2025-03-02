@@ -1,5 +1,6 @@
 package com.example.passionmeet.mapper
 
+import android.util.Log
 import com.example.passionmeet.data.local.entity.GroupEntity
 import com.example.passionmeet.data.local.entity.PassionEntity
 import com.example.passionmeet.data.local.entity.EncounterEntity
@@ -83,7 +84,8 @@ fun EncounterEntity.toModel(): EncounterModel {
         userMet = UserMetModel(
             id = userMetId,
             email = userMetEmail,
-            username = userMetUsername
+            username = userMetUsername,
+            groups = emptyList()
         )
     )
 }
@@ -92,12 +94,13 @@ fun EncounterModel.toShortenedEncounter(): ShortenedEncounter {
     return ShortenedEncounter(
         userEncounteredName1 = userMet.username,
         status = if (isSeen) EncounterStatus.SEEN else EncounterStatus.UNSEEN,
-        happenedAt = createdAt,
-        profilePic = "https://example.com/profiles/${userMet.id}/profile.jpg"
+        happenedAt = formatDate(createdAt),
+        profilePic = "https://robohash.org/${userMet.id}/",
+        groups = userMet.groups
     )
 }
 
-private fun formatDate(dateString: String): String {
+fun formatDate(dateString: String): String {
     try {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         val date = inputFormat.parse(dateString) ?: return dateString
@@ -107,8 +110,8 @@ private fun formatDate(dateString: String): String {
         
         return when {
             isSameDay(now, encounterDate) -> "Today"
-            isYesterday(now, encounterDate) -> "Yesterday"
-            else -> SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(date)
+            isYesterday(encounterDate) -> "Yesterday"
+            else -> SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(date)
         }
     } catch (e: Exception) {
         return dateString
@@ -120,7 +123,7 @@ private fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
             cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
 }
 
-private fun isYesterday(now: Calendar, date: Calendar): Boolean {
+private fun isYesterday(date: Calendar): Boolean {
     val yesterday = Calendar.getInstance().apply {
         add(Calendar.DAY_OF_YEAR, -1)
     }

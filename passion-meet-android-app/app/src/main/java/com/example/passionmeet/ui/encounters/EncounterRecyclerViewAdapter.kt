@@ -12,8 +12,13 @@ import com.example.passionmeet.views.EncounterVH
 
 class EncounterRecyclerViewAdapter(
     private val context: Context,
-    private val lastEncounters: List<ShortenedEncounter>
+    private val lastEncounters: List<ShortenedEncounter>,
+    private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<EncounterVH>() {
+
+    interface OnItemClickListener {
+        fun onItemClick(encounter: ShortenedEncounter)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EncounterVH {
        val view = LayoutInflater.from(context).inflate(R.layout.fragment_encounter, parent, false)
@@ -21,8 +26,11 @@ class EncounterRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: EncounterVH, position: Int) {
-        val lastEncounters = lastEncounters[position]
-        holder.bind(lastEncounters)
+        val lastEncounter = lastEncounters[position]
+        holder.itemView.setOnClickListener {
+            onItemClickListener.onItemClick(lastEncounter)
+        }
+        holder.bind(lastEncounter)
     }
 
     override fun getItemCount(): Int = lastEncounters.size

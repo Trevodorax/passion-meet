@@ -5,11 +5,14 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.passionmeet.data.local.dao.GroupDao
+import com.example.passionmeet.data.remote.dto.GroupRequestDto
+import com.example.passionmeet.data.remote.dto.JoinActivityRequestDTO
 import com.example.passionmeet.mapper.mapGroupDtoToGroupEntity
 import com.example.passionmeet.mapper.mapGroupEntityToGroupModel
 import com.example.passionmeet.mapper.mapGroupToGroupModel
 import com.example.passionmeet.models.GroupModel
 import com.example.passionmeet.network.dto.GroupResponseDTO
+import com.example.passionmeet.network.dto.JoinGroupRequestDTO
 import com.example.passionmeet.network.services.GroupService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +29,12 @@ class GroupRepository(
 
     private val _groupData = MutableLiveData<List<GroupModel>>()
     val groupData get() = _groupData
+
+    private val joinGroupResult = MutableLiveData<Boolean>()
+    val joinGroupResultData get() = joinGroupResult
+
+    private val leaveGroupResult = MutableLiveData<Boolean>()
+    val leaveGroupResultData get() = leaveGroupResult
 
     /**
      * Shared preferences for getting the auth token
@@ -102,4 +111,80 @@ class GroupRepository(
             }
         }
     }
+
+    fun joinGroup(groupId: String){
+        Log.d("GroupRepository", "Joining group with id: $groupId")
+        coroutineScope.launch {
+            try {
+                val request = JoinGroupRequestDTO(
+                    groupId = groupId
+                )
+                val call = groupService.joinGroup(
+                    "Bearer ${sharedPreferences.getString("auth_token", "")}",
+                    request
+                )
+
+                call.enqueue(object : retrofit2.Callback<Void> {
+                    override fun onResponse(
+                        call: retrofit2.Call<Void>,
+                        response: retrofit2.Response<Void>
+                    ) {
+                        if (!response.isSuccessful) {
+                            Log.e("GroupRepository", "Error: ${response.code()} - ${response.message()}")
+                            joinGroupResult.postValue(false)
+                            return
+                        }
+                        joinGroupResult.postValue(true)
+                    }
+
+                    override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
+                        Log.e("GroupRepository", "Error joining group: ${t.message}")
+                        joinGroupResult.postValue(false)
+                    }
+                })
+            } catch (e: Exception) {
+                Log.e("GroupRepository", "Error joining group", e)
+                joinGroupResult.postValue(false)
+            }
+        }
+    }
+
+    fun leaveGroup(groupId: String){
+        Log.d("GroupRepository", "Leaving group with id: $groupId")
+        coroutineScope.launch {
+            try {
+                val request = JoinGroupRequestDTO(
+                    groupId = groupId
+                )
+                val call = groupService.leaveGroup(
+                    "application/json",
+                    "Bearer ${sharedPreferences.getString("auth_token", "")}",
+                    request
+                )
+
+                call.enqueue(object : retrofit2.Callback<Void> {
+                    override fun onResponse(
+                        call: retrofit2.Call<Void>,
+                        response: retrofit2.Response<Void>
+                    ) {
+                        if (!response.isSuccessful) {
+                            Log.e("GroupRepository", "Error: ${response.code()} - ${response.message()}")
+                            leaveGroupResult.postValue(false)
+                            return
+                        }
+                        leaveGroupResult.postValue(true)
+                    }
+
+                    override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
+                        Log.e("GroupRepository", "Error leaving group: ${t.message}")
+                        leaveGroupResult.postValue(false)
+                    }
+                })
+            } catch (e: Exception) {
+                Log.e("GroupRepository", "Error leaving group", e)
+                leaveGroupResult.postValue(false)
+            }
+        }
+    }
 }
+

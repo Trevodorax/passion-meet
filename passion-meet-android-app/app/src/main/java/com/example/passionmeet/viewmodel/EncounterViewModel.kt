@@ -26,8 +26,6 @@ class EncounterViewModel(
     fun initialize() {
         if (_isInitialized) return
         _isInitialized = true
-        
-        Log.d("EncounterViewModel", "Initializing ViewModel")
         refreshEncounters()
     }
 
