@@ -242,6 +242,7 @@ class ActivityRepository(
                 activityId = activityId
             )
 
+            Log.e("ActivityRepo", "Leaving activity: $request")
             val call = activityService.leaveActivity(
                 request,
                 "Bearer ${sharedPreferences.getString("auth_token", "")}",

@@ -1,12 +1,10 @@
 package com.example.passionmeet.network.services
 
 import com.example.passionmeet.data.remote.dto.CreateGroupDto
-import com.example.passionmeet.data.remote.dto.GroupDto
 import com.example.passionmeet.network.dto.GroupResponseDTO
 import com.example.passionmeet.network.dto.JoinGroupRequestDTO
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -22,7 +20,7 @@ interface GroupService {
         @Body group: JoinGroupRequestDTO
     ): Call<Void>
 
-    @DELETE("/users/me/groups")
+    @POST("/users/me/groups/delete")
     fun leaveGroup(
         @Header("Content-Type:") contentType: String ,
         @Header("Authorization") authHeader: String,

@@ -6,7 +6,6 @@ import com.example.passionmeet.network.dto.CreatedActivityResponseDTO
 import com.example.passionmeet.network.dto.ListActivityDTO
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -35,7 +34,7 @@ interface ActivityService {
         @Header("Authorization") token: String
     ): Call<Void>
 
-    @DELETE("/users/me/activities")
+    @POST("/users/me/activities/delete")
     fun leaveActivity(
         @Body request: JoinActivityRequestDTO,
         @Header("Authorization") token: String,
