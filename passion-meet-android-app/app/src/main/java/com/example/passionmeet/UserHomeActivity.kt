@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.passionmeet.models.GroupModel
+import com.example.passionmeet.ui.groups.CreateGroupActivity
 import com.example.passionmeet.ui.groups.GroupsListAdapter
 import com.example.passionmeet.viewmodel.GroupViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,6 +26,7 @@ class UserHomeActivity : AppCompatActivity() {
     private lateinit var groups: List<GroupModel>
     private lateinit var selectPassionBtn: Button
     private lateinit var gifContainer : ImageView
+    private lateinit var addGroupBtn: ImageButton
 
     private val groupViewModel: GroupViewModel by viewModel { parametersOf(this) }
 
@@ -44,6 +47,12 @@ class UserHomeActivity : AppCompatActivity() {
         selectPassionBtn.setOnClickListener {
             // switch to select passion activity
             val intent = Intent(this, SelectPassionActivity::class.java)
+            startActivity(intent)
+        }
+
+        addGroupBtn = findViewById(R.id.add_group_button)
+        addGroupBtn.setOnClickListener {
+            val intent = Intent(this, CreateGroupActivity::class.java)
             startActivity(intent)
         }
 
