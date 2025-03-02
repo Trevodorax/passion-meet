@@ -1,14 +1,18 @@
 package com.example.passionmeet
 
+import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import com.bumptech.glide.Glide
 import com.example.passionmeet.data.local.dao.GroupDao
 import com.example.passionmeet.repositories.ActivityRepository
 import com.example.passionmeet.repositories.GroupRepository
@@ -23,11 +27,16 @@ import org.koin.core.parameter.parametersOf
 
 class GroupPageActivity : AppCompatActivity() {
 
-    //TODO: implement data from intent so far it's just the layout data
     private lateinit var groupChatBtn: CardView
     private lateinit var creatActivityBtn: Button
     private lateinit var fullActivitiesMap: Button
     private lateinit var leaveGroupBtn: Button
+    private lateinit var groupImage : ImageView
+    private lateinit var groupDescription: TextView
+    private lateinit var groupMembers: TextView
+    private lateinit var groupNameTv: TextView
+
+
     private val groupViewModel: GroupViewModel by viewModel { parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +97,17 @@ class GroupPageActivity : AppCompatActivity() {
                     finish()
                 }
             }
+
+            this.groupMembers = findViewById(R.id.group_card_memberCount)
+            this.groupDescription = findViewById(R.id.group_card_description)
+            this.groupNameTv = findViewById(R.id.group_card_title)
+            groupMembers.text = bundle.getString("group_members")
+            groupDescription.text = bundle.getString("group_description")
+            groupNameTv.text = bundle.getString("group_name")
+
+            Glide.with(this)
+                .load(bundle.getString("group_image"))
+                .into(findViewById(R.id.group_card_background))
         }
 
         // Add the fragment to the container with the groupID
