@@ -63,4 +63,5 @@
     <string name="group_name_label">Group name <font color='#FF0000'>*</font></string>
     <string name="create_group_page_title">Create your group</string>
     <string name="passion_label">Select a passion linked to the group</string>
+    <string name="map_activites_btn">All</string>
 </resources>

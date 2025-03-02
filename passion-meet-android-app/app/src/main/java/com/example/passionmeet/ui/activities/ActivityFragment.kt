@@ -6,9 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.passionmeet.FullMapActivity
 import com.example.passionmeet.R
 import com.example.passionmeet.mapper.formatDate
 import com.example.passionmeet.models.ActivityModel
@@ -26,7 +28,7 @@ class ActivityFragment : Fragment() {
     private lateinit var activitiesRecyclerView: ActivityRecyclerViewAdapter
     private var activities: List<ActivityModel> = emptyList()
     private lateinit var groupId: String
-
+    private lateinit var fullActivitiesMap: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +41,15 @@ class ActivityFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.e("ActivityFragment", "View created")
         super.onViewCreated(view, savedInstanceState)
+
+
+        this.fullActivitiesMap = view.findViewById(R.id.see_group_activities_map)
+        fullActivitiesMap.setOnClickListener {
+            val intent = Intent(requireContext(), FullMapActivity::class.java)
+            intent.putExtra("group_id", groupId)
+            intent.putExtra("activities", ArrayList(activities))
+            startActivity(intent)
+        }
 
         this.recylcerView = view.findViewById(R.id.activities_list_recycler_view)
         recylcerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

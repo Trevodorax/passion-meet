@@ -3,25 +3,16 @@ package com.example.passionmeet
 import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.bumptech.glide.Glide
-import com.example.passionmeet.data.local.dao.GroupDao
-import com.example.passionmeet.repositories.ActivityRepository
-import com.example.passionmeet.repositories.GroupRepository
 import com.example.passionmeet.ui.activities.ActivityFragment
 import com.example.passionmeet.ui.activities.CreateActivityActivity
-import com.example.passionmeet.viewmodel.ActivityViewModel
 import com.example.passionmeet.viewmodel.GroupViewModel
-import com.example.passionmeet.viewmodel.factories.ActivityViewModelFactory
-import com.example.passionmeet.viewmodel.factories.GroupViewModelFactory
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -29,7 +20,6 @@ class GroupPageActivity : AppCompatActivity() {
 
     private lateinit var groupChatBtn: CardView
     private lateinit var creatActivityBtn: Button
-    private lateinit var fullActivitiesMap: Button
     private lateinit var leaveGroupBtn: Button
     private lateinit var groupDescription: TextView
     private lateinit var groupMembers: TextView
@@ -58,14 +48,6 @@ class GroupPageActivity : AppCompatActivity() {
 
             bundleForFragment.putString("group_id", groupId)
             activitiesRVFragement.arguments = bundleForFragment
-
-            this.fullActivitiesMap = findViewById(R.id.see_group_activities_map)
-            fullActivitiesMap.setOnClickListener {
-                val intent = Intent(this, FullMapActivity::class.java)
-                intent.putExtra("group_id", groupId)
-                intent.putExtra("group_name", groupName)
-                startActivity(intent)
-            }
 
             this.groupChatBtn = findViewById(R.id.card_group_chat)
             groupChatBtn.setOnClickListener {

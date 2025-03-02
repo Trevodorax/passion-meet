@@ -1,6 +1,7 @@
 package com.example.passionmeet.models
 
 import com.example.passionmeet.data.remote.dto.UserDto
+import java.io.Serializable
 
 data class ActivityModel(
         val id: String,
@@ -11,4 +12,4 @@ data class ActivityModel(
         val startDate: String,
         val description: String,
         val participants: List<UserDto> = emptyList(),
-    )
+    ): Serializable
