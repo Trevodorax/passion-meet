@@ -37,7 +37,7 @@
     <string name="activity_name_hint">Share a coffee</string>
     <string name="activity_description_hint">I love coffee, let\'s make some great ones together !</string>
     <string name="activity_description_label">Description <font color='#FF0000'>*</font></string>
-    <string name="activity_start_date_label">Début de l\'activité ? <font color='#FF0000'>*</font></string>
+    <string name="activity_start_date_label">Activity start date <font color='#FF0000'>*</font></string>
     <string name="create_activity_btn">Create this activity</string>
     <string name="activity_date_hint">05/12/2025</string>
     <string name="activity_participant_hint">4</string>
@@ -50,10 +50,17 @@
     <string name="add_activity">Add activity</string>
     <string name="see_map_activities">See map</string>
     <string name="leave_group">Leave group</string>
-    <string name="send_message_hint">Ecrivez quelque chose...</string>
+    <string name="send_message_hint">Write something...</string>
     <string name="sign_up_activity">Sign up for the activity</string>
     <string name="participants">Participants:</string>
     <string name="description">Description:</string>
-    <string name="hint_for_maps">Cliquez sur la carte pour ouvrir dans Maps</string>
+    <string name="hint_for_maps">Click on the map to open it on full screen</string>
     <string name="sign_off_activity">Sign off from activity</string>
+    <string name="create_group_btn">Create this group</string>
+    <string name="group_image_hint">ex: https://my-pic.fr</string>
+    <string name="group_image_label">Group image url <font color='#FF0000'>*</font></string>
+    <string name="group_name_hint">ex: Pokemon Lovers</string>
+    <string name="group_name_label">Group name <font color='#FF0000'>*</font></string>
+    <string name="create_group_page_title">Create your group</string>
+    <string name="passion_label">Select a passion linked to the group</string>
 </resources>

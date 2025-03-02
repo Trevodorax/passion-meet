@@ -5,8 +5,9 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.passionmeet.data.local.dao.GroupDao
-import com.example.passionmeet.data.remote.dto.GroupRequestDto
-import com.example.passionmeet.data.remote.dto.JoinActivityRequestDTO
+import com.example.passionmeet.data.remote.dto.CreateGroupDto
+import com.example.passionmeet.data.remote.dto.PassionRequestDto
+import com.example.passionmeet.data.remote.dto.UserRequestDto
 import com.example.passionmeet.mapper.mapGroupDtoToGroupEntity
 import com.example.passionmeet.mapper.mapGroupEntityToGroupModel
 import com.example.passionmeet.mapper.mapGroupToGroupModel
@@ -23,7 +24,7 @@ import com.example.passionmeet.utils.NetworkUtils
 class GroupRepository(
     private val context: Context,
     private val groupService: GroupService,
-    private val groupDao: GroupDao
+    private val groupDao: GroupDao? = null
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
@@ -36,6 +37,9 @@ class GroupRepository(
     private val leaveGroupResult = MutableLiveData<Boolean>()
     val leaveGroupResultData get() = leaveGroupResult
 
+    private val _createGroupData = MutableLiveData<List<GroupModel>>()
+    val createGroupData get() = _createGroupData
+
     /**
      * Shared preferences for getting the auth token
      */
@@ -47,7 +51,7 @@ class GroupRepository(
         coroutineScope.launch {
             if (!NetworkUtils.isNetworkAvailable(context) || !NetworkUtils.hasInternetConnection()) {
                 // No network available, load from local database only
-                val localGroups = groupDao.getAllGroups()
+                val localGroups = groupDao?.getAllGroups() ?: emptyList()
                 withContext(Dispatchers.Main) {
                     _groupData.value = mapGroupEntityToGroupModel(localGroups)
                 }
@@ -68,9 +72,13 @@ class GroupRepository(
                             Log.e("GroupRepository", "Error: ${response.code()} - ${response.message()}")
                             // Load from local database on error response
                             coroutineScope.launch {
-                                val localGroups = groupDao.getAllGroups()
+                                val localGroups = groupDao?.getAllGroups()
                                 withContext(Dispatchers.Main) {
-                                    _groupData.value = mapGroupEntityToGroupModel(localGroups)
+                                    _groupData.value = localGroups?.let {
+                                        mapGroupEntityToGroupModel(
+                                            it
+                                        )
+                                    }
                                 }
                             }
                             return
@@ -84,8 +92,8 @@ class GroupRepository(
                             // Save to local database
                             coroutineScope.launch {
                                 val entities = it.map { dto -> mapGroupDtoToGroupEntity(dto) }
-                                groupDao.deleteAll() // Clear old data
-                                groupDao.insertAll(entities)
+                                groupDao?.deleteAll() // Clear old data
+                                groupDao?.insertAll(entities)
                             }
                         }
                     }
@@ -94,9 +102,9 @@ class GroupRepository(
                         Log.e("GroupRepository", "Error fetching groups: ${t.message}")
                         // Load from local database on failure
                         coroutineScope.launch {
-                            val localGroups = groupDao.getAllGroups()
+                            val localGroups = groupDao?.getAllGroups()
                             withContext(Dispatchers.Main) {
-                                _groupData.value = mapGroupEntityToGroupModel(localGroups)
+                                _groupData.value = localGroups?.let { mapGroupEntityToGroupModel(it) }
                             }
                         }
                     }
@@ -104,9 +112,9 @@ class GroupRepository(
             } catch (e: Exception) {
                 Log.e("GroupRepository", "Error fetching groups", e)
                 // Load from local database on error
-                val localGroups = groupDao.getAllGroups()
+                val localGroups = groupDao?.getAllGroups()
                 withContext(Dispatchers.Main) {
-                    _groupData.value = mapGroupEntityToGroupModel(localGroups)
+                    _groupData.value = localGroups?.let { mapGroupEntityToGroupModel(it) }
                 }
             }
         }
@@ -186,5 +194,45 @@ class GroupRepository(
             }
         }
     }
-}
 
+    fun createGroup(name: String, image: String, description: String, userId: String, passionId: String) {
+        Log.d("GroupRepository", "Creating group with name: $name")
+        coroutineScope.launch {
+            val request = CreateGroupDto(
+                name = name,
+                imageUrl = image,
+                description = description,
+                createdBy = UserRequestDto(userId),
+                passion = PassionRequestDto(passionId)
+            )
+            try {
+                val call = groupService.createGroup(
+                    "Bearer ${sharedPreferences.getString("auth_token", "")}",
+                    request
+                )
+
+                call.enqueue(object : retrofit2.Callback<Void> {
+                    override fun onResponse(
+                        call: retrofit2.Call<Void>,
+                        response: retrofit2.Response<Void>
+                    ) {
+                        if (!response.isSuccessful) {
+                            Log.e(
+                                "GroupRepository",
+                                "Error: ${response.code()} - ${response.message()}"
+                            )
+                            return
+                        }
+
+                    }
+
+                    override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
+                        Log.e("GroupRepository", "Error creating group: ${t.message}")
+                    }
+                })
+            } catch (e: Exception) {
+                Log.e("GroupRepository", "Error creating group", e)
+            }
+        }
+    }
+}

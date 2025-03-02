@@ -31,7 +31,6 @@ class GroupPageActivity : AppCompatActivity() {
     private lateinit var creatActivityBtn: Button
     private lateinit var fullActivitiesMap: Button
     private lateinit var leaveGroupBtn: Button
-    private lateinit var groupImage : ImageView
     private lateinit var groupDescription: TextView
     private lateinit var groupMembers: TextView
     private lateinit var groupNameTv: TextView

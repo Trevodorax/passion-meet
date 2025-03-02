@@ -1,5 +1,6 @@
 package com.example.passionmeet.network.services
 
+import com.example.passionmeet.data.remote.dto.CreateGroupDto
 import com.example.passionmeet.data.remote.dto.GroupDto
 import com.example.passionmeet.network.dto.GroupResponseDTO
 import com.example.passionmeet.network.dto.JoinGroupRequestDTO
@@ -31,6 +32,6 @@ interface GroupService {
     @POST("groups")
     fun createGroup(
         @Header("Authorization") authHeader: String,
-        @Body group: GroupDto
+        @Body group: CreateGroupDto
     ): Call<Void>
 }

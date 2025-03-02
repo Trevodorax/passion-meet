@@ -22,6 +22,9 @@ class GroupViewModel(
     private val _leaveGroupResultData = MutableLiveData<Boolean>()
     val leaveGroupResultData: LiveData<Boolean> get() = _leaveGroupResultData
 
+    private val _createGroupData = MutableLiveData<List<GroupModel>>()
+    val createGroupData: LiveData<List<GroupModel>> get() = _createGroupData
+
     fun getSelfGroups() {
         this.groupRepository.groupData.observe(context) { data ->
             this@GroupViewModel._groupData.value = data
@@ -45,5 +48,12 @@ class GroupViewModel(
             }
         }
         this.groupRepository.leaveGroup(groupId)
+    }
+
+    fun createGroup(name: String, image: String, description: String, userId: String, passionId: String) {
+        this.groupRepository.createGroupData.observe(context) { data ->
+            this@GroupViewModel._createGroupData.value = data
+        }
+        this.groupRepository.createGroup(name, image, description, userId, passionId)
     }
 }
