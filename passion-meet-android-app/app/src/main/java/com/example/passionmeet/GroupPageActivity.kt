@@ -2,12 +2,24 @@ package com.example.passionmeet
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import com.example.passionmeet.data.local.dao.GroupDao
+import com.example.passionmeet.repositories.ActivityRepository
+import com.example.passionmeet.repositories.GroupRepository
 import com.example.passionmeet.ui.activities.ActivityFragment
 import com.example.passionmeet.ui.activities.CreateActivityActivity
+import com.example.passionmeet.viewmodel.ActivityViewModel
+import com.example.passionmeet.viewmodel.GroupViewModel
+import com.example.passionmeet.viewmodel.factories.ActivityViewModelFactory
+import com.example.passionmeet.viewmodel.factories.GroupViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class GroupPageActivity : AppCompatActivity() {
 
@@ -15,6 +27,8 @@ class GroupPageActivity : AppCompatActivity() {
     private lateinit var groupChatBtn: CardView
     private lateinit var creatActivityBtn: Button
     private lateinit var fullActivitiesMap: Button
+    private lateinit var leaveGroupBtn: Button
+    private val groupViewModel: GroupViewModel by viewModel { parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +45,7 @@ class GroupPageActivity : AppCompatActivity() {
 
         val bundle = intent.extras
         if (bundle != null) {
-            val groupId = bundle.getString("group_id")
+            val groupId = bundle.getString("group_id", "unknown")
             val groupName = bundle.getString("group_name")
 
             bundleForFragment.putString("group_id", groupId)
@@ -58,6 +72,21 @@ class GroupPageActivity : AppCompatActivity() {
                 val intent = Intent(this, CreateActivityActivity::class.java)
                 intent.putExtra("group_id", groupId)
                 startActivity(intent)
+            }
+
+            this.leaveGroupBtn = findViewById(R.id.leave_group_button)
+            leaveGroupBtn.setOnClickListener {
+
+                groupViewModel.leaveGroup(groupId)
+            }
+
+            groupViewModel.leaveGroupResultData.observe(this) {
+                if(!it){
+                    Toast.makeText(this, "Failed to leave group", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(this, "Group left successfully", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
             }
         }
 

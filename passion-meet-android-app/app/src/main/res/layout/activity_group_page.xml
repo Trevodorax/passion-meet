@@ -36,7 +36,7 @@
         app:cardBackgroundColor="?attr/colorError">
 
         <Button
-            android:id="@+id/create_account_button"
+            android:id="@+id/leave_group_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/leave_group"

@@ -24,5 +24,8 @@ data class UserMetModel(
     val email: String,
     
     @SerializedName("username")
-    val username: String
+    val username: String,
+
+    @SerializedName("participatedGroups")
+    val groups : List<GroupModel>
 ) 

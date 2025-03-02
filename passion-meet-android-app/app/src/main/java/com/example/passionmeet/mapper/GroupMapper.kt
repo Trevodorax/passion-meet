@@ -9,7 +9,7 @@ fun mapGroupToGroupModel(dtos: List<GroupResponseDTO>): List<GroupModel> {
             it.id,
             it.name,
             it.imageUrl,
-            0,
+            it.participants.size,
             it.description
         )
     }

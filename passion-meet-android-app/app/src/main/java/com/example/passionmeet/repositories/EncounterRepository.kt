@@ -45,7 +45,6 @@ class EncounterRepository(
     }
 
     fun refreshEncounters() {
-        Log.d(tag, "Refreshing encounters")
         coroutineScope.launch {
             try {
                 if (NetworkUtils.isNetworkAvailable(context)) {
@@ -55,14 +54,11 @@ class EncounterRepository(
                         _error.postValue("No authentication token found")
                         return@launch
                     }
-
-                    Log.d(tag, "Making network request for encounters")
                     val response = encounterService.getSelfEncounters("Bearer $token")
-                    Log.d(tag, "Response received: ${response.code()}")
-                    
+
                     if (response.isSuccessful) {
                         response.body()?.let { encounters ->
-                            Log.d(tag, "Received ${encounters.size} encounters")
+                            Log.d(tag, "Received ${encounters.size} encounters : $encounters")
                             encounterDao.deleteAllEncounters()
                             encounterDao.insertEncounters(
                                 encounters.map { it.toEntity() }

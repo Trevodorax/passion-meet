@@ -244,7 +244,8 @@ class ActivityRepository(
 
             val call = activityService.leaveActivity(
                 request,
-                "Bearer ${sharedPreferences.getString("auth_token", "")}"
+                "Bearer ${sharedPreferences.getString("auth_token", "")}",
+                "application/json"
             )
 
             call.enqueue(object : retrofit2.Callback<Void> {
@@ -252,7 +253,6 @@ class ActivityRepository(
                     call: retrofit2.Call<Void>,
                     response: retrofit2.Response<Void>
                 ) {
-
                     if (response.isSuccessful) {
                         _joinActivityResponse.value = true
                     } else {
