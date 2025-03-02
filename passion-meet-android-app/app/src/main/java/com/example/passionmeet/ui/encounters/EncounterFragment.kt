@@ -88,10 +88,10 @@ class EncounterFragment : Fragment(), EncounterRecyclerViewAdapter.OnItemClickLi
     private fun showDialog(encounter: ShortenedEncounter) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setTitle("Join ${encounter.userEncounteredName1}'s group ?")
-        dialogBuilder.setMessage("You and ${encounter.userEncounteredName1} crossed path. Would you like to join their group: Milky way club?")
+        dialogBuilder.setMessage("You and ${encounter.userEncounteredName1} crossed path. Would you like to join their group: ${encounter.groups[0].name} ?")
         dialogBuilder.setPositiveButton("Yes") { dialog, _ ->
             // Call the view model to join the group
-            groupsViewModel.joinGroup("fecce777-7d1a-4dd9-b443-f186327d07a7")
+            groupsViewModel.joinGroup(encounter.groups[0].id)
             observeJoinGroupResult(dialog)
         }
         dialogBuilder.setNegativeButton("No") { dialog, _ ->

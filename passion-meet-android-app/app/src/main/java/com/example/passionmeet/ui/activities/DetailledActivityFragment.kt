@@ -77,6 +77,7 @@ class DetailledActivityFragment : AppCompatActivity() {
             activityParticipantsTV.text = participants?.joinToString(", ")
             activityMaxParticipantsTV.text = maxParticipants
 
+            Log.d("DetailledActivityFragment", sharedPreferences.getString("user_name", "unknown")!!)
             if(participants?.contains(sharedPreferences.getString("user_name", "user")) == true) {
                 activitySignUpBtn.isVisible = false
                 activitySignOffBtn.isVisible = true
@@ -116,7 +117,7 @@ class DetailledActivityFragment : AppCompatActivity() {
                         Log.d("ActivitySignOff", "User successfully signed off from activity $activityId")
                         activitySignOffBtn.isVisible = false
                         activitySignUpBtn.isVisible = true
-                        val updatedParticipants = participants?.joinToString(", ")
+                        val updatedParticipants = participants?.filter { it != sharedPreferences.getString("user_name", "user") }?.joinToString(", ")
                         activityParticipantsTV.text = updatedParticipants
 
                     } else {

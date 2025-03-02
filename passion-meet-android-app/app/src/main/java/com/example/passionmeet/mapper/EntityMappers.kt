@@ -13,6 +13,8 @@ import com.example.passionmeet.models.UserMetModel
 import com.example.passionmeet.network.dto.GroupResponseDTO
 import com.example.passionmeet.network.dto.PassionDto
 import com.example.passionmeet.models.ShortenedEncounter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Calendar
@@ -66,17 +68,22 @@ fun mapGroupEntityToGroupModel(entities: List<GroupEntity>): List<GroupModel> {
 }
 
 fun EncounterModel.toEntity(): EncounterEntity {
+    //add fields groups
+    val groupsJson = Gson().toJson(this.userMet.groups)
     return EncounterEntity(
         id = id,
         createdAt = createdAt,
         isSeen = isSeen,
         userMetId = userMet.id,
         userMetEmail = userMet.email,
-        userMetUsername = userMet.username
+        userMetUsername = userMet.username,
+        userMetGroups = groupsJson
     )
 }
 
 fun EncounterEntity.toModel(): EncounterModel {
+    val groups: List<GroupModel> = Gson().fromJson(this.userMetGroups, object : TypeToken<List<GroupModel>>() {}.type)
+
     return EncounterModel(
         id = id,
         createdAt = createdAt,
@@ -85,7 +92,7 @@ fun EncounterEntity.toModel(): EncounterModel {
             id = userMetId,
             email = userMetEmail,
             username = userMetUsername,
-            groups = emptyList()
+            groups = groups
         )
     )
 }

@@ -38,7 +38,6 @@ interface ActivityService {
     fun leaveActivity(
         @Body request: JoinActivityRequestDTO,
         @Header("Authorization") token: String,
-        @Header("Content-Type:") contentType: String
     ): Call<Void>
 
 }

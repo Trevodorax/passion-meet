@@ -170,15 +170,17 @@ class LoginRepository(
         body?.let {
             val editor = sharedPreferences.edit()
             editor.putString("user_id", it.id)
-            editor.putString("user_name", it.name)
+            editor.putString("user_name", it.username)
             editor.putString("user_email", it.email)
+            editor.putString("user_username", it.username)
             editor.apply()
         }
 
         return UserResponseDTO(
             id = sharedPreferences.getString("user_id", "") ?: throw IllegalStateException("User ID not found"),
             name = sharedPreferences.getString("user_name", "") ?: throw IllegalStateException("User name not found"),
-            email = sharedPreferences.getString("user_email", "") ?: throw IllegalStateException("User email not found")
+            email = sharedPreferences.getString("user_email", "") ?: throw IllegalStateException("User email not found"),
+            username = sharedPreferences.getString("user_name", "") ?: throw IllegalStateException("User name not found"),
         )
     }
 

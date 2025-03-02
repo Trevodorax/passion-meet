@@ -34,7 +34,7 @@ class EncounterRepository(
         Log.d(tag, "Getting encounters from database")
         refreshEncounters()
         return encounterDao.getAllEncounters().map { entities ->
-            Log.d(tag, "Mapping ${entities.size} entities to models")
+            Log.d(tag, "Mapping ${entities.size} entities to models : $entities")
             entities.map { it.toModel() }
         }
     }
@@ -58,7 +58,7 @@ class EncounterRepository(
 
                     if (response.isSuccessful) {
                         response.body()?.let { encounters ->
-                            Log.d(tag, "Received ${encounters.size} encounters : $encounters")
+                            Log.d(tag, "Refresh Received ${encounters.size} encounters : $encounters")
                             encounterDao.deleteAllEncounters()
                             encounterDao.insertEncounters(
                                 encounters.map { it.toEntity() }

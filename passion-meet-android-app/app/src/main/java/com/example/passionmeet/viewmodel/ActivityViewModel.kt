@@ -38,7 +38,7 @@ class ActivityViewModel(
             this.activities.value = data
         }
 
-        this.activityRepository.getActivities(groupId) //"49540ff4-db56-4cbe-9e01-2506714ede73
+        this.activityRepository.getActivities(groupId)
     }
 
 

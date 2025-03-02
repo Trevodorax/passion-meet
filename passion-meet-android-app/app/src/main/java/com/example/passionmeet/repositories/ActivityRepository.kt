@@ -245,8 +245,7 @@ class ActivityRepository(
             Log.e("ActivityRepo", "Leaving activity: $request")
             val call = activityService.leaveActivity(
                 request,
-                "Bearer ${sharedPreferences.getString("auth_token", "")}",
-                "application/json"
+                "Bearer ${sharedPreferences.getString("auth_token", "")}"
             )
 
             call.enqueue(object : retrofit2.Callback<Void> {
