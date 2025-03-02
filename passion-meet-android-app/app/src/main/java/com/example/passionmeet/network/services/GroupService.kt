@@ -33,5 +33,5 @@ interface GroupService {
     fun createGroup(
         @Header("Authorization") authHeader: String,
         @Body group: CreateGroupDto
-    ): Call<Void>
+    ): Call<GroupResponseDTO>
 }

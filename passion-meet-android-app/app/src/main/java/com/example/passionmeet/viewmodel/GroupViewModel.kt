@@ -22,8 +22,8 @@ class GroupViewModel(
     private val _leaveGroupResultData = MutableLiveData<Boolean>()
     val leaveGroupResultData: LiveData<Boolean> get() = _leaveGroupResultData
 
-    private val _createGroupData = MutableLiveData<List<GroupModel>>()
-    val createGroupData: LiveData<List<GroupModel>> get() = _createGroupData
+    private val _createGroupData = MutableLiveData<GroupModel>()
+    val createGroupData: LiveData<GroupModel> get() = _createGroupData
 
     fun getSelfGroups() {
         this.groupRepository.groupData.observe(context) { data ->
