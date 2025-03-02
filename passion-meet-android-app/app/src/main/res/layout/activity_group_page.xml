@@ -156,27 +156,6 @@
 
             />
     </androidx.cardview.widget.CardView>
-    <androidx.cardview.widget.CardView
-            android:id="@+id/card_group_button_3"
-            android:layout_width="120dp"
-            android:layout_height="35dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            android:layout_marginHorizontal="30dp"
-            app:layout_constraintStart_toEndOf="@+id/groupCardInfo"
-            app:layout_constraintTop_toBottomOf="@id/card_group_btn_2"
-            android:layout_marginVertical="32dp">
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/see_map_activities"
-                android:textSize="12sp"
-                android:background="?attr/colorError"
-
-                />
-        </androidx.cardview.widget.CardView>
-
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_group_audio_chat"
