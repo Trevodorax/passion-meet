@@ -42,14 +42,12 @@ class FullMapActivity: AppCompatActivity() {
         Log.d("FullMapActivity", "Group ID: $groupId")
         Log.d("FullMapActivity", "Activities: $activities")
 
-        // Create a map and set the initial camera
         mapView = MapView(this)
         setContentView(mapView)
 
         // Initialize PermissionManager
         permissionManager = PermissionManager(this)
 
-        // Check if location permission is granted
         if (permissionManager.isLocationPermissionGranted()) {
             // Permission is already granted, proceed with location setup
             Log.d("FullMapActivity", "Location permission granted")
@@ -58,9 +56,6 @@ class FullMapActivity: AppCompatActivity() {
             // Enable location component to show the user's location
             locationComponent.locationPuck = createDefault2DPuck(withBearing = true)
             locationComponent.enabled = true
-            locationComponent.puckBearing = PuckBearing.COURSE
-            locationComponent.puckBearingEnabled = true
-
 
             // Set up listener to update map when the user's location changes
             locationComponent.addOnIndicatorPositionChangedListener { position ->
@@ -77,9 +72,11 @@ class FullMapActivity: AppCompatActivity() {
                 mapView.gestures.focalPoint = mapView.mapboxMap.pixelForCoordinate(position)
             }
 
+        }else {
+            Log.d("FullMapActivity", "Location permission not granted")
         }
 
-             // Add the activities to the map
+        // Add the activities to the map
             activities.forEach { activity ->
                 Log.d("FullMapActivity", "Activity: $activity")
                 getGeolocationFromPostalLocation(activity.location)
@@ -117,6 +114,18 @@ class FullMapActivity: AppCompatActivity() {
                         val activityPoint = Point.fromLngLat(longitude, latitude)
                         // Add a marker for the activity
                         addMarker(activityPoint)
+
+//                        if(counter == 0){
+//                            mapView.mapboxMap.setCamera(
+//                                CameraOptions.Builder()
+//                                    .center(Point.fromLngLat(longitude, latitude))
+//                                    .pitch(0.0)
+//                                    .zoom(12.0)
+//                                    .bearing(0.0)
+//                                    .build()
+//                            )
+//                            counter++
+//                        }
                     }
                 } else {
                     Log.e("Geocoding", "No results found or geocoding failed")
