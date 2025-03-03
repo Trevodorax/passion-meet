@@ -119,6 +119,22 @@ export class UserService {
         }
         await this.save(user)
     }
+
+    async overwritePassionsForUser(user: User, dtos: AddPassionDto[]): Promise<void> {
+        user.passions = []
+        for (const dto of dtos) {
+            const passion = await this.passionService.findOneById(dto.passionId)
+            if (passion === null) {
+                throw new NotFoundException('PASSION_NOT_FOUND')
+            }
+
+            if (user.passions === undefined) {
+                user.passions = []
+            }
+            user.passions.push(passion)
+        }
+        await this.save(user)
+    }
     
     async joinActivity(user: User, activityId: string): Promise<void> {
 
