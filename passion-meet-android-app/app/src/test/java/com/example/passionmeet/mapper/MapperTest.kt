@@ -89,7 +89,8 @@ class MapperTest {
             id = "1",
             name = "Sports Group",
             description = "Group for sports enthusiasts",
-            imageUrl = "group.jpg"
+            imageUrl = "group.jpg",
+            participants = emptyList(),
         )
 
         // When
@@ -134,7 +135,8 @@ class MapperTest {
         val userMet = UserMetModel(
             id = "1",
             email = "user@example.com",
-            username = "testUser"
+            username = "testUser",
+            groups = emptyList()
         )
         val encounterModel = EncounterModel(
             id = "1",
@@ -169,7 +171,8 @@ class MapperTest {
         val userMet = UserMetModel(
             id = "1",
             email = "user@example.com",
-            username = "testUser"
+            username = "testUser",
+            groups = emptyList()
         )
         val encounterModel = EncounterModel(
             id = "1",
