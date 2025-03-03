@@ -1,10 +1,13 @@
 package com.example.passionmeet
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,11 +26,13 @@ class SelectPassionActivity : AppCompatActivity() {
 
     private var passions: List<PassionCategoryModel>? = null
     private lateinit var selectedPassionsContainer: FlexboxLayout
+    private lateinit var submitButton: Button
 
     private val passionViewModel: PassionViewModel by viewModel { parametersOf(this) }
 
     private lateinit var categoryAdapter: CategoryAdapter
 
+    private var initialObservation = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +45,18 @@ class SelectPassionActivity : AppCompatActivity() {
         }
 
         selectedPassionsContainer = findViewById(R.id.selected_passions_container)
+        submitButton = findViewById(R.id.submit_button)
+        
+        // Reset the update result state
+        passionViewModel.resetUpdateResult()
+        
+        // Set up the submit button click listener
+        submitButton.setOnClickListener {
+            handleSubmitPassions()
+        }
 
         fetchData()
+        observeUpdateResult()
     }
 
     private fun fetchData() {
@@ -56,6 +71,33 @@ class SelectPassionActivity : AppCompatActivity() {
         }
 
         this.passionViewModel.fetchAllData()
+    }
+    
+    private fun observeUpdateResult() {
+        passionViewModel.updatePassionsResult.observe(this) { success ->
+            // Reset button state
+            submitButton.isEnabled = true
+            submitButton.text = getString(R.string.submit_button_label)
+            
+            // Skip the first observation when activity is created
+            if (initialObservation) {
+                initialObservation = false
+                return@observe
+            }
+            
+            if (success) {
+                // navigate back to the previous screen by destroying this activity
+
+                // destroy the observer
+                setResult(Activity.RESULT_OK)
+                Log.e("SelectPassionActivity", "Passions updated successfully - finishing activity")
+
+                finish()
+//                super.onBackPressedDispatcher.onBackPressed()
+            } else {
+                Toast.makeText(this, "Failed to update passions. Please try again.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     /**
@@ -92,11 +134,24 @@ class SelectPassionActivity : AppCompatActivity() {
         categoryRecyclerView.adapter = categoryAdapter
     }
 
-
-//    private fun updateSelectedPassionsText(selectedPassions: List<PassionSelectorModel>) {
-//        val selectedNames = selectedPassions.joinToString(", ") { it.name }
-//        selectedPassionsTextView.text = "Selected Passions: $selectedNames"
-//    }
+    /**
+     * Handles the submit button click to update the user's passions.
+     */
+    private fun handleSubmitPassions() {
+        val selectedPassions = passions?.flatMap { it.items.filter { it.isSelected } } ?: emptyList()
+        
+        if (selectedPassions.isEmpty()) {
+            Toast.makeText(this, "Please select at least one passion", Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        // Show loading state (you might want to add a progress indicator)
+        submitButton.isEnabled = false
+        submitButton.text = "Updating..."
+        
+        // Call the ViewModel to update passions
+        passionViewModel.updatePassions(selectedPassions)
+    }
 
     private fun updateSelectedPassions(selectedPassions: List<PassionSelectorModel>) {
         selectedPassionsContainer.removeAllViews() // Clear existing chips

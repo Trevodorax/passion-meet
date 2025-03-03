@@ -42,11 +42,13 @@ class UserHomeActivity : AppCompatActivity() {
             .commit()
 
         gifContainer = findViewById(R.id.gif_hello)
-        Glide.with(this).asGif().load("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExemc0Y3oyamc3NzBkaTBxbzhxazYyMGZzdmozeW41dzI4OXlqbnYwcCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0JMaNj0xZ6cDFLvq/giphy.gif").into(gifContainer)
+        Glide.with(this).asGif().load(R.drawable.hello_gif).into(gifContainer)
         selectPassionBtn = findViewById(R.id.update_passion_button)
         selectPassionBtn.setOnClickListener {
             // switch to select passion activity
             val intent = Intent(this, SelectPassionActivity::class.java)
+            // start fresh activity each time
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
         }
 

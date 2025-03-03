@@ -31,6 +31,17 @@ class PassionRepository(
     private val _selfPassionData = MutableLiveData<List<PassionCategoryModel>>()
     val selfPassionData get() = _selfPassionData
 
+    // Result of update operation
+    private val _updatePassionsResult = MutableLiveData<Boolean>()
+    val updatePassionsResult get() = _updatePassionsResult
+
+    /**
+     * Resets the update passions result value
+     */
+    fun resetUpdatePassionsResult() {
+        _updatePassionsResult.value = null
+    }
+
     /**
      * Shared preferences for getting the auth token
      */
@@ -149,6 +160,73 @@ class PassionRepository(
                 withContext(Dispatchers.Main) {
                     _selfPassionData.value = mapPassionEntityToPassionCategoryModel(localSelfPassions)
                 }
+            }
+        }
+    }
+
+    fun updateMultiplePassions(passionIds: List<String>) {
+        coroutineScope.launch {
+            if (!NetworkUtils.isNetworkAvailable(context) || !NetworkUtils.hasInternetConnection()) {
+                withContext(Dispatchers.Main) {
+                    _updatePassionsResult.value = false
+                }
+                return@launch
+            }
+
+            try {
+                val passionsToUpdate = passionIds.map { 
+                    com.example.passionmeet.network.dto.AddPassionDto(it) 
+                }
+                
+                val call = passionService.updateMultiplePassions(
+                    "Bearer ${sharedPreferences.getString("auth_token", "")}",
+                    passionsToUpdate
+                )
+
+                call.enqueue(object : retrofit2.Callback<Void> {
+                    override fun onResponse(
+                        call: retrofit2.Call<Void>,
+                        response: retrofit2.Response<Void>
+                    ) {
+                        if (response.isSuccessful) {
+                            _updatePassionsResult.value = true
+                            
+                            // Update local database to mark these passions as selected
+                            coroutineScope.launch {
+                                // First, reset all self passions
+                                passionDao.deleteAllSelfPassions()
+                                
+                                // Then get the current passions to update their isSelfPassion flag
+                                val allPassions = passionDao.getAllPassions()
+                                val passionsToUpdate = allPassions.filter { 
+                                    passionIds.contains(it.id) 
+                                }.map { 
+                                    it.copy(isSelfPassion = true) 
+                                }
+                                
+                                if (passionsToUpdate.isNotEmpty()) {
+                                    passionDao.insertAll(passionsToUpdate)
+                                }
+                                
+                                // Refresh self passions data
+                                getSelfPassions()
+                            }
+                        } else {
+                            _updatePassionsResult.value = false
+                            Log.e("PassionRepository", "Error updating passions: ${response.code()}")
+                        }
+                    }
+
+                    override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
+                        _updatePassionsResult.value = false
+                        Log.e("PassionRepository", "Error updating passions", t)
+                    }
+                })
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _updatePassionsResult.value = false
+                }
+                Log.e("PassionRepository", "Error updating passions", e)
             }
         }
     }
