@@ -17,6 +17,10 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.maps.plugin.gestures.gestures
+import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
+import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
+import com.mapbox.maps.plugin.locationcomponent.location
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,8 +28,8 @@ import retrofit2.Response
 class FullMapActivity: AppCompatActivity() {
 
     private lateinit var mapView: MapView
-    private lateinit var activities: List<ActivityModel>
     private var counter = 0
+    private lateinit var permissionManager: PermissionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,13 +45,42 @@ class FullMapActivity: AppCompatActivity() {
         mapView = MapView(this)
         setContentView(mapView)
 
-        // Add the activities to the map
-        activities.forEach { activity ->
-            Log.d("FullMapActivity", "Activity: $activity")
-            getGeolocationFromPostalLocation(activity.location)
+        // Initialize PermissionManager
+        permissionManager = PermissionManager(this)
 
+        val locationComponent = mapView.location
+        // Enable location component to show the user's location
+        locationComponent.locationPuck = createDefault2DPuck(withBearing = true)
+
+        // Check if location permission is granted
+        if (permissionManager.isLocationPermissionGranted()) {
+            // Permission is already granted, proceed with location setup
+            Log.d("FullMapActivity", "Location permission granted")
+
+            val onIndicatorPositionChangedListener = OnIndicatorPositionChangedListener {
+                // Jump to the current indicator position
+                mapView.mapboxMap.setCamera(CameraOptions.Builder().center(it).pitch(0.0)
+                                    .zoom(12.0)
+                                    .bearing(0.0).
+                    build())
+                // Set the gestures plugin's focal point to the current indicator location.
+                mapView.gestures.focalPoint = mapView.mapboxMap.pixelForCoordinate(it)
+                }
+
+            locationComponent.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+            } else {
+                // Request location permission
+                permissionManager.requestLocationPermission(PermissionManager.LOCATION_PERMISSION_REQUEST_CODE)
+            }
+
+             // Add the activities to the map
+            activities.forEach { activity ->
+                Log.d("FullMapActivity", "Activity: $activity")
+                getGeolocationFromPostalLocation(activity.location)
+
+            }
         }
-    }
+
 
     private fun getGeolocationFromPostalLocation(activityLocation: String) {
 
@@ -79,17 +112,17 @@ class FullMapActivity: AppCompatActivity() {
                         // Add a marker for the activity
                         addMarker(activityPoint)
 
-                        if(counter == 0){
-                            mapView.mapboxMap.setCamera(
-                                CameraOptions.Builder()
-                                    .center(Point.fromLngLat(longitude, latitude))
-                                    .pitch(0.0)
-                                    .zoom(12.0)
-                                    .bearing(0.0)
-                                    .build()
-                            )
-                            counter++
-                        }
+//                        if(counter == 0){
+//                            mapView.mapboxMap.setCamera(
+//                                CameraOptions.Builder()
+//                                    .center(Point.fromLngLat(longitude, latitude))
+//                                    .pitch(0.0)
+//                                    .zoom(12.0)
+//                                    .bearing(0.0)
+//                                    .build()
+//                            )
+//                            counter++
+//                        }
                     }
                 } else {
                     Log.e("Geocoding", "No results found or geocoding failed")

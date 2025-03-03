@@ -23,9 +23,13 @@ import com.mapbox.api.geocoding.v6.V6ForwardGeocodingRequestOptions
 import com.mapbox.api.geocoding.v6.models.V6Response
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.plugin.PuckBearing
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
+import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.maps.plugin.viewport.viewport
 import retrofit2.Callback
 import retrofit2.Call
 import retrofit2.Response
@@ -137,6 +141,19 @@ class DetailledActivityFragment : AppCompatActivity() {
         if (activityLocation != null) {
             getGeolocationFromPostalLocation(activityLocation)
         }
+
+        with(activityMap) {
+            location.locationPuck = createDefault2DPuck(withBearing = true)
+            location.enabled = true
+            location.puckBearing = PuckBearing.COURSE
+            location.puckBearingEnabled = true
+            viewport.transitionTo(
+                targetState = viewport.makeFollowPuckViewportState(),
+                transition = viewport.makeImmediateViewportTransition()
+            )
+
+        }
+
     }
 
     private fun getGeolocationFromPostalLocation(activityLocation: String) {
